@@ -13,19 +13,19 @@
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #2a2a2a, #3f3f3f);
-            color: #fff;
+            background: linear-gradient(135deg, #e8ecef, #f5f7fa);
+            color: #333;
             overflow-x: hidden;
         }
         #header {
             text-align: center;
             padding: 15px 0;
-            background: linear-gradient(90deg, #b22222, #8b1a1a);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(90deg, #4682b4, #2e8b57);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
         #header h1 {
             font-family: 'Bebas Neue', cursive;
-            font-size: 24px;
+            font-size: 36px;
             margin: 0;
             color: #fff;
             text-transform: uppercase;
@@ -41,22 +41,24 @@
             display: flex;
             justify-content: space-between;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         #pitch-container {
             width: 50%;
             position: relative;
             background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
             background-size: contain;
-            height: 800px;
-            border: 2px solid #b22222;
+            height: 700px;
+            border: 2px solid #4682b4;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(178, 34, 34, 0.3);
+            box-shadow: 0 0 8px rgba(70, 130, 180, 0.2);
         }
         .player {
             position: absolute;
             width: 40px;
             height: 40px;
-            background: #8b1a1a;
+            background: #2e8b57;
             border-radius: 50%;
             color: #fff;
             text-align: center;
@@ -67,58 +69,65 @@
         }
         .player:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(139, 26, 26, 0.6);
+            box-shadow: 0 0 8px rgba(46, 139, 87, 0.6);
         }
-        #left-panel, #right-panel {
+        #left-panel {
             width: 24%;
-            height: 800px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
-            overflow-y: auto;
-            box-shadow: 0 0 10px rgba(178, 34, 34, 0.2);
-            transition: transform 0.3s;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
         }
-        #left-panel:hover, #right-panel:hover {
-            transform: translateY(-3px);
+        #right-panel {
+            width: 24%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         select {
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
             border-radius: 5px;
-            background: #333;
-            color: #fff;
-            border: 1px solid #b22222;
+            background: #fff;
+            color: #333;
+            border: 1px solid #4682b4;
             font-size: 14px;
         }
         h2, h3 {
-            color: #b22222;
+            color: #4682b4;
             font-family: 'Bebas Neue', cursive;
         }
         .position-info {
             display: none;
             line-height: 1.6;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(70, 130, 180, 0.1);
             padding: 10px;
             border-radius: 5px;
+            margin-bottom: 10px;
         }
         .position-info p {
             margin: 5px 0;
         }
         .position-info strong {
-            color: #b22222;
+            color: #2e8b57;
         }
         #subs-list {
             margin-top: 10px;
+            padding: 10px;
+            background: rgba(46, 139, 87, 0.1);
+            border-radius: 5px;
         }
         #formation-select {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
             font-size: 16px;
-            background: #b22222;
+            background: #4682b4;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -126,7 +135,7 @@
             transition: background 0.3s;
         }
         #formation-select:hover {
-            background: #8b1a1a;
+            background: #2e8b57;
         }
     </style>
 </head>
@@ -144,15 +153,19 @@
                 <option value="451-defensive">4-5-1 防守陣</option>
             </select>
             <div id="positions-container"></div>
-            <h3>後備球員</h3>
-            <div id="subs-list"></div>
         </div>
 
         <div id="pitch-container"></div>
 
         <div id="right-panel">
-            <h2>點選顯示各位置戰術要求</h2>
-            <div id="position-details"></div>
+            <div>
+                <h2>位置詳情</h2>
+                <div id="position-details"></div>
+            </div>
+            <div>
+                <h3>後備球員</h3>
+                <div id="subs-list"></div>
+            </div>
         </div>
     </div>
 
