@@ -75,22 +75,22 @@
         }
 .player {
     position: absolute;
-    width: clamp(25px, 3.5vw, 40px); /* 放大球員尺寸 */
+    width: clamp(25px, 3.5vw, 40px); /* 保留原有尺寸 */
     height: clamp(25px, 3.5vw, 40px);
-    background: #2e8b57;
+    background: #4682b4; /* 改成藍色，使用與主題一致的 #4682b4 */
     border-radius: 50%;
     color: #fff;
     text-align: center;
     line-height: clamp(25px, 3.5vw, 40px);
     cursor: pointer;
-    font-size: clamp(8px, 1.5vw, 14px); /* 放大字體 */
+    font-size: clamp(8px, 1.5vw, 14px);
     transition: transform 0.3s, box-shadow 0.3s;
     transform: translate(-50%, -50%);
 }
 
 .player:hover {
     transform: translate(-50%, -50%) scale(1.1);
-    box-shadow: 0 0 8px rgba(46, 139, 87, 0.6);
+    box-shadow: 0 0 8px rgba(70, 130, 180, 0.6); /* 調整 hover 時的陰影顏色與藍色搭配 */
 }
         #left-panel, #subs-container, #right-panel {
             flex: 1 1 18%; /* 平均分配剩餘寬度 */
