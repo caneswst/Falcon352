@@ -106,7 +106,7 @@
     </div>
 
     <script>
-        const players = ['東', 'Vasco', 'Alex', '光', '禮', '航', '銳', 'Mike', 'Dan', 'Xander', 'Nate', '軍C', '俊', '新', '達', 'Hugo', 'Ivan', '業', '甘', 'Joe', '杰', '銘', '雷公', '鬼佬', 'Ken', '家興'];
+        const players = ['新', '禮', '東', 'Vasco', 'Alex', '光', '航', 'Xander', 'Nate', '軍C', '俊', 'Joe', '杰', '銳', 'Mike', 'Dan', '銘', '達', 'Hugo', 'Ivan', '業', '甘', '雷公', '鬼佬', 'Ken', '家興'];
 
         const formations = {
             '352-offensive': {
@@ -125,46 +125,123 @@
                     'rst': { left: '60%', top: '15%' }
                 },
                 details: {
-                    'gk': { name: '門將 (GK)', tactics: '守門並快速分球', tech: '撲救 90, 開球 85', off: '支援後衛', def: '守門線', example: 'Manuel Neuer' },
-                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守左路並前插', tech: '頭球 85, 傳球 80', off: '參與進攻', def: '盯防右邊鋒', example: 'Giorgio Chiellini' },
-                    'cb': { name: '中後衛 (CB)', tactics: '統籌防線', tech: '頭球 90, 搶斷 92', off: '分球', def: '禁區中央', example: 'Virgil van Dijk' },
-                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守右路並前插', tech: '頭球 85, 傳球 80', off: '參與進攻', def: '盯防左邊鋒', example: 'Sergio Ramos' },
-                    'lwb': { name: '左翼衛 (LWB)', tactics: '邊路進攻', tech: '速度 90, 傳中 85', off: '前插傳中', def: '回防左路', example: 'Marcelo' },
-                    'lm': { name: '左中場 (LM)', tactics: '支援邊路進攻', tech: '傳球 85, 盤帶 80', off: '內切或傳中', def: '協助防守', example: 'Bernardo Silva' },
-                    'cam': { name: '進攻中場 (CAM)', tactics: '組織進攻', tech: '視野 90, 傳球 88', off: '禁區外圍', def: '壓迫中場', example: 'Kevin De Bruyne' },
-                    'rm': { name: '右中場 (RM)', tactics: '支援邊路進攻', tech: '傳球 85, 盤帶 80', off: '內切或傳中', def: '協助防守', example: 'Jadon Sancho' },
-                    'rwb': { name: '右翼衛 (RWB)', tactics: '邊路進攻', tech: '速度 90, 傳中 85', off: '前插傳中', def: '回防右路', example: 'Trent Alexander-Arnold' },
-                    'lst': { name: '左前鋒 (LST)', tactics: '拉開防線並得分', tech: '射門 88, 速度 90', off: '禁區左側', def: '壓迫後衛', example: 'Neymar' },
-                    'rst': { name: '右前鋒 (RST)', tactics: '拉開防線並得分', tech: '射門 88, 速度 90', off: '禁區右側', def: '壓迫後衛', example: 'Lionel Messi' }
+                    'gk': { name: '門將 (GK)', tactics: '負責守護球門並快速發動反擊，作為防守的最後一道屏障', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '站在禁區外圍，支援後衛分球，必要時長傳找到前場快速球員', def: '守住球門線，保持冷靜判斷射門角度，必要時出擊攔截單刀球', example: 'Manuel Neuer' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守左側並在前場提供支援，與左翼衛協作', tech: '頭球 85, 搶斷 88, 傳球 80, 防守站位 90, 速度 75', off: '適當前壓至中場線，參與短傳組織並支援左翼衛進攻', def: '退守禁區左側，與中後衛協作，盯防對方右邊鋒或內切球員', example: 'Giorgio Chiellini' },
+                    'cb': { name: '中後衛 (CB)', tactics: '統籌防線，負責中路防守並清掃禁區威脅', tech: '頭球 90, 搶斷 92, 傳球 85, 防守站位 95, 力量 88', off: '留在後場中路，分球至中場或邊路，必要時帶球前插', def: '坐鎮禁區中央，負責高空球防守和對方中鋒的直接對抗', example: 'Virgil van Dijk' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守右側並在前場提供支援，與右翼衛協作', tech: '頭球 85, 搶斷 88, 傳球 80, 防守站位 90, 速度 75', off: '適當前壓至中場線，參與短傳組織並支援右翼衛進攻', def: '退守禁區右側，與中後衛協作，盯防對方左邊鋒或內切球員', example: 'Sergio Ramos' },
+                    'lwb': { name: '左翼衛 (LWB)', tactics: '負責左邊路的進攻與防守，提供場地寬度', tech: '速度 90, 傳中 85, 盤帶 80, 防守 75, 體力 90', off: '前插至對方半場邊線，傳中或內切配合前鋒', def: '回撤至左後衛位置，封堵對方右邊鋒並協助中後衛', example: 'Marcelo' },
+                    'lm': { name: '左中場 (LM)', tactics: '支援左邊路進攻並提供中場銜接', tech: '傳球 85, 盤帶 80, 射門 75, 體力 85, 速度 88', off: '內切至禁區外圍或傳中至前鋒，增加進攻選擇', def: '協助左翼衛防守，壓迫對方右後衛或中場', example: 'Bernardo Silva' },
+                    'cam': { name: '進攻中場 (CAM)', tactics: '組織進攻並為前鋒創造機會，是中場核心', tech: '視野 90, 傳球 88, 盤帶 85, 射門 80, 靈活性 88', off: '位於禁區外圍，分球至前鋒或邊路，嘗試遠射', def: '壓迫對方後腰，協助中場防守', example: 'Kevin De Bruyne' },
+                    'rm': { name: '右中場 (RM)', tactics: '支援右邊路進攻並提供中場銜接', tech: '傳球 85, 盤帶 80, 射門 75, 體力 85, 速度 88', off: '內切至禁區外圍或傳中至前鋒，增加進攻選擇', def: '協助右翼衛防守，壓迫對方左後衛或中場', example: 'Jadon Sancho' },
+                    'rwb': { name: '右翼衛 (RWB)', tactics: '負責右邊路的進攻與防守，提供場地寬度', tech: '速度 90, 傳中 85, 盤帶 80, 防守 75, 體力 90', off: '前插至對方半場邊線，傳中或內切配合前鋒', def: '回撤至右後衛位置，封堵對方左邊鋒並協助中後衛', example: 'Trent Alexander-Arnold' },
+                    'lst': { name: '左前鋒 (LST)', tactics: '拉開防線並尋找得分機會，與右前鋒配合', tech: '射門 88, 速度 90, 盤帶 88, 傳球 80, 靈活性 90', off: '位於禁區左側，內切射門或傳中給隊友', def: '壓迫對方右後衛，參與前場防守', example: 'Neymar' },
+                    'rst': { name: '右前鋒 (RST)', tactics: '拉開防線並尋找得分機會，與左前鋒配合', tech: '射門 88, 速度 90, 盤帶 88, 傳球 80, 靈活性 90', off: '位於禁區右側，內切射門或傳中給隊友', def: '壓迫對方左後衛，參與前場防守', example: 'Lionel Messi' }
                 }
             },
             '352-defensive-am': {
-                positions: ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'ldm', 'rdm', 'rwb', 'am', 'lst', 'rst'],
+                positions: ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'lcm', 'rcm', 'rwb', 'am', 'lst', 'rst'],
                 layout: {
                     'gk': { left: '50%', top: '90%' },
                     'lcb': { left: '30%', top: '70%' },
                     'cb': { left: '50%', top: '70%' },
                     'rcb': { left: '70%', top: '70%' },
                     'lwb': { left: '20%', top: '55%' },
-                    'ldm': { left: '40%', top: '50%' },
-                    'rdm': { left: '60%', top: '50%' },
+                    'lcm': { left: '40%', top: '50%' },
+                    'rcm': { left: '60%', top: '50%' },
                     'rwb': { left: '80%', top: '55%' },
                     'am': { left: '50%', top: '35%' },
                     'lst': { left: '35%', top: '20%' },
                     'rst': { left: '65%', top: '20%' }
                 },
                 details: {
-                    'gk': { name: '門將 (GK)', tactics: '穩固守門並組織防線', tech: '撲救 90, 反應 95, 位置感 88', off: '短傳後衛發動防守反擊', def: '守住球門線並出擊攔截', example: 'Manuel Neuer' },
-                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守左路並補位', tech: '頭球 88, 搶斷 90, 傳球 80', off: '穩固後場分球', def: '緊盯右邊鋒並清空禁區', example: 'Giorgio Chiellini' },
-                    'cb': { name: '中後衛 (CB)', tactics: '統籌防線並盯防中鋒', tech: '頭球 92, 搶斷 95, 力量 90', off: '分球至中場', def: '坐鎮禁區中央，負責高空防守', example: 'Virgil van Dijk' },
-                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守右路並補位', tech: '頭球 88, 搶斷 90, 傳球 80', off: '穩固後場分球', def: '緊盯左邊鋒並清空禁區', example: 'Sergio Ramos' },
-                    'lwb': { name: '左翼衛 (LWB)', tactics: '防守左邊路並少量前插', tech: '速度 85, 搶斷 88, 體力 90', off: '支援中場防守', def: '封堵對方右邊鋒並回防', example: 'Marcelo' },
-                    'ldm': { name: '左中場 (LCM)', tactics: '防守中場並保護後衛', tech: '傳球 85, 搶斷 90, 視野 88', off: '分球至邊路或AM', def: '壓迫對方中場並補位', example: 'N’Golo Kanté' },
-                    'rdm': { name: '右中場 (RCM)', tactics: '防守中場並保護後衛', tech: '傳球 85, 搶斷 90, 視野 88', off: '分球至邊路或AM', def: '壓迫對方中場並補位', example: 'Casemiro' },
-                    'rwb': { name: '右翼衛 (RWB)', tactics: '防守右邊路並少量前插', tech: '速度 85, 搶斷 88, 體力 90', off: '支援中場防守', def: '封堵對方左邊鋒並回防', example: 'Kyle Walker' },
-                    'am': { name: '進攻中場 (AM)', tactics: '銜接中場與前鋒並防守反擊', tech: '傳球 88, 視野 90, 射門 85', off: '禁區外圍組織或遠射', def: '壓迫對方後腰並回防', example: 'Kevin De Bruyne' },
-                    'lst': { name: '左前鋒 (LST)', tactics: '防守反擊並拉邊', tech: '速度 90, 射門 85, 盤帶 88', off: '拉開防線並尋找空位', def: '壓迫對方右後衛', example: 'Son Heung-min' },
-                    'rst': { name: '右前鋒 (RST)', tactics: '防守反擊並拉邊', tech: '速度 90, 射門 85, 盤帶 88', off: '拉開防線並尋找空位', def: '壓迫對方左後衛', example: 'Kylian Mbappé' }
+                    'gk': { 
+                        name: '門將 (GK)', 
+                        tactics: '作為防守的最後一道屏障，負責守護球門並組織防線，快速發動防守反擊。需要與後衛保持高效溝通，掌控禁區內的防守布局。', 
+                        tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', 
+                        off: '站在禁區外圍，支援後衛進行短傳分球，必要時利用長傳找到前場快速球員發動反擊。', 
+                        def: '守住球門線，保持冷靜，快速判斷射門角度並作出反應，必要時果斷出擊攔截單刀球或高空球。', 
+                        example: 'Manuel Neuer - 現代「掃蕩型門將」的代表，擅長出擊防守和用腳傳球，改變了門將的傳統角色。' 
+                    },
+                    'lcb': { 
+                        name: '左中後衛 (LCB)', 
+                        tactics: '負責防守左側區域，協助左翼衛封堵邊路進攻，同時在中路提供補位支援，是三後衛體系的重要支柱。', 
+                        tech: '頭球 88, 搶斷 90, 傳球 80, 防守站位 90, 速度 75', 
+                        off: '穩固後場，適時分球至左翼衛或中場，保持防守陣型的完整性。', 
+                        def: '退守禁區左側，與中後衛協作，緊盯對方右邊鋒或內切前鋒，負責清空禁區內的高空球和傳中威脅。', 
+                        example: 'Giorgio Chiellini - 防守硬朗，頭球能力出色，擅長人盯人防守和關鍵攔截。' 
+                    },
+                    'cb': { 
+                        name: '中後衛 (CB)', 
+                        tactics: '三後衛體系的核心，負責統籌防線，盯防對方中鋒並清掃禁區內的所有威脅，同時承擔防守指揮責任。', 
+                        tech: '頭球 92, 搶斷 95, 傳球 85, 防守站位 95, 力量 90', 
+                        off: '留在後場中路，分球至中場或邊路，必要時帶球前插支援中場防守轉換。', 
+                        def: '坐鎮禁區中央，負責高空球防守和對方中鋒的直接對抗，快速補位並指揮隊友站位。', 
+                        example: 'Virgil van Dijk - 現代中後衛的典範，防守全面且具備出球能力，場上領導力極強。' 
+                    },
+                    'rcb': { 
+                        name: '右中後衛 (RCB)', 
+                        tactics: '負責防守右側區域，協助右翼衛封堵邊路進攻，同時在中路提供補位支援，與左中後衛協作保持防線平衡。', 
+                        tech: '頭球 88, 搶斷 90, 傳球 80, 防守站位 90, 速度 75', 
+                        off: '穩固後場，適時分球至右翼衛或中場，保持防守陣型的完整性。', 
+                        def: '退守禁區右側，與中後衛協作，緊盯對方左邊鋒或內切前鋒，負責清空禁區內的高空球和傳中威脅。', 
+                        example: 'Sergio Ramos - 防守兇悍且進攻能力強，定位球得分能力突出，防守經驗豐富。' 
+                    },
+                    'lwb': { 
+                        name: '左翼衛 (LWB)', 
+                        tactics: '防守左邊路為主，輔以少量前插支援進攻，提供場地寬度並與左中後衛協作形成穩固防線。', 
+                        tech: '速度 85, 搶斷 88, 傳中 80, 防守站位 85, 體力 90', 
+                        off: '支援中場防守，適時前插至中場線附近，分球至進攻中場或左前鋒。', 
+                        def: '回撤至左後衛位置，封堵對方右邊鋒的突破或傳中，協助左中後衛防守邊路空位。', 
+                        example: 'Marcelo - 進攻型翼衛的代表，防守穩健且具備一定的邊路推進能力。' 
+                    },
+                    'lcm': { 
+                        name: '左中場 (LCM)', 
+                        tactics: '防守型雙後腰之一，負責中場左側的防守與銜接，保護後衛並與進攻中場聯繫，提供中場穩定性。', 
+                        tech: '傳球 85, 搶斷 90, 視野 88, 跑動 85, 防守站位 88', 
+                        off: '分球至邊路或進攻中場，保持中場防守陣型的完整性，必要時支援左翼衛。', 
+                        def: '壓迫對方中場球員，負責中場左側的搶斷和補位，保護左中後衛免受直接衝擊。', 
+                        example: 'N’Golo Kanté - 防守覆蓋面廣，搶斷能力頂尖，是中場防守的標杆。' 
+                    },
+                    'rcm': { 
+                        name: '右中場 (RCM)', 
+                        tactics: '防守型雙後腰之一，負責中場右側的防守與銜接，保護後衛並與進攻中場聯繫，提供中場穩定性。', 
+                        tech: '傳球 85, 搶斷 90, 視野 88, 跑動 85, 防守站位 88', 
+                        off: '分球至邊路或進攻中場，保持中場防守陣型的完整性，必要時支援右翼衛。', 
+                        def: '壓迫對方中場球員，負責中場右側的搶斷和補位，保護右中後衛免受直接衝擊。', 
+                        example: 'Casemiro - 防守硬朗且傳球穩健，是防守型後腰的經典代表。' 
+                    },
+                    'rwb': { 
+                        name: '右翼衛 (RWB)', 
+                        tactics: '防守右邊路為主，輔以少量前插支援進攻，提供場地寬度並與右中後衛協作形成穩固防線。', 
+                        tech: '速度 85, 搶斷 88, 傳中 80, 防守站位 85, 體力 90', 
+                        off: '支援中場防守，適時前插至中場線附近，分球至進攻中場或右前鋒。', 
+                        def: '回撤至右後衛位置，封堵對方左邊鋒的突破或傳中，協助右中後衛防守邊路空位。', 
+                        example: 'Kyle Walker - 速度快且防守穩固，具備一定的邊路推進能力。' 
+                    },
+                    'am': { 
+                        name: '進攻中場 (AM)', 
+                        tactics: '銜接中場與前鋒，負責防守反擊的組織與推進，同時參與中場壓迫，是攻防轉換的關鍵角色。', 
+                        tech: '傳球 88, 視野 90, 射門 85, 盤帶 85, 靈活性 88', 
+                        off: '位於禁區外圍，負責分球至雙前鋒或邊路，尋找遠射機會並創造進攻空間。', 
+                        def: '壓迫對方後腰或中場核心，協助雙後腰防守，必要時回撤至中場線參與防守。', 
+                        example: 'Kevin De Bruyne - 傳球視野出色，遠射能力強，是現代進攻中場的典範。' 
+                    },
+                    'lst': { 
+                        name: '左前鋒 (LST)', 
+                        tactics: '防守反擊的重要一環，負責拉開防線並尋找得分機會，與右前鋒形成聯繫。', 
+                        tech: '速度 90, 射門 85, 盤帶 88, 傳球 80, 靈活性 90', 
+                        off: '拉至禁區左側，內切射門或傳中給右前鋒，快速利用反擊機會得分。', 
+                        def: '壓迫對方右後衛或右中後衛，參與前場防守並爭搶第二落點。', 
+                        example: 'Son Heung-min - 速度快且射門精準，擅長邊路突破和內切得分。' 
+                    },
+                    'rst': { 
+                        name: '右前鋒 (RST)', 
+                        tactics: '防守反擊的重要一環，負責拉開防線並尋找得分機會，與左前鋒形成聯繫。', 
+                        tech: '速度 90, 射門 85, 盤帶 88, 傳球 80, 靈活性 90', 
+                        off: '拉至禁區右側，內切射門或傳中給左前鋒，快速利用反擊機會得分。', 
+                        def: '壓迫對方左後衛或左中後衛，參與前場防守並爭搶第二落點。', 
+                        example: 'Kylian Mbappé - 速度驚人且技術全面，是防守反擊的致命武器。' 
+                    }
                 }
             },
             '451-defensive': {
@@ -183,17 +260,17 @@
                     'st': { left: '50%', top: '20%' }
                 },
                 details: {
-                    'gk': { name: '門將 (GK)', tactics: '穩固守門並快速分球', tech: '撲救 90, 反應 95, 開球 85', off: '短傳發動反擊', def: '守住球門線並出擊', example: 'Manuel Neuer' },
-                    'lb': { name: '左後衛 (LB)', tactics: '防守左路並穩固邊線', tech: '搶斷 88, 速度 85, 傳球 80', off: '支援中場', def: '封堵右邊鋒並補位', example: 'Andrew Robertson' },
-                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守中路並清空威脅', tech: '頭球 90, 搶斷 92, 力量 88', off: '分球至中場', def: '禁區左側盯防', example: 'Virgil van Dijk' },
-                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守中路並清空威脅', tech: '頭球 90, 搶斷 92, 力量 88', off: '分球至中場', def: '禁區右側盯防', example: 'Sergio Ramos' },
-                    'rb': { name: '右後衛 (RB)', tactics: '防守右路並穩固邊線', tech: '搶斷 88, 速度 85, 傳球 80', off: '支援中場', def: '封堵左邊鋒並補位', example: 'Kyle Walker' },
-                    'lm': { name: '左中場 (LM)', tactics: '防守邊路並反擊支援', tech: '傳中 85, 體力 90, 速度 88', off: '拉邊傳中', def: '回防壓迫左路', example: 'Son Heung-min' },
-                    'lcm': { name: '左中場 (LCM)', tactics: '防守中場並銜接', tech: '傳球 88, 搶斷 85, 視野 90', off: '分球至邊路', def: '中場左側壓迫', example: 'Toni Kroos' },
-                    'cdm': { name: '防守中場 (CDM)', tactics: '保護後衛並斷球', tech: '搶斷 92, 傳球 85, 體力 90', off: '穩固中場', def: '中場核心防守', example: 'N’Golo Kanté' },
-                    'rcm': { name: '右中場 (RCM)', tactics: '防守中場並銜接', tech: '傳球 88, 搶斷 85, 視野 90', off: '分球至邊路', def: '中場右側壓迫', example: 'Luka Modrić' },
-                    'rm': { name: '右中場 (RM)', tactics: '防守邊路並反擊支援', tech: '傳中 85, 體力 90, 速度 88', off: '拉邊傳中', def: '回防壓迫右路', example: 'Bukayo Saka' },
-                    'st': { name: '中前鋒 (ST)', tactics: '防守反擊終結', tech: '射門 90, 速度 88, 位置感 92', off: '禁區內搶點', def: '壓迫對方後衛', example: 'Harry Kane' }
+                    'gk': { name: '門將 (GK)', tactics: '穩固守門並快速分球，作為防守的最後一道防線', tech: '撲救 90, 反應 95, 開球 85, 手控球 88, 位置感 90', off: '短傳至後衛發動反擊，必要時長傳至前鋒', def: '守住球門線，快速出擊攔截單刀或高空球', example: 'Manuel Neuer' },
+                    'lb': { name: '左後衛 (LB)', tactics: '防守左路並穩固邊線，協助中後衛防守', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '支援中場分球，少量前插至中場線', def: '封堵對方右邊鋒並補位禁區左側', example: 'Andrew Robertson' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守中路並清空威脅，與右中後衛協作', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定', def: '禁區左側盯防對方前鋒，清空高空球', example: 'Virgil van Dijk' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守中路並清空威脅，與左中後衛協作', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定', def: '禁區右側盯防對方前鋒，清空高空球', example: 'Sergio Ramos' },
+                    'rb': { name: '右後衛 (RB)', tactics: '防守右路並穩固邊線，協助中後衛防守', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '支援中場分球，少量前插至中場線', def: '封堵對方左邊鋒並補位禁區右側', example: 'Kyle Walker' },
+                    'lm': { name: '左中場 (LM)', tactics: '防守邊路並支援反擊，提供場地寬度', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊', def: '回防壓迫對方右後衛，協助左後衛防守', example: 'Son Heung-min' },
+                    'lcm': { name: '左中場 (LCM)', tactics: '防守中場並銜接攻防，與防守中場協作', tech: '傳球 88, 搶斷 85, 視野 90, 跑動 85, 防守站位 88', off: '分球至邊路或前鋒，支援中場組織', def: '中場左側壓迫對方球員，協助防守中場', example: 'Toni Kroos' },
+                    'cdm': { name: '防守中場 (CDM)', tactics: '保護後衛並斷球，是中場防守核心', tech: '搶斷 92, 傳球 85, 體力 90, 防守站位 90, 力量 88', off: '穩固中場，分球至邊路或中場', def: '中場核心防守，壓迫對方進攻球員並補位', example: 'N’Golo Kanté' },
+                    'rcm': { name: '右中場 (RCM)', tactics: '防守中場並銜接攻防，與防守中場協作', tech: '傳球 88, 搶斷 85, 視野 90, 跑動 85, 防守站位 88', off: '分球至邊路或前鋒，支援中場組織', def: '中場右側壓迫對方球員，協助防守中場', example: 'Luka Modrić' },
+                    'rm': { name: '右中場 (RM)', tactics: '防守邊路並支援反擊，提供場地寬度', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊', def: '回防壓迫對方左後衛，協助右後衛防守', example: 'Bukayo Saka' },
+                    'st': { name: '中前鋒 (ST)', tactics: '防守反擊的終結者，負責牽制後衛並得分', tech: '射門 90, 速度 88, 位置感 92, 力量 88, 搶點 90', off: '禁區內搶點，接應中場傳球完成射門', def: '壓迫對方中後衛，爭搶第一落點並參與防守', example: 'Harry Kane' }
                 }
             }
         };
