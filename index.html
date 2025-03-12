@@ -90,7 +90,7 @@
         <label>選擇陣型:</label>
         <select id="formation-select">
             <option value="352-offensive">3-5-2 進攻陣</option>
-            <option value="352-defensive">3-5-2 防守雙後腰</option>
+            <option value="352-defensive-am">3-5-2 防守AM</option>
             <option value="451-defensive">4-5-1 防守陣</option>
         </select>
         <div id="positions-container"></div>
@@ -138,8 +138,8 @@
                     'rst': { name: '右前鋒 (RST)', tactics: '拉開防線並得分', tech: '射門 88, 速度 90', off: '禁區右側', def: '壓迫後衛', example: 'Lionel Messi' }
                 }
             },
-            '352-defensive': {
-                positions: ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'lcm', 'rcm', 'rwb', 'lst', 'st', 'rst'],
+            '352-defensive-am': {
+                positions: ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'lcm', 'rcm', 'rwb', 'am', 'lst', 'rst'],
                 layout: {
                     'gk': { left: '50%', top: '90%' },
                     'lcb': { left: '30%', top: '70%' },
@@ -149,9 +149,9 @@
                     'lcm': { left: '40%', top: '50%' },
                     'rcm': { left: '60%', top: '50%' },
                     'rwb': { left: '80%', top: '55%' },
-                    'lst': { left: '35%', top: '30%' },
-                    'st': { left: '50%', top: '25%' },
-                    'rst': { left: '65%', top: '30%' }
+                    'am': { left: '50%', top: '35%' },
+                    'lst': { left: '35%', top: '20%' },
+                    'rst': { left: '65%', top: '20%' }
                 },
                 details: {
                     'gk': { name: '門將 (GK)', tactics: '穩固守門並組織防線', tech: '撲救 90, 反應 95, 位置感 88', off: '短傳後衛發動防守反擊', def: '守住球門線並出擊攔截', example: 'Manuel Neuer' },
@@ -159,11 +159,11 @@
                     'cb': { name: '中後衛 (CB)', tactics: '統籌防線並盯防中鋒', tech: '頭球 92, 搶斷 95, 力量 90', off: '分球至中場', def: '坐鎮禁區中央，負責高空防守', example: 'Virgil van Dijk' },
                     'rcb': { name: '右中後衛 (RCB)', tactics: '防守右路並補位', tech: '頭球 88, 搶斷 90, 傳球 80', off: '穩固後場分球', def: '緊盯左邊鋒並清空禁區', example: 'Sergio Ramos' },
                     'lwb': { name: '左翼衛 (LWB)', tactics: '防守左邊路並少量前插', tech: '速度 85, 搶斷 88, 體力 90', off: '支援中場防守', def: '封堵對方右邊鋒並回防', example: 'Marcelo' },
-                    'lcm': { name: '左中場 (LCM)', tactics: '防守中場並保護後衛', tech: '傳球 85, 搶斷 90, 視野 88', off: '分球至邊路', def: '壓迫對方中場並補位', example: 'N’Golo Kanté' },
-                    'rcm': { name: '右中場 (RCM)', tactics: '防守中場並保護後衛', tech: '傳球 85, 搶斷 90, 視野 88', off: '分球至邊路', def: '壓迫對方中場並補位', example: 'Casemiro' },
+                    'lcm': { name: '左中場 (LCM)', tactics: '防守中場並保護後衛', tech: '傳球 85, 搶斷 90, 視野 88', off: '分球至邊路或AM', def: '壓迫對方中場並補位', example: 'N’Golo Kanté' },
+                    'rcm': { name: '右中場 (RCM)', tactics: '防守中場並保護後衛', tech: '傳球 85, 搶斷 90, 視野 88', off: '分球至邊路或AM', def: '壓迫對方中場並補位', example: 'Casemiro' },
                     'rwb': { name: '右翼衛 (RWB)', tactics: '防守右邊路並少量前插', tech: '速度 85, 搶斷 88, 體力 90', off: '支援中場防守', def: '封堵對方左邊鋒並回防', example: 'Kyle Walker' },
+                    'am': { name: '進攻中場 (AM)', tactics: '銜接中場與前鋒並防守反擊', tech: '傳球 88, 視野 90, 射門 85', off: '禁區外圍組織或遠射', def: '壓迫對方後腰並回防', example: 'Kevin De Bruyne' },
                     'lst': { name: '左前鋒 (LST)', tactics: '防守反擊並拉邊', tech: '速度 90, 射門 85, 盤帶 88', off: '拉開防線並尋找空位', def: '壓迫對方右後衛', example: 'Son Heung-min' },
-                    'st': { name: '中前鋒 (ST)', tactics: '防守反擊核心', tech: '射門 90, 位置感 92, 力量 88', off: '禁區內搶點', def: '壓迫對方中後衛', example: 'Harry Kane' },
                     'rst': { name: '右前鋒 (RST)', tactics: '防守反擊並拉邊', tech: '速度 90, 射門 85, 盤帶 88', off: '拉開防線並尋找空位', def: '壓迫對方左後衛', example: 'Kylian Mbappé' }
                 }
             },
@@ -199,7 +199,7 @@
         };
 
         let selectedPlayers = {};
-        let currentFormation = '352-defensive'; // 默認陣型
+        let currentFormation = '352-defensive-am'; // 默認陣型
 
         // 初始化陣型選擇
         function initFormationSelect() {
