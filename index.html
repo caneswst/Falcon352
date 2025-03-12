@@ -49,11 +49,10 @@
             margin: 0 auto;
             gap: 1vw;
             flex-grow: 1;
-            min-height: calc(100vh - 60px); /* 確保容器填滿剩餘高度 */
             align-items: stretch; /* 確保子元素高度一致 */
         }
         #pitch-container {
-            flex: 0 0 60%; /* 固定寬度比例 */
+            flex: 0 0 45%; /* 降低寬度比例，減少兩側空白 */
             position: relative;
             background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
             background-size: cover;
@@ -76,15 +75,15 @@
         }
         .player {
             position: absolute;
-            width: clamp(30px, 4vw, 40px);
-            height: clamp(30px, 4vw, 40px);
+            width: clamp(25px, 3vw, 35px); /* 縮小球員尺寸 */
+            height: clamp(25px, 3vw, 35px);
             background: #2e8b57;
             border-radius: 50%;
             color: #fff;
             text-align: center;
-            line-height: clamp(30px, 4vw, 40px);
+            line-height: clamp(25px, 3vw, 35px);
             cursor: pointer;
-            font-size: clamp(10px, 1.5vw, 14px);
+            font-size: clamp(8px, 1.2vw, 12px); /* 縮小字體 */
             transition: transform 0.3s, box-shadow 0.3s;
             transform: translate(-50%, -50%);
         }
@@ -93,21 +92,12 @@
             box-shadow: 0 0 8px rgba(46, 139, 87, 0.6);
         }
         #left-panel, #subs-container, #right-panel {
-            flex: 1 1 20%; /* 平均分配剩餘寬度 */
+            flex: 1 1 18%; /* 平均分配剩餘寬度 */
             padding: 1vw;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
-            min-height: 400px; /* 與足球場最小高度一致 */
-        }
-        #left-panel {
-            min-width: 200px;
-        }
-        #subs-container {
-            min-width: 200px;
-        }
-        #right-panel {
             min-width: 200px;
         }
         select {
