@@ -16,7 +16,7 @@
             width: 50%;
             position: relative;
             background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
-            background-size: cover;
+            background-size: contain; /* 圖片自動適應容器大小 */
             height: 800px;
             border: 2px solid #333;
         }
@@ -73,24 +73,27 @@
         .position-info strong {
             color: #0066cc;
         }
+        #subs-list {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div id="left-panel">
-        <h2>傲翔2025丙組陣容選擇</h2>
-        <label>門將 (GK):</label><select id="gk"></select>
-        <label>左中後衛 (LCB):</label><select id="lcb"></select>
-        <label>中後衛 (CB):</label><select id="cb"></select>
-        <label>右中後衛 (RCB):</label><select id="rcb"></select>
-        <label>左翼衛 (LWB):</label><select id="lwb"></select>
-        <label>左中場 (LCM):</label><select id="lcm"></select>
-        <label>右中場 (RCM):</label><select id="rcm"></select>
-        <label>右翼衛 (RWB):</label><select id="rwb"></select>
-        <label>左前鋒 (LST):</label><select id="lst"></select>
-        <label>中前鋒 (ST):</label><select id="st"></select>
-        <label>右前鋒 (RST):</label><select id="rst"></select>
-        <h3>後備名單 (10人)</h3>
-        <div id="subs"></div>
+        <h2>陣容選擇</h2>
+        <label>門將 (GK):</label><select id="gk"><option value="">選擇球員</option></select>
+        <label>左中後衛 (LCB):</label><select id="lcb"><option value="">選擇球員</option></select>
+        <label>中後衛 (CB):</label><select id="cb"><option value="">選擇球員</option></select>
+        <label>右中後衛 (RCB):</label><select id="rcb"><option value="">選擇球員</option></select>
+        <label>左翼衛 (LWB):</label><select id="lwb"><option value="">選擇球員</option></select>
+        <label>左中場 (LCM):</label><select id="lcm"><option value="">選擇球員</option></select>
+        <label>右中場 (RCM):</label><select id="rcm"><option value="">選擇球員</option></select>
+        <label>右翼衛 (RWB):</label><select id="rwb"><option value="">選擇球員</option></select>
+        <label>左前鋒 (LST):</label><select id="lst"><option value="">選擇球員</option></select>
+        <label>中前鋒 (ST):</label><select id="st"><option value="">選擇球員</option></select>
+        <label>右前鋒 (RST):</label><select id="rst"><option value="">選擇球員</option></select>
+        <h3>後備球員</h3>
+        <div id="subs-list"></div>
     </div>
 
     <div id="pitch-container">
@@ -221,28 +224,47 @@
                 const select = document.getElementById(pos);
                 select.innerHTML = '<option value="">選擇球員</option>' + 
                     players.map(p => `<option value="${p}">${p}</option>`).join('');
-                select.onchange = updatePitch;
+                select.onchange = updatePitchAndSubs;
             });
-
-            // 後備名單
-            const subsDiv = document.getElementById('subs');
-            for (let i = 0; i < 10; i++) {
-                const select = document.createElement('select');
-                select.innerHTML = '<option value="">後備 ' + (i + 1) + '</option>' + 
-                    players.map(p => `<option value="${p}">${p}</option>`).join('');
-                subsDiv.appendChild(select);
-            }
+            loadSavedSelections(); // 載入上次選擇
         }
 
-        // 更新戰術板
-        function updatePitch() {
+        // 更新戰術板和後備名單
+        function updatePitchAndSubs() {
+            const selected = new Set();
             positions.forEach(pos => {
                 const select = document.getElementById(pos);
                 const playerDiv = document.getElementById(pos + '-player');
-                const selected = select.value;
-                playerDiv.textContent = selected || pos.toUpperCase();
-                selectedPlayers[pos] = selected;
+                const selectedPlayer = select.value;
+                playerDiv.textContent = selectedPlayer || pos.toUpperCase();
+                selectedPlayers[pos] = selectedPlayer;
+                if (selectedPlayer) selected.add(selectedPlayer);
             });
+
+            // 更新後備名單
+            const subsList = document.getElementById('subs-list');
+            const subs = players.filter(p => !selected.has(p));
+            subsList.innerHTML = subs.map(p => `<p>${p}</p>`).join('');
+
+            // 保存選擇到localStorage
+            localStorage.setItem('selectedPlayers', JSON.stringify(selectedPlayers));
+        }
+
+        // 載入上次保存的選擇
+        function loadSavedSelections() {
+            const saved = localStorage.getItem('selectedPlayers');
+            if (saved) {
+                selectedPlayers = JSON.parse(saved);
+                positions.forEach(pos => {
+                    const select = document.getElementById(pos);
+                    if (selectedPlayers[pos]) {
+                        select.value = selectedPlayers[pos];
+                    }
+                });
+                updatePitchAndSubs(); // 更新戰術板和後備名單
+            } else {
+                updatePitchAndSubs(); // 初始化後備名單
+            }
         }
 
         // 點擊球員顯示詳情
