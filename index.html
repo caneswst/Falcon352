@@ -7,15 +7,19 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap');
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             display: flex;
             flex-direction: column;
             font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
             background: linear-gradient(135deg, #e8ecef, #f5f7fa);
             color: #333;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         #header {
             text-align: center;
@@ -25,7 +29,7 @@
         }
         #header h1 {
             font-family: 'Bebas Neue', cursive;
-            font-size: clamp(24px, 5vw, 36px); /* 自適應字體 */
+            font-size: clamp(24px, 5vw, 36px);
             margin: 0;
             color: #fff;
             text-transform: uppercase;
@@ -39,26 +43,40 @@
         }
         .container {
             display: flex;
-            flex-wrap: wrap; /* 允許換行 */
+            flex-wrap: nowrap; /* 防止換行 */
             padding: 1vw;
             max-width: 100%;
             margin: 0 auto;
-            gap: 1vw; /* 欄間距 */
+            gap: 1vw;
+            flex-grow: 1;
+            min-height: calc(100vh - 60px); /* 確保容器填滿剩餘高度 */
+            align-items: stretch; /* 確保子元素高度一致 */
         }
         #pitch-container {
-            width: 60%;
+            flex: 0 0 60%; /* 固定寬度比例 */
             position: relative;
             background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
-            background-size: contain;
-            height: 70vh; /* 自適應高度 */
-            max-height: 700px;
+            background-size: cover;
+            min-height: 400px;
+            aspect-ratio: 3 / 5;
             border: 2px solid #4682b4;
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(70, 130, 180, 0.2);
+            background-color: #2e8b57; /* 備用背景色 */
+        }
+        #pitch-error {
+            display: none;
+            color: red;
+            text-align: center;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         .player {
             position: absolute;
-            width: clamp(30px, 4vw, 40px); /* 自適應球員大小 */
+            width: clamp(30px, 4vw, 40px);
             height: clamp(30px, 4vw, 40px);
             background: #2e8b57;
             border-radius: 50%;
@@ -68,37 +86,29 @@
             cursor: pointer;
             font-size: clamp(10px, 1.5vw, 14px);
             transition: transform 0.3s, box-shadow 0.3s;
+            transform: translate(-50%, -50%);
         }
         .player:hover {
-            transform: scale(1.1);
+            transform: translate(-50%, -50%) scale(1.1);
             box-shadow: 0 0 8px rgba(46, 139, 87, 0.6);
         }
-        #left-panel {
-            width: 20%;
+        #left-panel, #subs-container, #right-panel {
+            flex: 1 1 20%; /* 平均分配剩餘寬度 */
             padding: 1vw;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            max-height: 70vh;
             overflow-y: auto;
+            min-height: 400px; /* 與足球場最小高度一致 */
+        }
+        #left-panel {
+            min-width: 200px;
         }
         #subs-container {
-            width: 20%;
-            padding: 1vw;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            max-height: 70vh;
-            overflow-y: auto;
+            min-width: 200px;
         }
         #right-panel {
-            width: 20%;
-            padding: 1vw;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            max-height: 70vh;
-            overflow-y: auto;
+            min-width: 200px;
         }
         select {
             width: 100%;
@@ -149,38 +159,41 @@
 
         /* 平板調整 (寬度 < 900px) */
         @media (max-width: 900px) {
+            .container {
+                flex-wrap: wrap; /* 平板允許換行 */
+            }
             #pitch-container {
-                width: 70%; /* 球場更大 */
+                flex: 0 0 70%;
             }
             #left-panel, #subs-container, #right-panel {
-                width: 15%; /* 邊欄更窄 */
+                flex: 1 1 15%;
             }
         }
 
         /* 手機調整 (寬度 < 600px) */
         @media (max-width: 600px) {
             .container {
-                flex-direction: column; /* 上下堆疊 */
+                flex-direction: column;
                 padding: 2vw;
             }
             #pitch-container {
                 width: 100%;
-                height: 50vh; /* 手機上減小高度 */
+                min-height: 50vh;
                 max-height: 400px;
             }
             #left-panel, #subs-container, #right-panel {
                 width: 100%;
-                max-height: 30vh; /* 限制高度 */
+                min-height: 30vh;
                 margin-top: 2vw;
             }
             #left-panel {
-                order: 2; /* 陣容選擇放中間 */
+                order: 2;
             }
             #subs-container {
-                order: 3; /* 後備放最後 */
+                order: 3;
             }
             #right-panel {
-                order: 1; /* 戰術要求放上方 */
+                order: 1;
             }
             .player {
                 width: 6vw;
@@ -200,7 +213,7 @@
             <h2>陣容選擇</h2>
             <label>選擇陣型:</label>
             <select id="formation-select">
-                <option value="352-offensive">3-5-2 進攻陣</option>
+                <option value="442-defensive">4-4-2 防守陣</option>
                 <option value="352-defensive">3-5-2 防守陣</option>
                 <option value="451-defensive">4-5-1 防守陣</option>
             </select>
@@ -212,7 +225,11 @@
             <div id="subs-list"></div>
         </div>
 
-        <div id="pitch-container"></div>
+        <div id="pitch-container">
+            <div id="pitch-error" style="display: none;">
+                無法加載足球場圖片，請檢查網路或圖片路徑。
+            </div>
+        </div>
 
         <div id="right-panel">
             <h2>請點選位置顯示戰術要求</h2>
@@ -224,33 +241,33 @@
         const players = ['新', '禮', '東', 'Vasco', 'Alex', '光', '航', 'Xander', 'Nate', '軍C', '俊', 'Joe', '杰', '銳', 'Mike', 'Dan', '銘', '達', 'Hugo', 'Ivan', '業', '甘', '雷公', '鬼佬', 'Ken', '家興'];
 
         const formations = {
-            '352-offensive': {
-                positions: ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'lm', 'cam', 'rm', 'rwb', 'lst', 'rst'],
+            '442-defensive': {
+                positions: ['gk', 'lb', 'lcb', 'rcb', 'rb', 'lm', 'lcm', 'rcm', 'rm', 'lst', 'rst'],
                 layout: {
                     'gk': { left: '50%', top: '90%' },
-                    'lcb': { left: '30%', top: '70%' },
-                    'cb': { left: '50%', top: '70%' },
-                    'rcb': { left: '70%', top: '70%' },
-                    'lwb': { left: '20%', top: '50%' },
-                    'lm': { left: '35%', top: '40%' },
-                    'cam': { left: '50%', top: '30%' },
-                    'rm': { left: '65%', top: '40%' },
-                    'rwb': { left: '80%', top: '50%' },
-                    'lst': { left: '40%', top: '15%' },
-                    'rst': { left: '60%', top: '15%' }
+                    'lb': { left: '20%', top: '70%' },
+                    'lcb': { left: '40%', top: '70%' },
+                    'rcb': { left: '60%', top: '70%' },
+                    'rb': { left: '80%', top: '70%' },
+                    'lm': { left: '20%', top: '45%' },
+                    'lcm': { left: '40%', top: '45%' },
+                    'rcm': { left: '60%', top: '45%' },
+                    'rm': { left: '80%', top: '45%' },
+                    'lst': { left: '40%', top: '20%' },
+                    'rst': { left: '60%', top: '20%' }
                 },
                 details: {
-                    'gk': { name: '門將 (GK)', tactics: '作為防守的最後一道屏障，負責守護球門並快速發動反擊，同時組織後衛線保持緊密防守。需要具備出色的單對單能力和心理素質，能在高壓環境下穩定發揮。', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '站在禁區外圍，參與後場短傳組織，必要時利用長傳找到前場快速球員，直接發動進攻。', def: '守住球門線，保持冷靜判斷射門角度，快速反應撲救遠射或近距離射門，必要時果斷出擊攔截單刀球或高空球。', example: 'Manuel Neuer - 現代「掃蕩型門將」的代表，擅長出擊防守和用腳傳球，改變了門將的傳統角色。' },
-                    'lcb': { name: '左中後衛 (LCB)', tactics: '負責防守左側區域並在前場提供支援，與左翼衛協作形成邊路進攻威脅，同時在中路補位保持防線穩定。需要具備良好的空中爭頂能力和戰術意識。', tech: '頭球 85, 搶斷 88, 傳球 80, 防守站位 90, 速度 75', off: '適當前壓至中場線附近，參與短傳組織，支援左翼衛推進並為中場提供分球選擇。', def: '退守禁區左側，與中後衛緊密協作，盯防對方右邊鋒或內切前鋒，負責清空禁區內的高空球和傳中威脅。', example: 'Giorgio Chiellini - 防守硬朗，頭球能力出色，擅長人盯人防守和關鍵攔截。' },
-                    'cb': { name: '中後衛 (CB)', tactics: '三後衛體系的核心，負責統籌防線，盯防對方中鋒並清掃禁區內的所有威脅，同時承擔防守指揮責任。需要頂級的防守閱讀能力和領導力。', tech: '頭球 90, 搶斷 92, 傳球 85, 防守站位 95, 力量 88', off: '留在後場中路，分球至中場或邊路，必要時帶球前插支援中場，參與進攻組織的第一步。', def: '坐鎮禁區中央，負責高空球防守和對方中鋒的直接對抗，快速補位並指揮隊友站位，確保防線不被突破。', example: 'Virgil van Dijk - 現代中後衛的典範，防守全面且具備出球能力，場上領導力極強。' },
-                    'rcb': { name: '右中後衛 (RCB)', tactics: '負責防守右側區域並在前場提供支援，與右翼衛協作形成邊路進攻威脅，同時在中路補位保持防線穩定。需要具備穩定的防守意識和協作能力。', tech: '頭球 85, 搶斷 88, 傳球 80, 防守站位 90, 速度 75', off: '適當前壓至中場線附近，參與短傳組織，支援右翼衛推進並為中場提供分球選擇。', def: '退守禁區右側，與中後衛緊密協作，盯防對方左邊鋒或內切前鋒，負責清空禁區內的高空球和傳中威脅。', example: 'Sergio Ramos - 防守兇悍且進攻能力強，定位球得分能力突出，防守經驗豐富。' },
-                    'lwb': { name: '左翼衛 (LWB)', tactics: '負責左邊路的進攻與防守，提供場地寬度並支援前鋒，是進攻陣型中的關鍵角色。需要出色的往返能力和邊路突破技術。', tech: '速度 90, 傳中 85, 盤帶 80, 防守 75, 體力 90', off: '前插至對方半場邊線，傳中至禁區或內切配合前鋒，直接參與進攻並製造威脅。', def: '回撤至左後衛位置，封堵對方右邊鋒的突破或傳中，協助左中後衛防守邊路空位，保持防守穩定。', example: 'Marcelo - 進攻型翼衛的代表，盤帶和傳中技術一流，邊路進攻能力突出。' },
-                    'lm': { name: '左中場 (LM)', tactics: '支援左邊路進攻並提供中場銜接，與左翼衛和進攻中場形成聯繫，增強中場的進攻火力。需要具備一定的創造力和跑動能力。', tech: '傳球 85, 盤帶 80, 射門 75, 體力 85, 速度 88', off: '內切至禁區外圍尋找射門機會，或傳中至前鋒，與左翼衛配合撕開對方防線。', def: '協助左翼衛防守邊路，壓迫對方右後衛或中場，必要時回撤至中場線參與防守。', example: 'Bernardo Silva - 技術細膩且跑動積極，擅長在中場創造機會和支援邊路。' },
-                    'cam': { name: '進攻中場 (CAM)', tactics: '組織進攻並為前鋒創造得分機會，是中場進攻的核心樞紐。需要出色的視野和傳球能力，能在關鍵時刻改變比賽走向。', tech: '視野 90, 傳球 88, 盤帶 85, 射門 80, 靈活性 88', off: '位於禁區外圍，分球至雙前鋒或邊路，尋找遠射機會或直塞撕開對方防線。', def: '壓迫對方後腰或中場核心，協助中場防守，必要時回撤至中場線參與防守轉換。', example: 'Kevin De Bruyne - 傳球大師，視野開闊且遠射能力強，是進攻中場的頂級代表。' },
-                    'rm': { name: '右中場 (RM)', tactics: '支援右邊路進攻並提供中場銜接，與右翼衛和進攻中場形成聯繫，增強中場的進攻火力。需要具備一定的創造力和跑動能力。', tech: '傳球 85, 盤帶 80, 射門 75, 體力 85, 速度 88', off: '內切至禁區外圍尋找射門機會，或傳中至前鋒，與右翼衛配合撕開對方防線。', def: '協助右翼衛防守邊路，壓迫對方左後衛或中場，必要時回撤至中場線參與防守。', example: 'Jadon Sancho - 盤帶出色且傳球精準，擅長邊路突破和中場支援。' },
-                    'rwb': { name: '右翼衛 (RWB)', tactics: '負責右邊路的進攻與防守，提供場地寬度並支援前鋒，是進攻陣型中的關鍵角色。需要出色的往返能力和邊路突破技術。', tech: '速度 90, 傳中 85, 盤帶 80, 防守 75, 體力 90', off: '前插至對方半場邊線，傳中至禁區或內切配合前鋒，直接參與進攻並製造威脅。', def: '回撤至右後衛位置，封堵對方左邊鋒的突破或傳中，協助右中後衛防守邊路空位，保持防守穩定。', example: 'Trent Alexander-Arnold - 傳中精準且具備出色的進攻意識，是現代翼衛的典範。' },
-                    'lst': { name: '左前鋒 (LST)', tactics: '拉開對方防線並尋找得分機會，與右前鋒和進攻中場形成進攻三角，承擔主要的進攻終結任務。需要出色的突破和射門能力。', tech: '射門 88, 速度 90, 盤帶 88, 傳球 80, 靈活性 90', off: '位於禁區左側，內切射門或傳中給右前鋒，快速利用空位製造威脅，與隊友配合完成進攻。', def: '壓迫對方右後衛或右中後衛，參與前場防守，爭搶第二落點並阻斷對方後場出球。', example: 'Neymar - 技術細膩且突破能力強，擅長內切得分和創造機會。' },
-                    'rst': { name: '右前鋒 (RST)', tactics: '拉開對方防線並尋找得分機會，與左前鋒和進攻中場形成進攻三角，承擔主要的進攻終結任務。需要出色的突破和射門能力。', tech: '射門 88, 速度 90, 盤帶 88, 傳球 80, 靈活性 90', off: '位於禁區右側，內切射門或傳中給左前鋒，快速利用空位製造威脅，與隊友配合完成進攻。', def: '壓迫對方左後衛或左中後衛，參與前場防守，爭搶第二落點並阻斷對方後場出球。', example: 'Lionel Messi - 技術與創造力的巔峰，右路內切無人能敵，得分和助攻能力頂尖。' }
+                    'gk': { name: '門將 (GK)', tactics: '防守的最後一道屏障，負責守護球門並快速分球發動反擊，組織後衛線保持緊密防守。', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '參與後場短傳，必要時長傳至前場快速球員發動反擊。', def: '守住球門線，快速反應撲救，果斷出擊攔截單刀或高空球。', example: 'Manuel Neuer - 出擊防守和傳球能力強的現代門將典範。' },
+                    'lb': { name: '左後衛 (LB)', tactics: '穩固左路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援左中場。', def: '封堵對方右邊鋒突破或傳中，退守禁區補位。', example: 'Andrew Robertson - 防守穩健且跑動積極的邊後衛。' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守中路核心，負責清空禁區威脅，與右中後衛協作穩固防線。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定。', def: '盯防對方前鋒，清空高空球和傳中威脅，快速補位。', example: 'Virgil van Dijk - 防守全面且領導力強的中後衛。' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守中路核心，與左中後衛協作，承擔空中防守和盯人任務。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，必要時支援中場轉換。', def: '盯防對方前鋒，清空高空球，確保防線完整。', example: 'Sergio Ramos - 防守兇悍且經驗豐富的中後衛。' },
+                    'rb': { name: '右後衛 (RB)', tactics: '穩固右路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援右中場。', def: '封堵對方左邊鋒突破或傳中，退守禁區補位。', example: 'Kyle Walker - 速度快且防守穩固的邊後衛。' },
+                    'lm': { name: '左中場 (LM)', tactics: '防守左邊路並支援反擊，提供場地寬度並協助左後衛防守。', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊。', def: '回防壓迫對方右後衛或右邊鋒，協助防守邊路。', example: 'Son Heung-min - 速度快且技術全面的邊路球員。' },
+                    'lcm': { name: '左中場 (LCM)', tactics: '防守中場左側並銜接攻防，與右中場協作形成中場屏障。', tech: '傳球 88, 搶斷 85, 視野 90, 跑動 85, 防守站位 88', off: '分球至邊路或前鋒，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛。', example: 'Toni Kroos - 傳球精準且防守穩健的中場。' },
+                    'rcm': { name: '右中場 (RCM)', tactics: '防守中場右側並銜接攻防，與左中場協作形成中場屏障。', tech: '傳球 88, 搶斷 85, 視野 90, 跑動 85, 防守站位 88', off: '分球至邊路或前鋒，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛。', example: 'Luka Modrić - 技術全面且防守積極的中場。' },
+                    'rm': { name: '右中場 (RM)', tactics: '防守右邊路並支援反擊，提供場地寬度並協助右後衛防守。', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊。', def: '回防壓迫對方左後衛或左邊鋒，協助防守邊路。', example: 'Bukayo Saka - 速度快且技術出色的邊路球員。' },
+                    'lst': { name: '左前鋒 (LST)', tactics: '防守反擊的終結者，負責牽制後衛並完成得分，與右前鋒配合。', tech: '射門 88, 速度 90, 盤帶 88, 傳球 80, 位置感 90', off: '位於禁區左側，內切射門或傳中給右前鋒。', def: '壓迫對方右後衛或右中後衛，爭搶第二落點。', example: 'Son Heung-min - 射門精準且速度快的左前鋒。' },
+                    'rst': { name: '右前鋒 (RST)', tactics: '防守反擊的終結者，負責牽制後衛並完成得分，與左前鋒配合。', tech: '射門 88, 速度 90, 盤帶 88, 傳球 80, 位置感 90', off: '位於禁區右側，內切射門或傳中給左前鋒。', def: '壓迫對方左後衛或左中後衛，爭搶第二落點。', example: 'Kylian Mbappé - 速度驚人且技術全面的右前鋒。' }
                 }
             },
             '352-defensive': {
@@ -314,11 +331,23 @@
         };
 
         let selectedPlayersByFormation = {
-            '352-offensive': {},
+            '442-defensive': {},
             '352-defensive': {},
             '451-defensive': {}
         };
-        let currentFormation = '352-defensive'; // 默認陣型
+        let currentFormation = '442-defensive';
+
+        // 檢查足球場圖片是否加載成功
+        function checkPitchImage() {
+            const img = new Image();
+            img.src = 'https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg';
+            img.onload = () => {
+                document.getElementById('pitch-error').style.display = 'none';
+            };
+            img.onerror = () => {
+                document.getElementById('pitch-error').style.display = 'block';
+            };
+        }
 
         // 初始化陣型選擇
         function initFormationSelect() {
@@ -330,6 +359,7 @@
             };
             updateFormation();
             loadSavedSelections();
+            checkPitchImage();
         }
 
         // 更新陣型相關內容
@@ -350,6 +380,11 @@
 
             // 更新戰術板
             pitchContainer.innerHTML = '';
+            pitchContainer.innerHTML += `
+                <div id="pitch-error" style="display: none;">
+                    無法加載足球場圖片，請檢查網路或圖片路徑。
+                </div>
+            `;
             formation.positions.forEach(pos => {
                 const playerDiv = document.createElement('div');
                 playerDiv.className = 'player';
@@ -386,6 +421,8 @@
                 }
             });
 
+            // 默認顯示第一個位置的戰術要求
+            showPositionDetails(formation.positions[0]);
             updatePitchAndSubs();
         }
 
