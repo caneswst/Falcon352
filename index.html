@@ -40,12 +40,12 @@
         .container {
             display: flex;
             justify-content: space-between;
-            padding: 20px;
-            max-width: 1200px;
+            padding: 10px; /* 減少外邊距 */
+            max-width: 100%; /* 占滿寬度 */
             margin: 0 auto;
         }
         #pitch-container {
-            width: 50%;
+            width: 60%; /* 增大球場比例 */
             position: relative;
             background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
             background-size: contain;
@@ -72,54 +72,57 @@
             box-shadow: 0 0 8px rgba(46, 139, 87, 0.6);
         }
         #left-panel {
-            width: 24%;
-            padding: 15px;
+            width: 20%; /* 減少寬度 */
+            padding: 10px; /* 減少內邊距 */
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
+            height: 700px; /* 固定高度 */
+            overflow-y: auto; /* 內部滾動 */
         }
         #subs-container {
-            width: 24%;
-            padding: 15px;
+            width: 20%; /* 減少寬度 */
+            padding: 10px; /* 減少內邊距 */
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            height: 700px;
-            overflow-y: auto;
+            height: 700px; /* 與球場同高 */
+            overflow-y: auto; /* 內部滾動 */
         }
         #right-panel {
-            width: 24%;
-            padding: 15px;
+            width: 20%; /* 減少寬度 */
+            padding: 10px; /* 減少內邊距 */
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            height: 700px; /* 固定高度 */
+            overflow-y: auto; /* 內部滾動 */
         }
         select {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
+            padding: 6px; /* 減小內邊距 */
+            margin-bottom: 8px; /* 減小間距 */
             border-radius: 5px;
             background: #fff;
             color: #333;
             border: 1px solid #4682b4;
-            font-size: 14px;
+            font-size: 12px; /* 減小字體 */
         }
         h2, h3 {
             color: #4682b4;
             font-family: 'Bebas Neue', cursive;
+            margin: 5px 0; /* 減小外邊距 */
         }
         .position-info {
             display: none;
-            line-height: 1.6;
+            line-height: 1.5;
             background: rgba(70, 130, 180, 0.1);
-            padding: 10px;
+            padding: 8px; /* 減小內邊距 */
             border-radius: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 8px; /* 減小間距 */
         }
         .position-info p {
-            margin: 5px 0;
+            margin: 4px 0; /* 減小外邊距 */
         }
         .position-info strong {
             color: #2e8b57;
@@ -130,9 +133,9 @@
         }
         #formation-select {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 16px;
+            padding: 8px; /* 減小內邊距 */
+            margin-bottom: 10px; /* 減小間距 */
+            font-size: 14px; /* 減小字體 */
             background: #4682b4;
             color: #fff;
             border: none;
@@ -246,7 +249,7 @@
                     'rb': { left: '80%', top: '70%' },
                     'lm': { left: '20%', top: '45%' },
                     'lcm': { left: '35%', top: '40%' },
-                    'cdm': { left: '50%', top: '57%' }, // 調整至防線與中場線之間
+                    'cdm': { left: '50%', top: '57%' },
                     'rcm': { left: '65%', top: '40%' },
                     'rm': { left: '80%', top: '45%' },
                     'st': { left: '50%', top: '20%' }
