@@ -19,13 +19,13 @@
         }
         #header {
             text-align: center;
-            padding: 15px 0;
+            padding: 2vh 0;
             background: linear-gradient(90deg, #4682b4, #2e8b57);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
         #header h1 {
             font-family: 'Bebas Neue', cursive;
-            font-size: 36px;
+            font-size: clamp(24px, 5vw, 36px); /* 自適應字體 */
             margin: 0;
             color: #fff;
             text-transform: uppercase;
@@ -39,32 +39,34 @@
         }
         .container {
             display: flex;
-            justify-content: space-between;
-            padding: 10px; /* 減少外邊距 */
-            max-width: 100%; /* 占滿寬度 */
+            flex-wrap: wrap; /* 允許換行 */
+            padding: 1vw;
+            max-width: 100%;
             margin: 0 auto;
+            gap: 1vw; /* 欄間距 */
         }
         #pitch-container {
-            width: 60%; /* 增大球場比例 */
+            width: 60%;
             position: relative;
             background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
             background-size: contain;
-            height: 700px;
+            height: 70vh; /* 自適應高度 */
+            max-height: 700px;
             border: 2px solid #4682b4;
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(70, 130, 180, 0.2);
         }
         .player {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: clamp(30px, 4vw, 40px); /* 自適應球員大小 */
+            height: clamp(30px, 4vw, 40px);
             background: #2e8b57;
             border-radius: 50%;
             color: #fff;
             text-align: center;
-            line-height: 40px;
+            line-height: clamp(30px, 4vw, 40px);
             cursor: pointer;
-            font-size: 14px;
+            font-size: clamp(10px, 1.5vw, 14px);
             transition: transform 0.3s, box-shadow 0.3s;
         }
         .player:hover {
@@ -72,70 +74,68 @@
             box-shadow: 0 0 8px rgba(46, 139, 87, 0.6);
         }
         #left-panel {
-            width: 20%; /* 減少寬度 */
-            padding: 10px; /* 減少內邊距 */
+            width: 20%;
+            padding: 1vw;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            height: 700px; /* 固定高度 */
-            overflow-y: auto; /* 內部滾動 */
+            max-height: 70vh;
+            overflow-y: auto;
         }
         #subs-container {
-            width: 20%; /* 減少寬度 */
-            padding: 10px; /* 減少內邊距 */
+            width: 20%;
+            padding: 1vw;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            height: 700px; /* 與球場同高 */
-            overflow-y: auto; /* 內部滾動 */
+            max-height: 70vh;
+            overflow-y: auto;
         }
         #right-panel {
-            width: 20%; /* 減少寬度 */
-            padding: 10px; /* 減少內邊距 */
+            width: 20%;
+            padding: 1vw;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            height: 700px; /* 固定高度 */
-            overflow-y: auto; /* 內部滾動 */
+            max-height: 70vh;
+            overflow-y: auto;
         }
         select {
             width: 100%;
-            padding: 6px; /* 減小內邊距 */
-            margin-bottom: 8px; /* 減小間距 */
+            padding: clamp(4px, 1vw, 6px);
+            margin-bottom: clamp(6px, 1vw, 8px);
             border-radius: 5px;
             background: #fff;
             color: #333;
             border: 1px solid #4682b4;
-            font-size: 12px; /* 減小字體 */
+            font-size: clamp(10px, 1.5vw, 12px);
         }
         h2, h3 {
             color: #4682b4;
             font-family: 'Bebas Neue', cursive;
-            margin: 5px 0; /* 減小外邊距 */
+            margin: clamp(4px, 1vw, 5px) 0;
+            font-size: clamp(16px, 2vw, 20px);
         }
         .position-info {
             display: none;
             line-height: 1.5;
             background: rgba(70, 130, 180, 0.1);
-            padding: 8px; /* 減小內邊距 */
+            padding: clamp(6px, 1vw, 8px);
             border-radius: 5px;
-            margin-bottom: 8px; /* 減小間距 */
+            margin-bottom: clamp(6px, 1vw, 8px);
         }
         .position-info p {
-            margin: 4px 0; /* 減小外邊距 */
+            margin: clamp(3px, 0.5vw, 4px) 0;
+            font-size: clamp(10px, 1.5vw, 12px);
         }
         .position-info strong {
             color: #2e8b57;
         }
-        #subs-list {
-            flex-grow: 1;
-            overflow-y: auto;
-        }
         #formation-select {
             width: 100%;
-            padding: 8px; /* 減小內邊距 */
-            margin-bottom: 10px; /* 減小間距 */
-            font-size: 14px; /* 減小字體 */
+            padding: clamp(6px, 1vw, 8px);
+            margin-bottom: clamp(8px, 1.5vw, 10px);
+            font-size: clamp(12px, 1.8vw, 14px);
             background: #4682b4;
             color: #fff;
             border: none;
@@ -145,6 +145,49 @@
         }
         #formation-select:hover {
             background: #2e8b57;
+        }
+
+        /* 平板調整 (寬度 < 900px) */
+        @media (max-width: 900px) {
+            #pitch-container {
+                width: 70%; /* 球場更大 */
+            }
+            #left-panel, #subs-container, #right-panel {
+                width: 15%; /* 邊欄更窄 */
+            }
+        }
+
+        /* 手機調整 (寬度 < 600px) */
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column; /* 上下堆疊 */
+                padding: 2vw;
+            }
+            #pitch-container {
+                width: 100%;
+                height: 50vh; /* 手機上減小高度 */
+                max-height: 400px;
+            }
+            #left-panel, #subs-container, #right-panel {
+                width: 100%;
+                max-height: 30vh; /* 限制高度 */
+                margin-top: 2vw;
+            }
+            #left-panel {
+                order: 2; /* 陣容選擇放中間 */
+            }
+            #subs-container {
+                order: 3; /* 後備放最後 */
+            }
+            #right-panel {
+                order: 1; /* 戰術要求放上方 */
+            }
+            .player {
+                width: 6vw;
+                height: 6vw;
+                line-height: 6vw;
+                font-size: 2vw;
+            }
         }
     </style>
 </head>
