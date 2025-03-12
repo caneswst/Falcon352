@@ -51,18 +51,18 @@
             flex-grow: 1;
             align-items: stretch; /* 確保子元素高度一致 */
         }
-        #pitch-container {
-            flex: 0 0 45%; /* 降低寬度比例，減少兩側空白 */
-            position: relative;
-            background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
-            background-size: cover;
-            min-height: 400px;
-            aspect-ratio: 3 / 5;
-            border: 2px solid #4682b4;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(70, 130, 180, 0.2);
-            background-color: #2e8b57; /* 備用背景色 */
-        }
+#pitch-container {
+    flex: 0 0 30%; /* 進一步降低寬度比例至 30% */
+    position: relative;
+    background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
+    background-size: cover;
+    min-height: 250px; /* 降低最小高度至 250px */
+    aspect-ratio: 3 / 5;
+    border: 2px solid #4682b4;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(70, 130, 180, 0.2);
+    background-color: #2e8b57;
+}
         #pitch-error {
             display: none;
             color: red;
@@ -73,24 +73,25 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-        .player {
-            position: absolute;
-            width: clamp(25px, 3vw, 35px); /* 縮小球員尺寸 */
-            height: clamp(25px, 3vw, 35px);
-            background: #2e8b57;
-            border-radius: 50%;
-            color: #fff;
-            text-align: center;
-            line-height: clamp(25px, 3vw, 35px);
-            cursor: pointer;
-            font-size: clamp(8px, 1.2vw, 12px); /* 縮小字體 */
-            transition: transform 0.3s, box-shadow 0.3s;
-            transform: translate(-50%, -50%);
-        }
-        .player:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            box-shadow: 0 0 8px rgba(46, 139, 87, 0.6);
-        }
+.player {
+    position: absolute;
+    width: clamp(18px, 2vw, 25px); /* 進一步縮小球員尺寸 */
+    height: clamp(18px, 2vw, 25px);
+    background: #2e8b57;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: clamp(18px, 2vw, 25px);
+    cursor: pointer;
+    font-size: clamp(5px, 0.8vw, 8px); /* 縮小字體 */
+    transition: transform 0.3s, box-shadow 0.3s;
+    transform: translate(-50%, -50%);
+}
+
+.player:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 8px rgba(46, 139, 87, 0.6);
+}
         #left-panel, #subs-container, #right-panel {
             flex: 1 1 18%; /* 平均分配剩餘寬度 */
             padding: 1vw;
