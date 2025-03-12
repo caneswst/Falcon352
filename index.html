@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>352戰術板</title>
+    <title>傲翔2025丙組戰術板</title>
     <style>
         body {
             display: flex;
@@ -16,7 +16,7 @@
             width: 50%;
             position: relative;
             background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
-            background-size: contain; /* 圖片自動適應容器大小 */
+            background-size: contain;
             height: 800px;
             border: 2px solid #333;
         }
@@ -76,163 +76,199 @@
         #subs-list {
             margin-top: 10px;
         }
+        #formation-select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div id="left-panel">
         <h2>陣容選擇</h2>
-        <label>門將 (GK):</label><select id="gk"><option value="">選擇球員</option></select>
-        <label>左中後衛 (LCB):</label><select id="lcb"><option value="">選擇球員</option></select>
-        <label>中後衛 (CB):</label><select id="cb"><option value="">選擇球員</option></select>
-        <label>右中後衛 (RCB):</label><select id="rcb"><option value="">選擇球員</option></select>
-        <label>左翼衛 (LWB):</label><select id="lwb"><option value="">選擇球員</option></select>
-        <label>左中場 (LCM):</label><select id="lcm"><option value="">選擇球員</option></select>
-        <label>右中場 (RCM):</label><select id="rcm"><option value="">選擇球員</option></select>
-        <label>右翼衛 (RWB):</label><select id="rwb"><option value="">選擇球員</option></select>
-        <label>左前鋒 (LST):</label><select id="lst"><option value="">選擇球員</option></select>
-        <label>中前鋒 (ST):</label><select id="st"><option value="">選擇球員</option></select>
-        <label>右前鋒 (RST):</label><select id="rst"><option value="">選擇球員</option></select>
+        <label>選擇陣型:</label>
+        <select id="formation-select">
+            <option value="352-offensive">3-5-2 進攻陣</option>
+            <option value="352-double">3-5-2 雙後腰</option>
+            <option value="442-defensive">4-4-2 防守陣</option>
+        </select>
+        <div id="positions-container"></div>
         <h3>後備球員</h3>
         <div id="subs-list"></div>
     </div>
 
-    <div id="pitch-container">
-        <div class="player" id="gk-player" style="left: 50%; top: 90%;">GK</div>
-        <div class="player" id="lcb-player" style="left: 30%; top: 70%;">LCB</div>
-        <div class="player" id="cb-player" style="left: 50%; top: 70%;">CB</div>
-        <div class="player" id="rcb-player" style="left: 70%; top: 70%;">RCB</div>
-        <div class="player" id="lwb-player" style="left: 20%; top: 50%;">LWB</div>
-        <div class="player" id="lcm-player" style="left: 40%; top: 40%;">LCM</div>
-        <div class="player" id="rcm-player" style="left: 60%; top: 40%;">RCM</div>
-        <div class="player" id="rwb-player" style="left: 80%; top: 50%;">RWB</div>
-        <div class="player" id="lst-player" style="left: 35%; top: 20%;">LST</div>
-        <div class="player" id="st-player" style="left: 50%; top: 15%;">ST</div>
-        <div class="player" id="rst-player" style="left: 65%; top: 20%;">RST</div>
-    </div>
+    <div id="pitch-container"></div>
 
     <div id="right-panel">
         <h2>位置詳情</h2>
-        <div id="gk-info" class="position-info">
-            <h3>門將 (GK)</h3>
-            <p><strong>戰術要求:</strong> 負責守護球門，組織防線，快速發動反擊。需要與後衛保持良好溝通，掌控禁區內的防守布局。</p>
-            <p><strong>技術要求:</strong> 撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88</p>
-            <p><strong>能力要求:</strong> 出色的單對單能力，穩定的心理素質，能適應高壓比賽環境，長傳精準度高。</p>
-            <p><strong>進攻時位置要求:</strong> 站在禁區外圍，支援後衛分球，必要時長傳找到前場快速球員發動反擊。</p>
-            <p><strong>防守時位置要求:</strong> 守住球門線，保持冷靜，快速判斷射門角度並作出反應，必要時出擊攔截。</p>
-            <p><strong>代表球員:</strong> Manuel Neuer (德國) - 現代「掃蕩型門將」的代表，擅長出擊防守和用腳傳球，改變了門將的傳統角色。</p>
-        </div>
-        <div id="lcb-info" class="position-info">
-            <h3>左中後衛 (LCB)</h3>
-            <p><strong>戰術要求:</strong> 在三後衛體系中負責左側防守，協助左翼衛封堵邊路，並在中路提供支援。</p>
-            <p><strong>技術要求:</strong> 頭球 85, 搶斷 88, 傳球 80, 防守站位 90, 速度 75</p>
-            <p><strong>能力要求:</strong> 出色的空中爭頂能力，穩定的防守意識，能快速切換防守目標。</p>
-            <p><strong>進攻時位置要求:</strong> 適當前壓至中場線附近，參與短傳組織，支援左翼衛進攻。</p>
-            <p><strong>防守時位置要求:</strong> 退守禁區左側，與中後衛協作，重點盯防對方右邊鋒或內切前鋒。</p>
-            <p><strong>代表球員:</strong> Giorgio Chiellini (意大利) - 防守硬朗，頭球能力出色，擅長人盯人防守。</p>
-        </div>
-        <div id="cb-info" class="position-info">
-            <h3>中後衛 (CB)</h3>
-            <p><strong>戰術要求:</strong> 三後衛核心，負責統籌防線，盯防對方中鋒並清掃禁區威脅。</p>
-            <p><strong>技術要求:</strong> 頭球 90, 搶斷 92, 傳球 85, 防守站位 95, 力量 88</p>
-            <p><strong>能力要求:</strong> 頂級的防守閱讀能力，強壯的體格，領導力強。</p>
-            <p><strong>進攻時位置要求:</strong> 留在後場中路，負責分球至中場或邊路，必要時帶球前插。</p>
-            <p><strong>防守時位置要求:</strong> 坐鎮禁區中央，負責高空球防守和對方中鋒的直接對抗。</p>
-            <p><strong>代表球員:</strong> Virgil van Dijk (荷蘭) - 現代中後衛的典範，防守全面且具備出球能力。</p>
-        </div>
-        <div id="rcb-info" class="position-info">
-            <h3>右中後衛 (RCB)</h3>
-            <p><strong>戰術要求:</strong> 負責右側防守，與右翼衛協作，同時在中路補位。</p>
-            <p><strong>技術要求:</strong> 頭球 85, 搶斷 88, 傳球 80, 防守站位 90, 速度 75</p>
-            <p><strong>能力要求:</strong> 穩定的防守意識，良好的協作能力，能迅速回防。</p>
-            <p><strong>進攻時位置要求:</strong> 前壓至中場右側，參與短傳或長傳至右翼衛。</p>
-            <p><strong>防守時位置要求:</strong> 退守禁區右側，盯防對方左邊鋒或內切球員。</p>
-            <p><strong>代表球員:</strong> Sergio Ramos (西班牙) - 防守兇悍且進攻能力強，定位球得分能力突出。</p>
-        </div>
-        <div id="lwb-info" class="position-info">
-            <h3>左翼衛 (LWB)</h3>
-            <p><strong>戰術要求:</strong> 負責左邊路進攻與防守，提供寬度並支援前鋒。</p>
-            <p><strong>技術要求:</strong> 速度 90, 傳中 85, 盤帶 80, 防守 75, 體力 90</p>
-            <p><strong>能力要求:</strong> 出色的往返能力，精準的傳中技術，防守時能回追。</p>
-            <p><strong>進攻時位置要求:</strong> 前插至對方半場邊線，傳中或內切配合前鋒。</p>
-            <p><strong>防守時位置要求:</strong> 回撤至左後衛位置，封堵對方右邊鋒。</p>
-            <p><strong>代表球員:</strong> Marcelo (巴西) - 進攻型翼衛的代表，盤帶和傳中技術一流。</p>
-        </div>
-        <div id="lcm-info" class="position-info">
-            <h3>左中場 (LCM)</h3>
-            <p><strong>戰術要求:</strong> 雙後腰之一，負責中場防守與進攻的銜接，偏向左側活動。</p>
-            <p><strong>技術要求:</strong> 傳球 88, 搶斷 85, 視野 90, 跑動 80, 射門 70</p>
-            <p><strong>能力要求:</strong> 出色的戰術理解力，穩定的傳球能力，防守覆蓋面廣。</p>
-            <p><strong>進攻時位置要求:</strong> 前插至對方禁區外圍，負責分球或遠射。</p>
-            <p><strong>防守時位置要求:</strong> 回撤至中場左側，協助左翼衛防守並斷球。</p>
-            <p><strong>代表球員:</strong> Toni Kroos (德國) - 傳球大師，防守穩健且進攻組織能力強。</p>
-        </div>
-        <div id="rcm-info" class="position-info">
-            <h3>右中場 (RCM)</h3>
-            <p><strong>戰術要求:</strong> 雙後腰之一，負責中場右側的防守與進攻轉換。</p>
-            <p><strong>技術要求:</strong> 傳球 88, 搶斷 85, 視野 90, 跑動 80, 射門 70</p>
-            <p><strong>能力要求:</strong> 良好的控場能力，防守時能快速回位，進攻時支援右翼衛。</p>
-            <p><strong>進攻時位置要求:</strong> 前插至右側禁區外圍，分球或嘗試遠射。</p>
-            <p><strong>防守時位置要求:</strong> 回撤至中場右側，協助右翼衛防守並搶斷。</p>
-            <p><strong>代表球員:</strong> Luka Modrić (克羅地亞) - 中場節奏器，技術全面且防守積極。</p>
-        </div>
-        <div id="rwb-info" class="position-info">
-            <h3>右翼衛 (RWB)</h3>
-            <p><strong>戰術要求:</strong> 負責右邊路進攻與防守，提供寬度並支援前鋒。</p>
-            <p><strong>技術要求:</strong> 速度 90, 傳中 85, 盤帶 80, 防守 75, 體力 90</p>
-            <p><strong>能力要求:</strong> 出色的衝刺能力，精準的傳中技術，防守時能及時回位。</p>
-            <p><strong>進攻時位置要求:</strong> 前插至對方半場邊線，傳中或內切配合前鋒。</p>
-            <p><strong>防守時位置要求:</strong> 回撤至右後衛位置，封堵對方左邊鋒。</p>
-            <p><strong>代表球員:</strong> Trent Alexander-Arnold (英格蘭) - 傳中精準且具備出色的進攻意識。</p>
-        </div>
-        <div id="lst-info" class="position-info">
-            <h3>左前鋒 (LST)</h3>
-            <p><strong>戰術要求:</strong> 三前鋒中偏左活動，負責拉開防線並創造機會。</p>
-            <p><strong>技術要求:</strong> 速度 90, 盤帶 88, 射門 85, 傳球 80, 靈活性 90</p>
-            <p><strong>能力要求:</strong> 出色的突破能力，射門精準，能與中鋒配合。</p>
-            <p><strong>進攻時位置要求:</strong> 拉至左側禁區，內切射門或傳中給中鋒。</p>
-            <p><strong>防守時位置要求:</strong> 回撤至中場左側，壓迫對方右後衛。</p>
-            <p><strong>代表球員:</strong> Neymar (巴西) - 技術細膩，擅長內切和創造機會。</p>
-        </div>
-        <div id="st-info" class="position-info">
-            <h3>中前鋒 (ST)</h3>
-            <p><strong>戰術要求:</strong> 三前鋒核心，負責終結進攻並牽制後衛。</p>
-            <p><strong>技術要求:</strong> 射門 92, 頭球 85, 力量 88, 位置感 90, 搶點 90</p>
-            <p><strong>能力要求:</strong> 出色的門前嗅覺，強壯的對抗能力，高效的得分效率。</p>
-            <p><strong>進攻時位置要求:</strong> 站在禁區中央，接應傳球並完成射門。</p>
-            <p><strong>防守時位置要求:</strong> 前場壓迫對方中後衛，爭搶第一落點。</p>
-            <p><strong>代表球員:</strong> Robert Lewandowski (波蘭) - 現代中鋒的典範，射門效率極高。</p>
-        </div>
-        <div id="rst-info" class="position-info">
-            <h3>右前鋒 (RST)</h3>
-            <p><strong>戰術要求:</strong> 三前鋒中偏右活動，負責拉開防線並製造進攻機會。</p>
-            <p><strong>技術要求:</strong> 速度 90, 盤帶 88, 射門 85, 傳球 80, 靈活性 90</p>
-            <p><strong>能力要求:</strong> 出色的個人能力，射門精準，能與中鋒聯繫。</p>
-            <p><strong>進攻時位置要求:</strong> 拉至右側禁區，內切射門或傳中給中鋒。</p>
-            <p><strong>防守時位置要求:</strong> 回撤至中場右側，壓迫對方左後衛。</p>
-            <p><strong>代表球員:</strong> Lionel Messi (阿根廷) - 技術與創造力的巔峰，右路內切無人能敵。</p>
-        </div>
+        <div id="position-details"></div>
     </div>
 
     <script>
         const players = ['東', 'Alex', '光', '禮', 'Ken', '航', '雷公', '鬼佬', 'Dan', '锐', 'Vasco', 'Mike', 'Xander', 'Nate', '軍', '俊', '新', '達', 'Hugo', '謙', '斌', '甘', 'Joe', '杰', '家興'];
-        const positions = ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'lcm', 'rcm', 'rwb', 'lst', 'st', 'rst'];
-        let selectedPlayers = {};
 
-        // 初始化下拉選單
-        function populateSelects() {
-            positions.forEach(pos => {
-                const select = document.getElementById(pos);
-                select.innerHTML = '<option value="">選擇球員</option>' + 
-                    players.map(p => `<option value="${p}">${p}</option>`).join('');
-                select.onchange = updatePitchAndSubs;
+        const formations = {
+            '352-offensive': {
+                positions: ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'lm', 'cam', 'rm', 'rwb', 'lst', 'rst'],
+                layout: {
+                    'gk': { left: '50%', top: '90%' },
+                    'lcb': { left: '30%', top: '70%' },
+                    'cb': { left: '50%', top: '70%' },
+                    'rcb': { left: '70%', top: '70%' },
+                    'lwb': { left: '20%', top: '50%' },
+                    'lm': { left: '35%', top: '40%' },
+                    'cam': { left: '50%', top: '30%' },
+                    'rm': { left: '65%', top: '40%' },
+                    'rwb': { left: '80%', top: '50%' },
+                    'lst': { left: '40%', top: '15%' },
+                    'rst': { left: '60%', top: '15%' }
+                },
+                details: {
+                    'gk': { name: '門將 (GK)', tactics: '守門並快速分球', tech: '撲救 90, 開球 85', off: '支援後衛', def: '守門線', example: 'Manuel Neuer' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守左路並前插', tech: '頭球 85, 傳球 80', off: '參與進攻', def: '盯防右邊鋒', example: 'Giorgio Chiellini' },
+                    'cb': { name: '中後衛 (CB)', tactics: '統籌防線', tech: '頭球 90, 搶斷 92', off: '分球', def: '禁區中央', example: 'Virgil van Dijk' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守右路並前插', tech: '頭球 85, 傳球 80', off: '參與進攻', def: '盯防左邊鋒', example: 'Sergio Ramos' },
+                    'lwb': { name: '左翼衛 (LWB)', tactics: '邊路進攻', tech: '速度 90, 傳中 85', off: '前插傳中', def: '回防左路', example: 'Marcelo' },
+                    'lm': { name: '左中場 (LM)', tactics: '支援邊路進攻', tech: '傳球 85, 盤帶 80', off: '內切或傳中', def: '協助防守', example: 'Bernardo Silva' },
+                    'cam': { name: '進攻中場 (CAM)', tactics: '組織進攻', tech: '視野 90, 傳球 88', off: '禁區外圍', def: '壓迫中場', example: 'Kevin De Bruyne' },
+                    'rm': { name: '右中場 (RM)', tactics: '支援邊路進攻', tech: '傳球 85, 盤帶 80', off: '內切或傳中', def: '協助防守', example: 'Jadon Sancho' },
+                    'rwb': { name: '右翼衛 (RWB)', tactics: '邊路進攻', tech: '速度 90, 傳中 85', off: '前插傳中', def: '回防右路', example: 'Trent Alexander-Arnold' },
+                    'lst': { name: '左前鋒 (LST)', tactics: '拉開防線並得分', tech: '射門 88, 速度 90', off: '禁區左側', def: '壓迫後衛', example: 'Neymar' },
+                    'rst': { name: '右前鋒 (RST)', tactics: '拉開防線並得分', tech: '射門 88, 速度 90', off: '禁區右側', def: '壓迫後衛', example: 'Lionel Messi' }
+                }
+            },
+            '352-double': {
+                positions: ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'lcm', 'rcm', 'rwb', 'lst', 'st', 'rst'],
+                layout: {
+                    'gk': { left: '50%', top: '90%' },
+                    'lcb': { left: '30%', top: '70%' },
+                    'cb': { left: '50%', top: '70%' },
+                    'rcb': { left: '70%', top: '70%' },
+                    'lwb': { left: '20%', top: '50%' },
+                    'lcm': { left: '40%', top: '40%' },
+                    'rcm': { left: '60%', top: '40%' },
+                    'rwb': { left: '80%', top: '50%' },
+                    'lst': { left: '35%', top: '20%' },
+                    'st': { left: '50%', top: '15%' },
+                    'rst': { left: '65%', top: '20%' }
+                },
+                details: {
+                    'gk': { name: '門將 (GK)', tactics: '守門並組織', tech: '撲救 90, 開球 80', off: '長傳反擊', def: '守門線', example: 'Manuel Neuer' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守左側', tech: '頭球 85, 搶斷 88', off: '支援中場', def: '禁區左側', example: 'Giorgio Chiellini' },
+                    'cb': { name: '中後衛 (CB)', tactics: '統籌防線', tech: '頭球 90, 搶斷 92', off: '分球', def: '禁區中央', example: 'Virgil van Dijk' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守右側', tech: '頭球 85, 搶斷 88', off: '支援中場', def: '禁區右側', example: 'Sergio Ramos' },
+                    'lwb': { name: '左翼衛 (LWB)', tactics: '邊路支援', tech: '速度 90, 傳中 85', off: '前插', def: '封堵右邊鋒', example: 'Marcelo' },
+                    'lcm': { name: '左中場 (LCM)', tactics: '防守與銜接', tech: '傳球 88, 搶斷 85', off: '分球', def: '中場左側', example: 'Toni Kroos' },
+                    'rcm': { name: '右中場 (RCM)', tactics: '防守與銜接', tech: '傳球 88, 搶斷 85', off: '分球', def: '中場右側', example: 'Luka Modrić' },
+                    'rwb': { name: '右翼衛 (RWB)', tactics: '邊路支援', tech: '速度 90, 傳中 85', off: '前插', def: '封堵左邊鋒', example: 'Trent Alexander-Arnold' },
+                    'lst': { name: '左前鋒 (LST)', tactics: '拉開防線', tech: '射門 85, 速度 90', off: '禁區左側', def: '壓迫', example: 'Neymar' },
+                    'st': { name: '中前鋒 (ST)', tactics: '終結進攻', tech: '射門 92, 位置感 90', off: '禁區中央', def: '壓迫後衛', example: 'Robert Lewandowski' },
+                    'rst': { name: '右前鋒 (RST)', tactics: '拉開防線', tech: '射門 85, 速度 90', off: '禁區右側', def: '壓迫', example: 'Lionel Messi' }
+                }
+            },
+            '442-defensive': {
+                positions: ['gk', 'lb', 'lcb', 'rcb', 'rb', 'lm', 'lcm', 'rcm', 'rm', 'lst', 'rst'],
+                layout: {
+                    'gk': { left: '50%', top: '90%' },
+                    'lb': { left: '20%', top: '70%' },
+                    'lcb': { left: '40%', top: '70%' },
+                    'rcb': { left: '60%', top: '70%' },
+                    'rb': { left: '80%', top: '70%' },
+                    'lm': { left: '20%', top: '40%' },
+                    'lcm': { left: '40%', top: '40%' },
+                    'rcm': { left: '60%', top: '40%' },
+                    'rm': { left: '80%', top: '40%' },
+                    'lst': { left: '40%', top: '15%' },
+                    'rst': { left: '60%', top: '15%' }
+                },
+                details: {
+                    'gk': { name: '門將 (GK)', tactics: '守門並穩固防線', tech: '撲救 90, 反應 95', off: '分球', def: '守門線', example: 'Manuel Neuer' },
+                    'lb': { name: '左後衛 (LB)', tactics: '防守左路', tech: '搶斷 85, 速度 80', off: '支援邊路', def: '封堵右邊鋒', example: 'Andrew Robertson' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守中路', tech: '頭球 88, 搶斷 90', off: '分球', def: '禁區左側', example: 'Giorgio Chiellini' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守中路', tech: '頭球 88, 搶斷 90', off: '分球', def: '禁區右側', example: 'Virgil van Dijk' },
+                    'rb': { name: '右後衛 (RB)', tactics: '防守右路', tech: '搶斷 85, 速度 80', off: '支援邊路', def: '封堵左邊鋒', example: 'Kyle Walker' },
+                    'lm': { name: '左中場 (LM)', tactics: '邊路防守與支援', tech: '傳中 80, 體力 85', off: '傳中', def: '回防左路', example: 'Son Heung-min' },
+                    'lcm': { name: '左中場 (LCM)', tactics: '中場防守', tech: '傳球 85, 搶斷 85', off: '分球', def: '中場左側', example: 'N’Golo Kanté' },
+                    'rcm': { name: '右中場 (RCM)', tactics: '中場防守', tech: '傳球 85, 搶斷 85', off: '分球', def: '中場右側', example: 'Casemiro' },
+                    'rm': { name: '右中場 (RM)', tactics: '邊路防守與支援', tech: '傳中 80, 體力 85', off: '傳中', def: '回防右路', example: 'Bukayo Saka' },
+                    'lst': { name: '左前鋒 (LST)', tactics: '防守反擊得分', tech: '射門 88, 速度 90', off: '禁區左側', def: '壓迫', example: 'Harry Kane' },
+                    'rst': { name: '右前鋒 (RST)', tactics: '防守反擊得分', tech: '射門 88, 速度 90', off: '禁區右側', def: '壓迫', example: 'Kylian Mbappé' }
+                }
+            }
+        };
+
+        let selectedPlayers = {};
+        let currentFormation = '352-double'; // 默認陣型
+
+        // 初始化陣型選擇
+        function initFormationSelect() {
+            const formationSelect = document.getElementById('formation-select');
+            formationSelect.onchange = () => {
+                currentFormation = formationSelect.value;
+                updateFormation();
+                updatePitchAndSubs();
+            };
+            updateFormation();
+            loadSavedSelections();
+        }
+
+        // 更新陣型相關內容
+        function updateFormation() {
+            const formation = formations[currentFormation];
+            const positionsContainer = document.getElementById('positions-container');
+            const pitchContainer = document.getElementById('pitch-container');
+            const positionDetails = document.getElementById('position-details');
+
+            // 更新左側選單
+            positionsContainer.innerHTML = '';
+            formation.positions.forEach(pos => {
+                positionsContainer.innerHTML += `
+                    <label>${formation.details[pos].name}:</label>
+                    <select id="${pos}"><option value="">選擇球員</option>${players.map(p => `<option value="${p}">${p}</option>`).join('')}</select>
+                `;
             });
-            loadSavedSelections(); // 載入上次選擇
+
+            // 更新戰術板
+            pitchContainer.innerHTML = '';
+            formation.positions.forEach(pos => {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = 'player';
+                playerDiv.id = `${pos}-player`;
+                playerDiv.style.left = formation.layout[pos].left;
+                playerDiv.style.top = formation.layout[pos].top;
+                playerDiv.textContent = pos.toUpperCase();
+                playerDiv.onclick = () => showPositionDetails(pos);
+                pitchContainer.appendChild(playerDiv);
+            });
+
+            // 更新右側詳情
+            positionDetails.innerHTML = '';
+            formation.positions.forEach(pos => {
+                const info = formation.details[pos];
+                positionDetails.innerHTML += `
+                    <div id="${pos}-info" class="position-info">
+                        <h3>${info.name}</h3>
+                        <p><strong>戰術要求:</strong> ${info.tactics}</p>
+                        <p><strong>技術要求:</strong> ${info.tech}</p>
+                        <p><strong>進攻時位置要求:</strong> ${info.off}</p>
+                        <p><strong>防守時位置要求:</strong> ${info.def}</p>
+                        <p><strong>代表球員:</strong> ${info.example}</p>
+                    </div>
+                `;
+            });
+
+            // 為每個下拉選單添加事件
+            formation.positions.forEach(pos => {
+                document.getElementById(pos).onchange = updatePitchAndSubs;
+            });
         }
 
         // 更新戰術板和後備名單
         function updatePitchAndSubs() {
+            const formation = formations[currentFormation];
             const selected = new Set();
-            positions.forEach(pos => {
+            formation.positions.forEach(pos => {
                 const select = document.getElementById(pos);
                 const playerDiv = document.getElementById(pos + '-player');
                 const selectedPlayer = select.value;
@@ -246,38 +282,38 @@
             const subs = players.filter(p => !selected.has(p));
             subsList.innerHTML = subs.map(p => `<p>${p}</p>`).join('');
 
-            // 保存選擇到localStorage
+            // 保存選擇
             localStorage.setItem('selectedPlayers', JSON.stringify(selectedPlayers));
+            localStorage.setItem('currentFormation', currentFormation);
         }
 
         // 載入上次保存的選擇
         function loadSavedSelections() {
+            const savedFormation = localStorage.getItem('currentFormation');
+            if (savedFormation) {
+                currentFormation = savedFormation;
+                document.getElementById('formation-select').value = savedFormation;
+                updateFormation();
+            }
             const saved = localStorage.getItem('selectedPlayers');
             if (saved) {
                 selectedPlayers = JSON.parse(saved);
-                positions.forEach(pos => {
+                formations[currentFormation].positions.forEach(pos => {
                     const select = document.getElementById(pos);
-                    if (selectedPlayers[pos]) {
-                        select.value = selectedPlayers[pos];
-                    }
+                    if (selectedPlayers[pos]) select.value = selectedPlayers[pos];
                 });
-                updatePitchAndSubs(); // 更新戰術板和後備名單
-            } else {
-                updatePitchAndSubs(); // 初始化後備名單
             }
+            updatePitchAndSubs();
         }
 
-        // 點擊球員顯示詳情
-        document.querySelectorAll('.player').forEach(player => {
-            player.onclick = () => {
-                const pos = player.id.split('-')[0];
-                document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
-                const infoDiv = document.getElementById(pos + '-info');
-                if (infoDiv) infoDiv.style.display = 'block';
-            };
-        });
+        // 顯示位置詳情
+        function showPositionDetails(pos) {
+            document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
+            const infoDiv = document.getElementById(pos + '-info');
+            if (infoDiv) infoDiv.style.display = 'block';
+        }
 
-        populateSelects();
+        initFormationSelect();
     </script>
 </body>
 </html>
