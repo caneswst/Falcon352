@@ -146,6 +146,24 @@
         #formation-select:hover {
             background: #2e8b57;
         }
+        .export-import-btn {
+            width: 100%;
+            padding: clamp(6px, 1vw, 8px);
+            margin: clamp(4px, 0.5vw, 6px) 0;
+            font-size: clamp(12px, 1.8vw, 14px);
+            background: #2e8b57;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .export-import-btn:hover {
+            background: #4682b4;
+        }
+        #import-file {
+            display: none;
+        }
         @media (max-width: 900px) {
             .container {
                 flex-wrap: wrap;
@@ -199,6 +217,9 @@
                 <option value="4231-defensive">4-2-3-1 防守陣</option>
             </select>
             <div id="positions-container"></div>
+            <button class="export-import-btn" onclick="exportFormation()">匯出陣容</button>
+            <button class="export-import-btn" onclick="document.getElementById('import-file').click()">匯入陣容</button>
+            <input type="file" id="import-file" accept=".json" onchange="importFormation(event)">
         </div>
         <div id="subs-container">
             <h3>後備球員</h3>
@@ -350,43 +371,76 @@
             const img = new Image();
             img.src = 'https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg';
             img.onload = () => {
+                console.log('Football pitch image loaded successfully.');
                 document.getElementById('pitch-error').style.display = 'none';
+                document.getElementById('pitch-container').style.backgroundImage = "url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg')";
             };
             img.onerror = () => {
+                console.error('Failed to load football pitch image.');
                 document.getElementById('pitch-error').style.display = 'block';
+                document.getElementById('pitch-container').style.backgroundImage = 'none';
             };
         }
 
         // 初始化陣型選擇
         function initFormationSelect() {
+            console.log('Initializing formation select...');
             const formationSelect = document.getElementById('formation-select');
+            if (!formationSelect) {
+                console.error("Formation select element not found!");
+                return;
+            }
+            formationSelect.value = '442-defensive';
             formationSelect.onchange = () => {
+                console.log('Formation changed to:', formationSelect.value);
                 currentFormation = formationSelect.value;
                 updateFormation();
                 updatePitchAndSubs();
             };
-            loadSavedSelections(); // 先加載保存的選擇
-            updateFormation();     // 再更新頁面顯示
+            loadSavedSelections();
+            updateFormation();
             checkPitchImage();
         }
 
         // 更新陣型相關內容
         function updateFormation() {
+            console.log('Updating formation for:', currentFormation);
             const formation = formations[currentFormation];
             const positionsContainer = document.getElementById('positions-container');
             const pitchContainer = document.getElementById('pitch-container');
             const positionDetails = document.getElementById('position-details');
 
+            if (!formation) {
+                console.error('Formation not found for:', currentFormation);
+                return;
+            }
+            if (!positionsContainer || !pitchContainer || !positionDetails) {
+                console.error("One or more required elements not found!");
+                return;
+            }
+
+            // 檢查 players 陣列
+            if (!players || players.length === 0) {
+                console.error('Players array is empty or undefined!');
+                positionsContainer.innerHTML = '<p style="color: red;">錯誤：球員名單未加載！</p>';
+                return;
+            }
+
             // 更新左側選單
+            console.log('Generating positions for:', formation.positions);
             positionsContainer.innerHTML = '';
             formation.positions.forEach(pos => {
-                positionsContainer.innerHTML += `
-                    <label>${formation.details[pos].name}:</label>
-                    <select id="${pos}"><option value="">選擇球員</option>${players.map(p => `<option value="${p}">${p}</option>`).join('')}</select>
-                `;
+                const label = document.createElement('label');
+                label.textContent = formation.details[pos].name + ':';
+                const select = document.createElement('select');
+                select.id = pos;
+                select.innerHTML = '<option value="">選擇球員</option>' + players.map(p => `<option value="${p}">${p}</option>`).join('');
+                positionsContainer.appendChild(label);
+                positionsContainer.appendChild(select);
             });
 
             // 更新戰術板
+            console.log('Generating pitch layout for:', formation.positions);
             pitchContainer.innerHTML = '';
             pitchContainer.innerHTML += `
                 <div id="pitch-error" style="display: none;">
@@ -405,6 +459,7 @@
             });
 
             // 更新右側詳情
+            console.log('Generating position details for:', formation.positions);
             positionDetails.innerHTML = '';
             formation.positions.forEach(pos => {
                 const info = formation.details[pos];
@@ -423,34 +478,44 @@
             // 為每個下拉選單添加事件並加載保存的選擇
             formation.positions.forEach(pos => {
                 const select = document.getElementById(pos);
-                select.onchange = updatePitchAndSubs;
-                if (selectedPlayersByFormation[currentFormation][pos]) {
-                    select.value = selectedPlayersByFormation[currentFormation][pos];
+                if (select) {
+                    select.onchange = updatePitchAndSubs;
+                    if (selectedPlayersByFormation[currentFormation][pos]) {
+                        select.value = selectedPlayersByFormation[currentFormation][pos];
+                    }
                 }
             });
 
             // 默認顯示第一個位置的戰術要求
-            showPositionDetails(formation.positions[0]);
+            if (formation.positions.length > 0) {
+                showPositionDetails(formation.positions[0]);
+            }
             updatePitchAndSubs();
         }
 
         // 更新戰術板和後備名單
         function updatePitchAndSubs() {
+            console.log('Updating pitch and subs...');
             const formation = formations[currentFormation];
             const selected = new Set();
             formation.positions.forEach(pos => {
                 const select = document.getElementById(pos);
                 const playerDiv = document.getElementById(pos + '-player');
-                const selectedPlayer = select.value;
-                playerDiv.textContent = selectedPlayer || pos.toUpperCase();
-                selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
-                if (selectedPlayer) selected.add(selectedPlayer);
+                if (select && playerDiv) {
+                    const selectedPlayer = select.value;
+                    playerDiv.textContent = selectedPlayer || pos.toUpperCase();
+                    selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
+                    if (selectedPlayer) selected.add(selectedPlayer);
+                }
             });
 
             // 更新後備名單
             const subsList = document.getElementById('subs-list');
-            const subs = players.filter(p => !selected.has(p));
-            subsList.innerHTML = subs.map(p => `<p>${p}</p>`).join('');
+            if (subsList) {
+                const subs = players.filter(p => !selected.has(p));
+                console.log('Substitutes:', subs);
+                subsList.innerHTML = subs.map(p => `<p>${p}</p>`).join('');
+            }
 
             // 保存選擇到本地存儲
             localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
@@ -459,16 +524,19 @@
 
         // 載入上次保存的選擇
         function loadSavedSelections() {
+            console.log('Loading saved selections...');
             const savedFormation = localStorage.getItem('currentFormation');
             const savedPlayers = localStorage.getItem('selectedPlayersByFormation');
             if (savedFormation) {
                 currentFormation = savedFormation;
-                document.getElementById('formation-select').value = savedFormation;
+                const formationSelect = document.getElementById('formation-select');
+                if (formationSelect) {
+                    formationSelect.value = savedFormation;
+                }
             }
             if (savedPlayers) {
                 selectedPlayersByFormation = JSON.parse(savedPlayers);
             }
-            // 確保所有陣型都有初始化對象
             Object.keys(formations).forEach(formation => {
                 if (!selectedPlayersByFormation[formation]) {
                     selectedPlayersByFormation[formation] = {};
@@ -478,12 +546,78 @@
 
         // 顯示位置詳情
         function showPositionDetails(pos) {
+            console.log('Showing details for position:', pos);
             document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
             const infoDiv = document.getElementById(pos + '-info');
             if (infoDiv) infoDiv.style.display = 'block';
         }
 
-        initFormationSelect();
+        // 匯出陣容功能
+        function exportFormation() {
+            console.log('Exporting formation...');
+            const data = {
+                currentFormation: currentFormation,
+                selectedPlayersByFormation: selectedPlayersByFormation
+            };
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'formation.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // 匯入陣容功能
+        function importFormation(event) {
+            console.log('Importing formation...');
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.currentFormation && data.selectedPlayersByFormation) {
+                        currentFormation = data.currentFormation;
+                        selectedPlayersByFormation = data.selectedPlayersByFormation;
+
+                        // 確保所有陣型都有對應的選擇數據
+                        Object.keys(formations).forEach(formation => {
+                            if (!selectedPlayersByFormation[formation]) {
+                                selectedPlayersByFormation[formation] = {};
+                            }
+                        });
+
+                        // 更新 UI
+                        const formationSelect = document.getElementById('formation-select');
+                        formationSelect.value = currentFormation;
+                        updateFormation();
+                        updatePitchAndSubs();
+
+                        // 保存到本地存儲
+                        localStorage.setItem('currentFormation', currentFormation);
+                        localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
+
+                        alert('陣容已成功匯入！');
+                    } else {
+                        alert('匯入的檔案格式不正確！');
+                    }
+                } catch (err) {
+                    alert('無法解析匯入的檔案，請確保檔案格式正確！');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 確保頁面加載完成後初始化
+        window.onload = () => {
+            console.log('Window loaded, initializing...');
+            initFormationSelect();
+        };
     </script>
 </body>
 </html>
