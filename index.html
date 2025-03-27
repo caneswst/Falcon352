@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
@@ -44,26 +43,26 @@
         }
         .container {
             display: flex;
-            flex-wrap: nowrap; /* 防止換行 */
+            flex-wrap: nowrap;
             padding: 1vw;
             max-width: 100%;
             margin: 0 auto;
             gap: 1vw;
             flex-grow: 1;
-            align-items: stretch; /* 確保子元素高度一致 */
+            align-items: stretch;
         }
-#pitch-container {
-    flex: 0 0 25%; /* 進一步降低寬度比例至 30% */
-    position: relative;
-    background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
-    background-size: cover;
-    min-height: 200px; /* 降低最小高度至 250px */
-    aspect-ratio: 3 / 5;
-    border: 2px solid #4682b4;
-    border-radius: 8px;
-    box-shadow: 0 0 8px rgba(70, 130, 180, 0.2);
-    background-color: #2e8b57;
-}
+        #pitch-container {
+            flex: 0 0 25%;
+            position: relative;
+            background: url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg') no-repeat center;
+            background-size: cover;
+            min-height: 200px;
+            aspect-ratio: 3 / 5;
+            border: 2px solid #4682b4;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(70, 130, 180, 0.2);
+            background-color: #2e8b57;
+        }
         #pitch-error {
             display: none;
             color: red;
@@ -74,27 +73,26 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-.player {
-    position: absolute;
-    width: clamp(25px, 3.5vw, 40px); /* 放大球員尺寸 */
-    height: clamp(25px, 3.5vw, 40px);
-    background: #4682b4;
-    border-radius: 50%;
-    color: #fff;
-    text-align: center;
-    line-height: clamp(25px, 3.5vw, 40px);
-    cursor: pointer;
-    font-size: clamp(8px, 1.5vw, 14px); /* 放大字體 */
-    transition: transform 0.3s, box-shadow 0.3s;
-    transform: translate(-50%, -50%);
-}
-
-.player:hover {
-    transform: translate(-50%, -50%) scale(1.1);
-    box-shadow: 0 0 8px rgba(70, 130, 180, 0.6);
-}
+        .player {
+            position: absolute;
+            width: clamp(25px, 3.5vw, 40px);
+            height: clamp(25px, 3.5vw, 40px);
+            background: #4682b4;
+            border-radius: 50%;
+            color: #fff;
+            text-align: center;
+            line-height: clamp(25px, 3.5vw, 40px);
+            cursor: pointer;
+            font-size: clamp(8px, 1.5vw, 14px);
+            transition: transform 0.3s, box-shadow 0.3s;
+            transform: translate(-50%, -50%);
+        }
+        .player:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 8px rgba(70, 130, 180, 0.6);
+        }
         #left-panel, #subs-container, #right-panel {
-            flex: 1 1 18%; /* 平均分配剩餘寬度 */
+            flex: 1 1 18%;
             padding: 1vw;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
@@ -148,11 +146,9 @@
         #formation-select:hover {
             background: #2e8b57;
         }
-
-        /* 平板調整 (寬度 < 900px) */
         @media (max-width: 900px) {
             .container {
-                flex-wrap: wrap; /* 平板允許換行 */
+                flex-wrap: wrap;
             }
             #pitch-container {
                 flex: 0 0 70%;
@@ -161,8 +157,6 @@
                 flex: 1 1 15%;
             }
         }
-
-        /* 手機調整 (寬度 < 600px) */
         @media (max-width: 600px) {
             .container {
                 flex-direction: column;
@@ -178,15 +172,9 @@
                 min-height: 30vh;
                 margin-top: 2vw;
             }
-            #left-panel {
-                order: 2;
-            }
-            #subs-container {
-                order: 3;
-            }
-            #right-panel {
-                order: 1;
-            }
+            #left-panel { order: 2; }
+            #subs-container { order: 3; }
+            #right-panel { order: 1; }
             .player {
                 width: 6vw;
                 height: 6vw;
@@ -208,22 +196,19 @@
                 <option value="442-defensive">4-4-2 防守陣</option>
                 <option value="352-defensive">3-5-2 防守陣</option>
                 <option value="451-defensive">4-5-1 防守陣</option>
-                <option value="4231-defensive">4-2-3-1 防守陣</option> <!-- 新增 -->
+                <option value="4231-defensive">4-2-3-1 防守陣</option>
             </select>
             <div id="positions-container"></div>
         </div>
-
         <div id="subs-container">
             <h3>後備球員</h3>
             <div id="subs-list"></div>
         </div>
-
         <div id="pitch-container">
             <div id="pitch-error" style="display: none;">
                 無法加載足球場圖片，請檢查網路或圖片路徑。
             </div>
         </div>
-
         <div id="right-panel">
             <h2>請點選位置顯示戰術要求</h2>
             <div id="position-details"></div>
@@ -234,35 +219,6 @@
         const players = ['新', '禮', '東', 'Vasco', 'Alex', '光', '航', 'Xander', 'Nate', '軍C', '俊', 'Joe', '杰', '銳', 'Mike', 'Dan', '銘', '達', 'Hugo', 'Ivan', '業', '甘', '雷公', '鬼佬', 'Ken', '家興'];
 
         const formations = {
-            '4231-defensive': {
-        positions: ['gk', 'lb', 'lcb', 'rcb', 'rb', 'ldm', 'rdm', 'lam', 'cam', 'ram', 'st'],
-        layout: {
-            'gk': { left: '50%', top: '90%' },
-            'lb': { left: '20%', top: '70%' },
-            'lcb': { left: '40%', top: '70%' },
-            'rcb': { left: '60%', top: '70%' },
-            'rb': { left: '80%', top: '70%' },
-            'ldm': { left: '40%', top: '55%' },
-            'rdm': { left: '60%', top: '55%' },
-            'lam': { left: '30%', top: '35%' },
-            'cam': { left: '50%', top: '35%' },
-            'ram': { left: '70%', top: '35%' },
-            'st': { left: '50%', top: '20%' }
-        },
-        details: {
-            'gk': { name: '門將 (GK)', tactics: '防守的最後一道屏障，負責守護球門並快速分球發動反擊，組織後衛線保持緊密防守。', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '參與後場短傳，必要時長傳至前場快速球員發動反擊。', def: '守住球門線，快速反應撲救，果斷出擊攔截單刀或高空球。', example: 'Manuel Neuer - 出擊防守和傳球能力強的現代門將典範。' },
-            'lb': { name: '左後衛 (LB)', tactics: '穩固左路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援左邊進攻中場。', def: '封堵對方右邊鋒突破或傳中，退守禁區補位。', example: 'Andrew Robertson - 防守穩健且跑動積極的邊後衛。' },
-            'lcb': { name: '左中後衛 (LCB)', tactics: '防守中路核心，負責清空禁區威脅，與右中後衛協作穩固防線。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定。', def: '盯防對方前鋒，清空高空球和傳中威脅，快速補位。', example: 'Virgil van Dijk - 防守全面且領導力強的中後衛。' },
-            'rcb': { name: '右中後衛 (RCB)', tactics: '防守中路核心，與左中後衛協作，承擔空中防守和盯人任務。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，必要時支援中場轉換。', def: '盯防對方前鋒，清空高空球，確保防線完整。', example: 'Sergio Ramos - 防守兇悍且經驗豐富的中後衛。' },
-            'rb': { name: '右後衛 (RB)', tactics: '穩固右路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援右邊進攻中場。', def: '封堵對方左邊鋒突破或傳中，退守禁區補位。', example: 'Kyle Walker - 速度快且防守穩固的邊後衛。' },
-            'ldm': { name: '左防守中場 (LDM)', tactics: '防守中場左側，負責保護後衛並銜接攻防，與右防守中場形成雙後腰屏障。', tech: '傳球 88, 搶斷 90, 視野 85, 防守站位 90, 體力 88', off: '分球至邊路或進攻中場，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛線。', example: 'N’Golo Kanté - 防守覆蓋面廣且搶斷能力頂尖的後腰。' },
-            'rdm': { name: '右防守中場 (RDM)', tactics: '防守中場右側，負責保護後衛並銜接攻防，與左防守中場形成雙後腰屏障。', tech: '傳球 88, 搶斷 90, 視野 85, 防守站位 90, 體力 88', off: '分球至邊路或進攻中場，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛線。', example: 'Casemiro - 防守硬朗且傳球穩健的防守型後腰。' },
-            'lam': { name: '左進攻中場 (LAM)', tactics: '負責左路進攻組織與防守壓迫，提供場地寬度並支援前鋒。', tech: '傳球 85, 盤帶 88, 速度 90, 射門 80, 靈活性 88', off: '拉邊至左路，內切射門或傳中至中鋒，與中進攻中場聯繫。', def: '壓迫對方右後衛或右中場，協助左防守中場防守邊路。', example: 'Son Heung-min - 速度快且技術全面的邊路進攻手。' },
-            'cam': { name: '中進攻中場 (CAM)', tactics: '進攻核心，負責組織進攻並為中鋒創造機會，位於中場與前鋒之間。', tech: '視野 90, 傳球 88, 盤帶 85, 射門 82, 靈活性 88', off: '位於禁區外圍，分球至邊路或直塞給中鋒，尋找遠射機會。', def: '壓迫對方後腰，協助雙防守中場防守中路。', example: 'Kevin De Bruyne - 傳球精準且視野開闊的進攻中場。' },
-            'ram': { name: '右進攻中場 (RAM)', tactics: '負責右路進攻組織與防守壓迫，提供場地寬度並支援前鋒。', tech: '傳球 85, 盤帶 88, 速度 90, 射門 80, 靈活性 88', off: '拉邊至右路，內切射門或傳中至中鋒，與中進攻中場聯繫。', def: '壓迫對方左後衛或左中場，協助右防守中場防守邊路。', example: 'Bukayo Saka - 速度快且技術出色的邊路進攻手。' },
-            'st': { name: '中前鋒 (ST)', tactics: '防守反擊的終結者，負責牽制後衛並完成得分，是前場的進攻支點。', tech: '射門 90, 速度 88, 位置感 92, 力量 88, 搶點 90', off: '位於禁區中央，接應中場傳球完成射門，或製造單刀機會。', def: '壓迫對方中後衛，爭搶第一落點並參與前場防守。', example: 'Harry Kane - 射門效率高且全面的現代中鋒。' }
-        }
-    },
             '442-defensive': {
                 positions: ['gk', 'lb', 'lcb', 'rcb', 'rb', 'lm', 'lcm', 'rcm', 'rm', 'lst', 'rst'],
                 layout: {
@@ -349,14 +305,43 @@
                     'rm': { name: '右中場 (RM)', tactics: '負責防守右邊路並支援快速反擊，提供場地寬度並與右後衛協作形成邊路防守網。需要出色的跑動能力和邊路技術。', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊，與右中場配合製造進攻機會。', def: '回防壓迫對方左後衛或左邊鋒，協助右後衛防守邊路，必要時退守至後場參與防守。', example: 'Bukayo Saka - 速度快且技術出色，擅長邊路突破和支援防守。' },
                     'st': { name: '中前鋒 (ST)', tactics: '防守反擊的終結者，負責牽制對方後衛並完成得分，是前場的唯一支點和進攻核心。需要出色的門前嗅覺和得分效率。', tech: '射門 90, 速度 88, 位置感 92, 力量 88, 搶點 90', off: '位於禁區中央，接應中場傳球完成射門，或利用速度和力量製造單刀機會。', def: '壓迫對方中後衛，爭搶第一落點並參與前場防守，阻斷對方後場出球。', example: 'Harry Kane - 射門效率高且全面，擅長禁區內搶點和遠射，是現代中鋒的典範。' }
                 }
+            },
+            '4231-defensive': {
+                positions: ['gk', 'lb', 'lcb', 'rcb', 'rb', 'ldm', 'rdm', 'lam', 'cam', 'ram', 'st'],
+                layout: {
+                    'gk': { left: '50%', top: '90%' },
+                    'lb': { left: '20%', top: '70%' },
+                    'lcb': { left: '40%', top: '70%' },
+                    'rcb': { left: '60%', top: '70%' },
+                    'rb': { left: '80%', top: '70%' },
+                    'ldm': { left: '40%', top: '55%' },
+                    'rdm': { left: '60%', top: '55%' },
+                    'lam': { left: '30%', top: '35%' },
+                    'cam': { left: '50%', top: '35%' },
+                    'ram': { left: '70%', top: '35%' },
+                    'st': { left: '50%', top: '20%' }
+                },
+                details: {
+                    'gk': { name: '門將 (GK)', tactics: '防守的最後一道屏障，負責守護球門並快速分球發動反擊，組織後衛線保持緊密防守。', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '參與後場短傳，必要時長傳至前場快速球員發動反擊。', def: '守住球門線，快速反應撲救，果斷出擊攔截單刀或高空球。', example: 'Manuel Neuer - 出擊防守和傳球能力強的現代門將典範。' },
+                    'lb': { name: '左後衛 (LB)', tactics: '穩固左路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援左邊進攻中場。', def: '封堵對方右邊鋒突破或傳中，退守禁區補位。', example: 'Andrew Robertson - 防守穩健且跑動積極的邊後衛。' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守中路核心，負責清空禁區威脅，與右中後衛協作穩固防線。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定。', def: '盯防對方前鋒，清空高空球和傳中威脅，快速補位。', example: 'Virgil van Dijk - 防守全面且領導力強的中後衛。' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守中路核心，與左中後衛協作，承擔空中防守和盯人任務。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，必要時支援中場轉換。', def: '盯防對方前鋒，清空高空球，確保防線完整。', example: 'Sergio Ramos - 防守兇悍且經驗豐富的中後衛。' },
+                    'rb': { name: '右後衛 (RB)', tactics: '穩固右路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援右邊進攻中場。', def: '封堵對方左邊鋒突破或傳中，退守禁區補位。', example: 'Kyle Walker - 速度快且防守穩固的邊後衛。' },
+                    'ldm': { name: '左防守中場 (LDM)', tactics: '防守中場左側，負責保護後衛並銜接攻防，與右防守中場形成雙後腰屏障。', tech: '傳球 88, 搶斷 90, 視野 85, 防守站位 90, 體力 88', off: '分球至邊路或進攻中場，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛線。', example: 'N’Golo Kanté - 防守覆蓋面廣且搶斷能力頂尖的後腰。' },
+                    'rdm': { name: '右防守中場 (RDM)', tactics: '防守中場右側，負責保護後衛並銜接攻防，與左防守中場形成雙後腰屏障。', tech: '傳球 88, 搶斷 90, 視野 85, 防守站位 90, 體力 88', off: '分球至邊路或進攻中場，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛線。', example: 'Casemiro - 防守硬朗且傳球穩健的防守型後腰。' },
+                    'lam': { name: '左進攻中場 (LAM)', tactics: '負責左路進攻組織與防守壓迫，提供場地寬度並支援前鋒。', tech: '傳球 85, 盤帶 88, 速度 90, 射門 80, 靈活性 88', off: '拉邊至左路，內切射門或傳中至中鋒，與中進攻中場聯繫。', def: '壓迫對方右後衛或右中場，協助左防守中場防守邊路。', example: 'Son Heung-min - 速度快且技術全面的邊路進攻手。' },
+                    'cam': { name: '中進攻中場 (CAM)', tactics: '進攻核心，負責組織進攻並為中鋒創造機會，位於中場與前鋒之間。', tech: '視野 90, 傳球 88, 盤帶 85, 射門 82, 靈活性 88', off: '位於禁區外圍，分球至邊路或直塞給中鋒，尋找遠射機會。', def: '壓迫對方後腰，協助雙防守中場防守中路。', example: 'Kevin De Bruyne - 傳球精準且視野開闊的進攻中場。' },
+                    'ram': { name: '右進攻中場 (RAM)', tactics: '負責右路進攻組織與防守壓迫，提供場地寬度並支援前鋒。', tech: '傳球 85, 盤帶 88, 速度 90, 射門 80, 靈活性 88', off: '拉邊至右路，內切射門或傳中至中鋒，與中進攻中場聯繫。', def: '壓迫對方左後衛或左中場，協助右防守中場防守邊路。', example: 'Bukayo Saka - 速度快且技術出色的邊路進攻手。' },
+                    'st': { name: '中前鋒 (ST)', tactics: '防守反擊的終結者，負責牽制後衛並完成得分，是前場的進攻支點。', tech: '射門 90, 速度 88, 位置感 92, 力量 88, 搶點 90', off: '位於禁區中央，接應中場傳球完成射門，或製造單刀機會。', def: '壓迫對方中後衛，爭搶第一落點並參與前場防守。', example: 'Harry Kane - 射門效率高且全面的現代中鋒。' }
+                }
             }
         };
 
         let selectedPlayersByFormation = {
-'442-defensive': {},
-    '352-defensive': {},
-    '451-defensive': {},
-    '4231-defensive': {}
+            '442-defensive': {},
+            '352-defensive': {},
+            '451-defensive': {},
+            '4231-defensive': {}
         };
         let currentFormation = '442-defensive';
 
@@ -380,8 +365,8 @@
                 updateFormation();
                 updatePitchAndSubs();
             };
-            updateFormation();
-            loadSavedSelections();
+            loadSavedSelections(); // 先加載保存的選擇
+            updateFormation();     // 再更新頁面顯示
             checkPitchImage();
         }
 
@@ -483,7 +468,12 @@
             if (savedPlayers) {
                 selectedPlayersByFormation = JSON.parse(savedPlayers);
             }
-            updateFormation();
+            // 確保所有陣型都有初始化對象
+            Object.keys(formations).forEach(formation => {
+                if (!selectedPlayersByFormation[formation]) {
+                    selectedPlayersByFormation[formation] = {};
+                }
+            });
         }
 
         // 顯示位置詳情
