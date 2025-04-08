@@ -91,6 +91,18 @@
             transform: translate(-50%, -50%) scale(1.1);
             box-shadow: 0 0 8px rgba(70, 130, 180, 0.6);
         }
+        .stats {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: clamp(6px, 1vw, 10px);
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
         #left-panel, #subs-container, #right-panel {
             flex: 1 1 18%;
             padding: 1vw;
@@ -199,6 +211,9 @@
                 line-height: 6vw;
                 font-size: 2vw;
             }
+            .stats {
+                font-size: 1.5vw;
+            }
         }
     </style>
 </head>
@@ -237,30 +252,30 @@
     </div>
 
     <script>
-        // 球員名單與統計數據
+        // 球員名單與統計數據，初始值為 0
         const players = {
-            '新': { appearances: 16, goals: 1, assists: 0 },
-            '禮': { appearances: 22, goals: 1, assists: 2 },
-            '東': { appearances: 20, goals: 0, assists: 1 },
-            'Vasco': { appearances: 23, goals: 7, assists: 6 },
-            'Alex': { appearances: 18, goals: 5, assists: 3 },
-            '光': { appearances: 15, goals: 2, assists: 4 },
-            '航': { appearances: 17, goals: 0, assists: 0 },
-            'Xander': { appearances: 19, goals: 4, assists: 4 },
-            'Nate': { appearances: 17, goals: 0, assists: 1 },
-            '軍C': { appearances: 20, goals: 2, assists: 3 },
-            '俊': { appearances: 21, goals: 5, assists: 2 },
-            'Joe': { appearances: 17, goals: 1, assists: 0 },
-            '杰': { appearances: 21, goals: 5, assists: 4 },
-            '銳': { appearances: 14, goals: 1, assists: 0 },
-            'Mike': { appearances: 18, goals: 3, assists: 2 },
-            'Dan': { appearances: 20, goals: 2, assists: 3 },
-            '銘': { appearances: 15, goals: 0, assists: 1 },
-            '達': { appearances: 22, goals: 3, assists: 4 },
-            'Hugo': { appearances: 18, goals: 6, assists: 5 },
-            'Ivan': { appearances: 16, goals: 2, assists: 1 },
-            '業': { appearances: 19, goals: 3, assists: 2 },
-            '甘': { appearances: 20, goals: 4, assists: 3 }
+            '新': { appearances: 0, goals: 0, assists: 0 },
+            '禮': { appearances: 0, goals: 0, assists: 0 },
+            '東': { appearances: 0, goals: 0, assists: 0 },
+            'Vasco': { appearances: 0, goals: 0, assists: 0 },
+            'Alex': { appearances: 0, goals: 0, assists: 0 },
+            '光': { appearances: 0, goals: 0, assists: 0 },
+            '航': { appearances: 0, goals: 0, assists: 0 },
+            'Xander': { appearances: 0, goals: 0, assists: 0 },
+            'Nate': { appearances: 0, goals: 0, assists: 0 },
+            '軍C': { appearances: 0, goals: 0, assists: 0 },
+            '俊': { appearances: 0, goals: 0, assists: 0 },
+            'Joe': { appearances: 0, goals: 0, assists: 0 },
+            '杰': { appearances: 0, goals: 0, assists: 0 },
+            '銳': { appearances: 0, goals: 0, assists: 0 },
+            'Mike': { appearances: 0, goals: 0, assists: 0 },
+            'Dan': { appearances: 0, goals: 0, assists: 0 },
+            '銘': { appearances: 0, goals: 0, assists: 0 },
+            '達': { appearances: 0, goals: 0, assists: 0 },
+            'Hugo': { appearances: 0, goals: 0, assists: 0 },
+            'Ivan': { appearances: 0, goals: 0, assists: 0 },
+            '業': { appearances: 0, goals: 0, assists: 0 },
+            '甘': { appearances: 0, goals: 0, assists: 0 }
         };
 
         const formations = {
@@ -472,11 +487,21 @@
                 playerDiv.style.left = formation.layout[pos].left;
                 playerDiv.style.top = formation.layout[pos].top;
                 playerDiv.textContent = pos.toUpperCase();
-                playerDiv.onclick = () => showPositionDetails(pos);
+                playerDiv.onclick = () => {
+                    incrementStats(pos);
+                    showPositionDetails(pos);
+                };
+
+                // 添加統計數據顯示
+                const statsDiv = document.createElement('div');
+                statsDiv.className = 'stats';
+                statsDiv.id = `${pos}-stats`;
+                playerDiv.appendChild(statsDiv);
+
                 pitchContainer.appendChild(playerDiv);
             });
 
-            // 更新右側詳情
+            // 更新右側詳情（移除統計數據顯示）
             console.log('Generating position details for:', formation.positions);
             positionDetails.innerHTML = '';
             formation.positions.forEach(pos => {
@@ -489,12 +514,6 @@
                         <p><strong>進攻時位置要求:</strong> ${info.off}</p>
                         <p><strong>防守時位置要求:</strong> ${info.def}</p>
                         <p><strong>代表球員:</strong> ${info.example}</p>
-                        <p><strong>統計數據:</strong></p>
-                        <ul>
-                            <li>出場: <span id="${pos}-appearances">N/A</span></li>
-                            <li>入球: <span id="${pos}-goals">N/A</span></li>
-                            <li>助攻: <span id="${pos}-assists">N/A</span></li>
-                        </ul>
                     </div>
                 `;
             });
@@ -525,11 +544,19 @@
             formation.positions.forEach(pos => {
                 const select = document.getElementById(pos);
                 const playerDiv = document.getElementById(pos + '-player');
-                if (select && playerDiv) {
+                const statsDiv = document.getElementById(pos + '-stats');
+                if (select && playerDiv && statsDiv) {
                     const selectedPlayer = select.value;
                     playerDiv.textContent = selectedPlayer || pos.toUpperCase();
                     selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
-                    if (selectedPlayer) selected.add(selectedPlayer);
+
+                    if (selectedPlayer && players[selectedPlayer]) {
+                        const stats = players[selectedPlayer];
+                        statsDiv.textContent = `出:${stats.appearances} 球:${stats.goals} 助:${stats.assists}`;
+                        selected.add(selectedPlayer);
+                    } else {
+                        statsDiv.textContent = '';
+                    }
                 }
             });
 
@@ -544,13 +571,28 @@
             // 保存選擇到本地存儲
             localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
             localStorage.setItem('currentFormation', currentFormation);
+            localStorage.setItem('playersStats', JSON.stringify(players));
         }
 
-        // 載入上次保存的選擇
+        // 點擊增加統計數據
+        function incrementStats(pos) {
+            const select = document.getElementById(pos);
+            const selectedPlayer = select ? select.value : '';
+            if (selectedPlayer && players[selectedPlayer]) {
+                players[selectedPlayer].appearances += 1; // 每次點擊增加出場次數
+                // 可根據需要啟用以下行來增加入球或助攻
+                // players[selectedPlayer].goals += 1;
+                // players[selectedPlayer].assists += 1;
+                updatePitchAndSubs(); // 更新顯示
+            }
+        }
+
+        // 載入上次保存的選擇和統計數據
         function loadSavedSelections() {
             console.log('Loading saved selections...');
             const savedFormation = localStorage.getItem('currentFormation');
             const savedPlayers = localStorage.getItem('selectedPlayersByFormation');
+            const savedStats = localStorage.getItem('playersStats');
             if (savedFormation) {
                 currentFormation = savedFormation;
                 const formationSelect = document.getElementById('formation-select');
@@ -561,6 +603,9 @@
             if (savedPlayers) {
                 selectedPlayersByFormation = JSON.parse(savedPlayers);
             }
+            if (savedStats) {
+                Object.assign(players, JSON.parse(savedStats));
+            }
             Object.keys(formations).forEach(formation => {
                 if (!selectedPlayersByFormation[formation]) {
                     selectedPlayersByFormation[formation] = {};
@@ -568,26 +613,12 @@
             });
         }
 
-        // 顯示位置詳情與統計數據
+        // 顯示位置詳情（右側面板）
         function showPositionDetails(pos) {
             console.log('Showing details for position:', pos);
             document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
             const infoDiv = document.getElementById(pos + '-info');
             if (infoDiv) infoDiv.style.display = 'block';
-
-            // 更新統計數據
-            const select = document.getElementById(pos);
-            const selectedPlayer = select ? select.value : "";
-            if (selectedPlayer && players[selectedPlayer]) {
-                const stats = players[selectedPlayer];
-                document.getElementById(`${pos}-appearances`).textContent = stats.appearances;
-                document.getElementById(`${pos}-goals`).textContent = stats.goals;
-                document.getElementById(`${pos}-assists`).textContent = stats.assists;
-            } else {
-                document.getElementById(`${pos}-appearances`).textContent = 'N/A';
-                document.getElementById(`${pos}-goals`).textContent = 'N/A';
-                document.getElementById(`${pos}-assists`).textContent = 'N/A';
-            }
         }
 
         // 匯出陣容功能
@@ -645,6 +676,7 @@
                         // 保存到本地存儲
                         localStorage.setItem('currentFormation', currentFormation);
                         localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
+                        localStorage.setItem('playersStats', JSON.stringify(players));
 
                         alert('陣容已成功匯入！');
                     } else {
