@@ -237,7 +237,31 @@
     </div>
 
     <script>
-        const players = ['新', '禮', '東', 'Vasco', 'Alex', '光', '航', 'Xander', 'Nate', '軍C', '俊', 'Joe', '杰', '銳', 'Mike', 'Dan', '銘', '達', 'Hugo', 'Ivan', '業', '甘'];
+        // 球員名單與統計數據
+        const players = {
+            '新': { appearances: 16, goals: 1, assists: 0 },
+            '禮': { appearances: 22, goals: 1, assists: 2 },
+            '東': { appearances: 20, goals: 0, assists: 1 },
+            'Vasco': { appearances: 23, goals: 7, assists: 6 },
+            'Alex': { appearances: 18, goals: 5, assists: 3 },
+            '光': { appearances: 15, goals: 2, assists: 4 },
+            '航': { appearances: 17, goals: 0, assists: 0 },
+            'Xander': { appearances: 19, goals: 4, assists: 4 },
+            'Nate': { appearances: 17, goals: 0, assists: 1 },
+            '軍C': { appearances: 20, goals: 2, assists: 3 },
+            '俊': { appearances: 21, goals: 5, assists: 2 },
+            'Joe': { appearances: 17, goals: 1, assists: 0 },
+            '杰': { appearances: 21, goals: 5, assists: 4 },
+            '銳': { appearances: 14, goals: 1, assists: 0 },
+            'Mike': { appearances: 18, goals: 3, assists: 2 },
+            'Dan': { appearances: 20, goals: 2, assists: 3 },
+            '銘': { appearances: 15, goals: 0, assists: 1 },
+            '達': { appearances: 22, goals: 3, assists: 4 },
+            'Hugo': { appearances: 18, goals: 6, assists: 5 },
+            'Ivan': { appearances: 16, goals: 2, assists: 1 },
+            '業': { appearances: 19, goals: 3, assists: 2 },
+            '甘': { appearances: 20, goals: 4, assists: 3 }
+        };
 
         const formations = {
             '442-defensive': {
@@ -419,13 +443,6 @@
                 return;
             }
 
-            // 檢查 players 陣列
-            if (!players || players.length === 0) {
-                console.error('Players array is empty or undefined!');
-                positionsContainer.innerHTML = '<p style="color: red;">錯誤：球員名單未加載！</p>';
-                return;
-            }
-
             // 更新左側選單
             console.log('Generating positions for:', formation.positions);
             positionsContainer.innerHTML = '';
@@ -434,7 +451,8 @@
                 label.textContent = formation.details[pos].name + ':';
                 const select = document.createElement('select');
                 select.id = pos;
-                select.innerHTML = '<option value="">選擇球員</option>' + players.map(p => `<option value="${p}">${p}</option>`).join('');
+                select.innerHTML = '<option value="">選擇球員</option>' + 
+                    Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
                 positionsContainer.appendChild(label);
                 positionsContainer.appendChild(select);
             });
@@ -471,6 +489,12 @@
                         <p><strong>進攻時位置要求:</strong> ${info.off}</p>
                         <p><strong>防守時位置要求:</strong> ${info.def}</p>
                         <p><strong>代表球員:</strong> ${info.example}</p>
+                        <p><strong>統計數據:</strong></p>
+                        <ul>
+                            <li>出場: <span id="${pos}-appearances">N/A</span></li>
+                            <li>入球: <span id="${pos}-goals">N/A</span></li>
+                            <li>助攻: <span id="${pos}-assists">N/A</span></li>
+                        </ul>
                     </div>
                 `;
             });
@@ -512,7 +536,7 @@
             // 更新後備名單
             const subsList = document.getElementById('subs-list');
             if (subsList) {
-                const subs = players.filter(p => !selected.has(p));
+                const subs = Object.keys(players).filter(p => !selected.has(p));
                 console.log('Substitutes:', subs);
                 subsList.innerHTML = subs.map(p => `<p>${p}</p>`).join('');
             }
@@ -544,12 +568,26 @@
             });
         }
 
-        // 顯示位置詳情
+        // 顯示位置詳情與統計數據
         function showPositionDetails(pos) {
             console.log('Showing details for position:', pos);
             document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
             const infoDiv = document.getElementById(pos + '-info');
             if (infoDiv) infoDiv.style.display = 'block';
+
+            // 更新統計數據
+            const select = document.getElementById(pos);
+            const selectedPlayer = select ? select.value : "";
+            if (selectedPlayer && players[selectedPlayer]) {
+                const stats = players[selectedPlayer];
+                document.getElementById(`${pos}-appearances`).textContent = stats.appearances;
+                document.getElementById(`${pos}-goals`).textContent = stats.goals;
+                document.getElementById(`${pos}-assists`).textContent = stats.assists;
+            } else {
+                document.getElementById(`${pos}-appearances`).textContent = 'N/A';
+                document.getElementById(`${pos}-goals`).textContent = 'N/A';
+                document.getElementById(`${pos}-assists`).textContent = 'N/A';
+            }
         }
 
         // 匯出陣容功能
@@ -557,7 +595,8 @@
             console.log('Exporting formation...');
             const data = {
                 currentFormation: currentFormation,
-                selectedPlayersByFormation: selectedPlayersByFormation
+                selectedPlayersByFormation: selectedPlayersByFormation,
+                players: players // 包含球員統計數據
             };
             const jsonStr = JSON.stringify(data, null, 2);
             const blob = new Blob([jsonStr], { type: 'application/json' });
@@ -584,6 +623,11 @@
                     if (data.currentFormation && data.selectedPlayersByFormation) {
                         currentFormation = data.currentFormation;
                         selectedPlayersByFormation = data.selectedPlayersByFormation;
+
+                        // 如果匯入檔案包含球員統計數據，則更新 players
+                        if (data.players) {
+                            Object.assign(players, data.players);
+                        }
 
                         // 確保所有陣型都有對應的選擇數據
                         Object.keys(formations).forEach(formation => {
