@@ -28,7 +28,7 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
         #header h1 {
-            font-family: 'Bebas Neue', cursive;
+            font-family: 'Bebas+Neue', cursive;
             font-size: clamp(24px, 5vw, 36px);
             margin: 0;
             color: #fff;
@@ -125,7 +125,7 @@
         }
         h2, h3 {
             color: #4682b4;
-            font-family: 'Bebas Neue', cursive;
+            font-family: 'Bebas+Neue', cursive;
             margin: clamp(4px, 1vw, 5px) 0;
             font-size: clamp(16px, 2vw, 20px);
         }
@@ -182,17 +182,27 @@
             align-items: center;
             justify-content: space-between;
             padding: 5px;
-            cursor: pointer;
             background: rgba(255, 255, 255, 0.9);
             margin: 2px 0;
             border-radius: 3px;
         }
-        .sub-player:hover {
-            background: rgba(70, 130, 180, 0.2);
+        .sub-player span {
+            margin-right: 5px;
         }
         .sub-stats {
+            display: flex;
+            align-items: center;
             font-size: clamp(8px, 1.2vw, 12px);
             color: #333;
+        }
+        .sub-stats input {
+            width: 40px;
+            padding: 2px;
+            margin-left: 5px;
+            border: 1px solid #4682b4;
+            border-radius: 3px;
+            font-size: clamp(8px, 1vw, 10px);
+            text-align: center;
         }
         @media (max-width: 900px) {
             .container {
@@ -231,6 +241,9 @@
             }
             .stats {
                 font-size: 1.5vw;
+            }
+            .sub-stats input {
+                width: 30px;
             }
         }
     </style>
@@ -388,15 +401,15 @@
                 positions: ['gk', 'lb', 'lcb', 'rcb', 'rb', 'ldm', 'rdm', 'lam', 'cam', 'ram', 'st'],
                 layout: {
                     'gk': { left: '50%', top: '90%' },
-                    'lb': { left: '20%', top: '65%' },
+                    'lb': { left: '20%', top: '70%' },
                     'lcb': { left: '40%', top: '70%' },
                     'rcb': { left: '60%', top: '70%' },
-                    'rb': { left: '80%', top: '65%' },
+                    'rb': { left: '80%', top: '70%' },
                     'ldm': { left: '40%', top: '55%' },
                     'rdm': { left: '60%', top: '55%' },
-                    'lam': { left: '20%', top: '45%' },
+                    'lam': { left: '30%', top: '35%' },
                     'cam': { left: '50%', top: '35%' },
-                    'ram': { left: '80%', top: '45%' },
+                    'ram': { left: '70%', top: '35%' },
                     'st': { left: '50%', top: '20%' }
                 },
                 details: {
@@ -557,16 +570,20 @@
                 }
             });
 
-            // 更新後備名單並顯示統計數據
+            // 更新後備名單並顯示可編輯的統計數據
             const subsList = document.getElementById('subs-list');
             if (subsList) {
                 const subs = Object.keys(players).filter(p => !selected.has(p));
                 subsList.innerHTML = subs.map(p => {
                     const stats = players[p];
                     return `
-                        <div class="sub-player" onclick="incrementSubStats('${p}')">
+                        <div class="sub-player">
                             <span>${p}</span>
-                            <span class="sub-stats">出:${stats.appearances} 球:${stats.goals} 助:${stats.assists}</span>
+                            <span class="sub-stats">
+                                出:<input type="number" min="0" value="${stats.appearances}" onchange="updateStats('${p}', 'appearances', this.value)">
+                                球:<input type="number" min="0" value="${stats.goals}" onchange="updateStats('${p}', 'goals', this.value)">
+                                助:<input type="number" min="0" value="${stats.assists}" onchange="updateStats('${p}', 'assists', this.value)">
+                            </span>
                         </div>
                     `;
                 }).join('');
@@ -577,12 +594,14 @@
             localStorage.setItem('playersStats', JSON.stringify(players));
         }
 
-        // 增加後備球員統計數據
-        function incrementSubStats(playerName) {
+        // 更新統計數據
+        function updateStats(playerName, statType, value) {
             if (players[playerName]) {
-                players[playerName].appearances += 1; // 增加出場次數
-                console.log(`Incremented stats for ${playerName}:`, players[playerName]);
-                updatePitchAndSubs();
+                const numValue = parseInt(value) || 0; // 確保輸入為數字，否則設為 0
+                players[playerName][statType] = numValue;
+                console.log(`Updated ${statType} for ${playerName} to ${numValue}`);
+                localStorage.setItem('playersStats', JSON.stringify(players)); // 立即保存
+                updatePitchAndSubs(); // 更新顯示
             }
         }
 
