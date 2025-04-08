@@ -211,9 +211,19 @@
                 line-height: 6vw;
                 font-size: 2vw;
             }
-            .stats {
-                font-size: 1.5vw;
-            }
+.stats {
+    position: absolute;
+    top: calc(100% + 2px); /* 稍微下移，避免重疊 */
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: clamp(6px, 1vw, 10px);
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2px 4px;
+    border-radius: 3px;
+    pointer-events: none; /* 避免影響點擊 */
+}
         }
     </style>
 </head>
@@ -441,151 +451,137 @@
             checkPitchImage();
         }
 
-        // 更新陣型相關內容
-        function updateFormation() {
-            console.log('Updating formation for:', currentFormation);
-            const formation = formations[currentFormation];
-            const positionsContainer = document.getElementById('positions-container');
-            const pitchContainer = document.getElementById('pitch-container');
-            const positionDetails = document.getElementById('position-details');
+// 更新戰術板
+function updateFormation() {
+    console.log('Updating formation for:', currentFormation);
+    const formation = formations[currentFormation];
+    const positionsContainer = document.getElementById('positions-container');
+    const pitchContainer = document.getElementById('pitch-container');
+    const positionDetails = document.getElementById('position-details');
 
-            if (!formation) {
-                console.error('Formation not found for:', currentFormation);
-                return;
+    if (!formation || !positionsContainer || !pitchContainer || !positionDetails) {
+        console.error('Required elements or formation not found!');
+        return;
+    }
+
+    // 更新左側選單
+    positionsContainer.innerHTML = '';
+    formation.positions.forEach(pos => {
+        const label = document.createElement('label');
+        label.textContent = formation.details[pos].name + ':';
+        const select = document.createElement('select');
+        select.id = pos;
+        select.innerHTML = '<option value="">選擇球員</option>' + 
+            Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
+        positionsContainer.appendChild(label);
+        positionsContainer.appendChild(select);
+    });
+
+    // 更新戰術板
+    pitchContainer.innerHTML = '<div id="pitch-error" style="display: none;">無法加載足球場圖片，請檢查網路或圖片路徑。</div>';
+    formation.positions.forEach(pos => {
+        const playerDiv = document.createElement('div');
+        playerDiv.className = 'player';
+        playerDiv.id = `${pos}-player`;
+        playerDiv.style.left = formation.layout[pos].left;
+        playerDiv.style.top = formation.layout[pos].top;
+        playerDiv.textContent = pos.toUpperCase();
+
+        // 添加統計數據顯示
+        const statsDiv = document.createElement('div');
+        statsDiv.className = 'stats';
+        statsDiv.id = `${pos}-stats`;
+        playerDiv.appendChild(statsDiv);
+
+        // 綁定點擊事件
+        playerDiv.onclick = () => {
+            incrementStats(pos);
+            showPositionDetails(pos);
+        };
+
+        pitchContainer.appendChild(playerDiv);
+    });
+
+    // 更新右側詳情（無統計數據）
+    positionDetails.innerHTML = '';
+    formation.positions.forEach(pos => {
+        const info = formation.details[pos];
+        positionDetails.innerHTML += `
+            <div id="${pos}-info" class="position-info">
+                <h3>${info.name}</h3>
+                <p><strong>戰術要求:</strong> ${info.tactics}</p>
+                <p><strong>技術要求:</strong> ${info.tech}</p>
+                <p><strong>進攻時位置要求:</strong> ${info.off}</p>
+                <p><strong>防守時位置要求:</strong> ${info.def}</p>
+                <p><strong>代表球員:</strong> ${info.example}</p>
+            </div>
+        `;
+    });
+
+    formation.positions.forEach(pos => {
+        const select = document.getElementById(pos);
+        if (select) {
+            select.onchange = updatePitchAndSubs;
+            if (selectedPlayersByFormation[currentFormation][pos]) {
+                select.value = selectedPlayersByFormation[currentFormation][pos];
             }
-            if (!positionsContainer || !pitchContainer || !positionDetails) {
-                console.error("One or more required elements not found!");
-                return;
-            }
-
-            // 更新左側選單
-            console.log('Generating positions for:', formation.positions);
-            positionsContainer.innerHTML = '';
-            formation.positions.forEach(pos => {
-                const label = document.createElement('label');
-                label.textContent = formation.details[pos].name + ':';
-                const select = document.createElement('select');
-                select.id = pos;
-                select.innerHTML = '<option value="">選擇球員</option>' + 
-                    Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
-                positionsContainer.appendChild(label);
-                positionsContainer.appendChild(select);
-            });
-
-            // 更新戰術板
-            console.log('Generating pitch layout for:', formation.positions);
-            pitchContainer.innerHTML = '';
-            pitchContainer.innerHTML += `
-                <div id="pitch-error" style="display: none;">
-                    無法加載足球場圖片，請檢查網路或圖片路徑。
-                </div>
-            `;
-            formation.positions.forEach(pos => {
-                const playerDiv = document.createElement('div');
-                playerDiv.className = 'player';
-                playerDiv.id = `${pos}-player`;
-                playerDiv.style.left = formation.layout[pos].left;
-                playerDiv.style.top = formation.layout[pos].top;
-                playerDiv.textContent = pos.toUpperCase();
-                playerDiv.onclick = () => {
-                    incrementStats(pos);
-                    showPositionDetails(pos);
-                };
-
-                // 添加統計數據顯示
-                const statsDiv = document.createElement('div');
-                statsDiv.className = 'stats';
-                statsDiv.id = `${pos}-stats`;
-                playerDiv.appendChild(statsDiv);
-
-                pitchContainer.appendChild(playerDiv);
-            });
-
-            // 更新右側詳情（移除統計數據顯示）
-            console.log('Generating position details for:', formation.positions);
-            positionDetails.innerHTML = '';
-            formation.positions.forEach(pos => {
-                const info = formation.details[pos];
-                positionDetails.innerHTML += `
-                    <div id="${pos}-info" class="position-info">
-                        <h3>${info.name}</h3>
-                        <p><strong>戰術要求:</strong> ${info.tactics}</p>
-                        <p><strong>技術要求:</strong> ${info.tech}</p>
-                        <p><strong>進攻時位置要求:</strong> ${info.off}</p>
-                        <p><strong>防守時位置要求:</strong> ${info.def}</p>
-                        <p><strong>代表球員:</strong> ${info.example}</p>
-                    </div>
-                `;
-            });
-
-            // 為每個下拉選單添加事件並加載保存的選擇
-            formation.positions.forEach(pos => {
-                const select = document.getElementById(pos);
-                if (select) {
-                    select.onchange = updatePitchAndSubs;
-                    if (selectedPlayersByFormation[currentFormation][pos]) {
-                        select.value = selectedPlayersByFormation[currentFormation][pos];
-                    }
-                }
-            });
-
-            // 默認顯示第一個位置的戰術要求
-            if (formation.positions.length > 0) {
-                showPositionDetails(formation.positions[0]);
-            }
-            updatePitchAndSubs();
         }
+    });
 
-        // 更新戰術板和後備名單
-        function updatePitchAndSubs() {
-            console.log('Updating pitch and subs...');
-            const formation = formations[currentFormation];
-            const selected = new Set();
-            formation.positions.forEach(pos => {
-                const select = document.getElementById(pos);
-                const playerDiv = document.getElementById(pos + '-player');
-                const statsDiv = document.getElementById(pos + '-stats');
-                if (select && playerDiv && statsDiv) {
-                    const selectedPlayer = select.value;
-                    playerDiv.textContent = selectedPlayer || pos.toUpperCase();
-                    selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
+    if (formation.positions.length > 0) {
+        showPositionDetails(formation.positions[0]);
+    }
+    updatePitchAndSubs();
+}
 
-                    if (selectedPlayer && players[selectedPlayer]) {
-                        const stats = players[selectedPlayer];
-                        statsDiv.textContent = `出:${stats.appearances} 球:${stats.goals} 助:${stats.assists}`;
-                        selected.add(selectedPlayer);
-                    } else {
-                        statsDiv.textContent = '';
-                    }
-                }
-            });
+// 更新戰術板和後備名單
+function updatePitchAndSubs() {
+    console.log('Updating pitch and subs...');
+    const formation = formations[currentFormation];
+    const selected = new Set();
+    formation.positions.forEach(pos => {
+        const select = document.getElementById(pos);
+        const playerDiv = document.getElementById(pos + '-player');
+        const statsDiv = document.getElementById(pos + '-stats');
+        if (select && playerDiv && statsDiv) {
+            const selectedPlayer = select.value;
+            playerDiv.textContent = selectedPlayer || pos.toUpperCase();
+            selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
 
-            // 更新後備名單
-            const subsList = document.getElementById('subs-list');
-            if (subsList) {
-                const subs = Object.keys(players).filter(p => !selected.has(p));
-                console.log('Substitutes:', subs);
-                subsList.innerHTML = subs.map(p => `<p>${p}</p>`).join('');
-            }
-
-            // 保存選擇到本地存儲
-            localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
-            localStorage.setItem('currentFormation', currentFormation);
-            localStorage.setItem('playersStats', JSON.stringify(players));
-        }
-
-        // 點擊增加統計數據
-        function incrementStats(pos) {
-            const select = document.getElementById(pos);
-            const selectedPlayer = select ? select.value : '';
             if (selectedPlayer && players[selectedPlayer]) {
-                players[selectedPlayer].appearances += 1; // 每次點擊增加出場次數
-                // 可根據需要啟用以下行來增加入球或助攻
-                // players[selectedPlayer].goals += 1;
-                // players[selectedPlayer].assists += 1;
-                updatePitchAndSubs(); // 更新顯示
+                const stats = players[selectedPlayer];
+                statsDiv.textContent = `出:${stats.appearances} 球:${stats.goals} 助:${stats.assists}`;
+                selected.add(selectedPlayer);
+            } else {
+                statsDiv.textContent = ''; // 未選擇球員時不顯示統計數據
             }
         }
+    });
+
+    const subsList = document.getElementById('subs-list');
+    if (subsList) {
+        const subs = Object.keys(players).filter(p => !selected.has(p));
+        subsList.innerHTML = subs.map(p => `<p>${p}</p>`).join('');
+    }
+
+    localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
+    localStorage.setItem('currentFormation', currentFormation);
+    localStorage.setItem('playersStats', JSON.stringify(players));
+}
+
+// 增加統計數據
+function incrementStats(pos) {
+    const select = document.getElementById(pos);
+    const selectedPlayer = select ? select.value : '';
+    if (selectedPlayer && players[selectedPlayer]) {
+        players[selectedPlayer].appearances += 1; // 增加出場次數
+        // 若需增加入球或助攻，可取消以下註釋
+        // players[selectedPlayer].goals += 1;
+        // players[selectedPlayer].assists += 1;
+        console.log(`Incremented stats for ${selectedPlayer}:`, players[selectedPlayer]);
+        updatePitchAndSubs(); // 立即更新顯示
+    }
+}
 
         // 載入上次保存的選擇和統計數據
         function loadSavedSelections() {
