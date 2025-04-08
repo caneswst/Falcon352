@@ -93,7 +93,7 @@
         }
         .stats {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 2px);
             left: 50%;
             transform: translateX(-50%);
             color: #fff;
@@ -102,6 +102,7 @@
             background: rgba(0, 0, 0, 0.7);
             padding: 2px 4px;
             border-radius: 3px;
+            pointer-events: none;
         }
         #left-panel, #subs-container, #right-panel {
             flex: 1 1 18%;
@@ -176,6 +177,23 @@
         #import-file {
             display: none;
         }
+        .sub-player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.9);
+            margin: 2px 0;
+            border-radius: 3px;
+        }
+        .sub-player:hover {
+            background: rgba(70, 130, 180, 0.2);
+        }
+        .sub-stats {
+            font-size: clamp(8px, 1.2vw, 12px);
+            color: #333;
+        }
         @media (max-width: 900px) {
             .container {
                 flex-wrap: wrap;
@@ -211,19 +229,9 @@
                 line-height: 6vw;
                 font-size: 2vw;
             }
-.stats {
-    position: absolute;
-    top: calc(100% + 2px); /* 稍微下移，避免重疊 */
-    left: 50%;
-    transform: translateX(-50%);
-    color: #fff;
-    font-size: clamp(6px, 1vw, 10px);
-    white-space: nowrap;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 2px 4px;
-    border-radius: 3px;
-    pointer-events: none; /* 避免影響點擊 */
-}
+            .stats {
+                font-size: 1.5vw;
+            }
         }
     </style>
 </head>
@@ -386,9 +394,9 @@
                     'rb': { left: '80%', top: '65%' },
                     'ldm': { left: '40%', top: '55%' },
                     'rdm': { left: '60%', top: '55%' },
-                    'lam': { left: '20%', top: '40%' },
+                    'lam': { left: '20%', top: '45%' },
                     'cam': { left: '50%', top: '35%' },
-                    'ram': { left: '80%', top: '40%' },
+                    'ram': { left: '80%', top: '45%' },
                     'st': { left: '50%', top: '20%' }
                 },
                 details: {
@@ -451,137 +459,132 @@
             checkPitchImage();
         }
 
-// 更新戰術板
-function updateFormation() {
-    console.log('Updating formation for:', currentFormation);
-    const formation = formations[currentFormation];
-    const positionsContainer = document.getElementById('positions-container');
-    const pitchContainer = document.getElementById('pitch-container');
-    const positionDetails = document.getElementById('position-details');
+        // 更新陣型相關內容
+        function updateFormation() {
+            console.log('Updating formation for:', currentFormation);
+            const formation = formations[currentFormation];
+            const positionsContainer = document.getElementById('positions-container');
+            const pitchContainer = document.getElementById('pitch-container');
+            const positionDetails = document.getElementById('position-details');
 
-    if (!formation || !positionsContainer || !pitchContainer || !positionDetails) {
-        console.error('Required elements or formation not found!');
-        return;
-    }
+            if (!formation || !positionsContainer || !pitchContainer || !positionDetails) {
+                console.error('Required elements or formation not found!');
+                return;
+            }
 
-    // 更新左側選單
-    positionsContainer.innerHTML = '';
-    formation.positions.forEach(pos => {
-        const label = document.createElement('label');
-        label.textContent = formation.details[pos].name + ':';
-        const select = document.createElement('select');
-        select.id = pos;
-        select.innerHTML = '<option value="">選擇球員</option>' + 
-            Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
-        positionsContainer.appendChild(label);
-        positionsContainer.appendChild(select);
-    });
+            // 更新左側選單
+            positionsContainer.innerHTML = '';
+            formation.positions.forEach(pos => {
+                const label = document.createElement('label');
+                label.textContent = formation.details[pos].name + ':';
+                const select = document.createElement('select');
+                select.id = pos;
+                select.innerHTML = '<option value="">選擇球員</option>' + 
+                    Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
+                positionsContainer.appendChild(label);
+                positionsContainer.appendChild(select);
+            });
 
-    // 更新戰術板
-    pitchContainer.innerHTML = '<div id="pitch-error" style="display: none;">無法加載足球場圖片，請檢查網路或圖片路徑。</div>';
-    formation.positions.forEach(pos => {
-        const playerDiv = document.createElement('div');
-        playerDiv.className = 'player';
-        playerDiv.id = `${pos}-player`;
-        playerDiv.style.left = formation.layout[pos].left;
-        playerDiv.style.top = formation.layout[pos].top;
-        playerDiv.textContent = pos.toUpperCase();
+            // 更新戰術板
+            pitchContainer.innerHTML = '<div id="pitch-error" style="display: none;">無法加載足球場圖片，請檢查網路或圖片路徑。</div>';
+            formation.positions.forEach(pos => {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = 'player';
+                playerDiv.id = `${pos}-player`;
+                playerDiv.style.left = formation.layout[pos].left;
+                playerDiv.style.top = formation.layout[pos].top;
+                playerDiv.textContent = pos.toUpperCase();
 
-        // 添加統計數據顯示
-        const statsDiv = document.createElement('div');
-        statsDiv.className = 'stats';
-        statsDiv.id = `${pos}-stats`;
-        playerDiv.appendChild(statsDiv);
+                // 添加空的 statsDiv（不顯示統計數據）
+                const statsDiv = document.createElement('div');
+                statsDiv.className = 'stats';
+                statsDiv.id = `${pos}-stats`;
+                playerDiv.appendChild(statsDiv);
 
-        // 綁定點擊事件
-        playerDiv.onclick = () => {
-            incrementStats(pos);
-            showPositionDetails(pos);
-        };
+                playerDiv.onclick = () => showPositionDetails(pos);
+                pitchContainer.appendChild(playerDiv);
+            });
 
-        pitchContainer.appendChild(playerDiv);
-    });
+            // 更新右側詳情
+            positionDetails.innerHTML = '';
+            formation.positions.forEach(pos => {
+                const info = formation.details[pos];
+                positionDetails.innerHTML += `
+                    <div id="${pos}-info" class="position-info">
+                        <h3>${info.name}</h3>
+                        <p><strong>戰術要求:</strong> ${info.tactics}</p>
+                        <p><strong>技術要求:</strong> ${info.tech}</p>
+                        <p><strong>進攻時位置要求:</strong> ${info.off}</p>
+                        <p><strong>防守時位置要求:</strong> ${info.def}</p>
+                        <p><strong>代表球員:</strong> ${info.example}</p>
+                    </div>
+                `;
+            });
 
-    // 更新右側詳情（無統計數據）
-    positionDetails.innerHTML = '';
-    formation.positions.forEach(pos => {
-        const info = formation.details[pos];
-        positionDetails.innerHTML += `
-            <div id="${pos}-info" class="position-info">
-                <h3>${info.name}</h3>
-                <p><strong>戰術要求:</strong> ${info.tactics}</p>
-                <p><strong>技術要求:</strong> ${info.tech}</p>
-                <p><strong>進攻時位置要求:</strong> ${info.off}</p>
-                <p><strong>防守時位置要求:</strong> ${info.def}</p>
-                <p><strong>代表球員:</strong> ${info.example}</p>
-            </div>
-        `;
-    });
+            formation.positions.forEach(pos => {
+                const select = document.getElementById(pos);
+                if (select) {
+                    select.onchange = updatePitchAndSubs;
+                    if (selectedPlayersByFormation[currentFormation][pos]) {
+                        select.value = selectedPlayersByFormation[currentFormation][pos];
+                    }
+                }
+            });
 
-    formation.positions.forEach(pos => {
-        const select = document.getElementById(pos);
-        if (select) {
-            select.onchange = updatePitchAndSubs;
-            if (selectedPlayersByFormation[currentFormation][pos]) {
-                select.value = selectedPlayersByFormation[currentFormation][pos];
+            if (formation.positions.length > 0) {
+                showPositionDetails(formation.positions[0]);
+            }
+            updatePitchAndSubs();
+        }
+
+        // 更新戰術板和後備名單
+        function updatePitchAndSubs() {
+            console.log('Updating pitch and subs...');
+            const formation = formations[currentFormation];
+            const selected = new Set();
+            
+            // 更新戰術板
+            formation.positions.forEach(pos => {
+                const select = document.getElementById(pos);
+                const playerDiv = document.getElementById(pos + '-player');
+                const statsDiv = document.getElementById(pos + '-stats');
+                if (select && playerDiv && statsDiv) {
+                    const selectedPlayer = select.value;
+                    playerDiv.textContent = selectedPlayer || pos.toUpperCase();
+                    selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
+                    statsDiv.textContent = ''; // 戰術板不顯示統計數據
+                    if (selectedPlayer) selected.add(selectedPlayer);
+                }
+            });
+
+            // 更新後備名單並顯示統計數據
+            const subsList = document.getElementById('subs-list');
+            if (subsList) {
+                const subs = Object.keys(players).filter(p => !selected.has(p));
+                subsList.innerHTML = subs.map(p => {
+                    const stats = players[p];
+                    return `
+                        <div class="sub-player" onclick="incrementSubStats('${p}')">
+                            <span>${p}</span>
+                            <span class="sub-stats">出:${stats.appearances} 球:${stats.goals} 助:${stats.assists}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
+            localStorage.setItem('currentFormation', currentFormation);
+            localStorage.setItem('playersStats', JSON.stringify(players));
+        }
+
+        // 增加後備球員統計數據
+        function incrementSubStats(playerName) {
+            if (players[playerName]) {
+                players[playerName].appearances += 1; // 增加出場次數
+                console.log(`Incremented stats for ${playerName}:`, players[playerName]);
+                updatePitchAndSubs();
             }
         }
-    });
-
-    if (formation.positions.length > 0) {
-        showPositionDetails(formation.positions[0]);
-    }
-    updatePitchAndSubs();
-}
-
-// 更新戰術板和後備名單
-function updatePitchAndSubs() {
-    console.log('Updating pitch and subs...');
-    const formation = formations[currentFormation];
-    const selected = new Set();
-    formation.positions.forEach(pos => {
-        const select = document.getElementById(pos);
-        const playerDiv = document.getElementById(pos + '-player');
-        const statsDiv = document.getElementById(pos + '-stats');
-        if (select && playerDiv && statsDiv) {
-            const selectedPlayer = select.value;
-            playerDiv.textContent = selectedPlayer || pos.toUpperCase();
-            selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
-
-            if (selectedPlayer && players[selectedPlayer]) {
-                const stats = players[selectedPlayer];
-                statsDiv.textContent = `出:${stats.appearances} 球:${stats.goals} 助:${stats.assists}`;
-                selected.add(selectedPlayer);
-            } else {
-                statsDiv.textContent = ''; // 未選擇球員時不顯示統計數據
-            }
-        }
-    });
-
-    const subsList = document.getElementById('subs-list');
-    if (subsList) {
-        const subs = Object.keys(players).filter(p => !selected.has(p));
-        subsList.innerHTML = subs.map(p => `<p>${p}</p>`).join('');
-    }
-
-    localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
-    localStorage.setItem('currentFormation', currentFormation);
-    localStorage.setItem('playersStats', JSON.stringify(players));
-}
-
-// 增加統計數據
-function incrementStats(pos) {
-    const select = document.getElementById(pos);
-    const selectedPlayer = select ? select.value : '';
-    if (selectedPlayer && players[selectedPlayer]) {
-        players[selectedPlayer].appearances += 1; // 增加出場次數
-        // 若需增加入球或助攻，可取消以下註釋
-        // players[selectedPlayer].goals += 1;
-        // players[selectedPlayer].assists += 1;
-        console.log(`Incremented stats for ${selectedPlayer}:`, players[selectedPlayer]);
-        updatePitchAndSubs(); // 立即更新顯示
-    }
-}
 
         // 載入上次保存的選擇和統計數據
         function loadSavedSelections() {
@@ -609,7 +612,7 @@ function incrementStats(pos) {
             });
         }
 
-        // 顯示位置詳情（右側面板）
+        // 顯示位置詳情
         function showPositionDetails(pos) {
             console.log('Showing details for position:', pos);
             document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
@@ -623,7 +626,7 @@ function incrementStats(pos) {
             const data = {
                 currentFormation: currentFormation,
                 selectedPlayersByFormation: selectedPlayersByFormation,
-                players: players // 包含球員統計數據
+                players: players
             };
             const jsonStr = JSON.stringify(data, null, 2);
             const blob = new Blob([jsonStr], { type: 'application/json' });
@@ -650,30 +653,21 @@ function incrementStats(pos) {
                     if (data.currentFormation && data.selectedPlayersByFormation) {
                         currentFormation = data.currentFormation;
                         selectedPlayersByFormation = data.selectedPlayersByFormation;
-
-                        // 如果匯入檔案包含球員統計數據，則更新 players
                         if (data.players) {
                             Object.assign(players, data.players);
                         }
-
-                        // 確保所有陣型都有對應的選擇數據
                         Object.keys(formations).forEach(formation => {
                             if (!selectedPlayersByFormation[formation]) {
                                 selectedPlayersByFormation[formation] = {};
                             }
                         });
-
-                        // 更新 UI
                         const formationSelect = document.getElementById('formation-select');
                         formationSelect.value = currentFormation;
                         updateFormation();
                         updatePitchAndSubs();
-
-                        // 保存到本地存儲
                         localStorage.setItem('currentFormation', currentFormation);
                         localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
                         localStorage.setItem('playersStats', JSON.stringify(players));
-
                         alert('陣容已成功匯入！');
                     } else {
                         alert('匯入的檔案格式不正確！');
@@ -685,7 +679,7 @@ function incrementStats(pos) {
             reader.readAsText(file);
         }
 
-        // 確保頁面加載完成後初始化
+        // 頁面加載完成後初始化
         window.onload = () => {
             console.log('Window loaded, initializing...');
             initFormationSelect();
