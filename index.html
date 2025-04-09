@@ -429,337 +429,353 @@
             }
         };
 
-        let selectedPlayersByFormation = {
-            '442-defensive': {},
-            '352-defensive': {},
-            '451-defensive': {},
-            '4231-defensive': {}
-        };
-        let playerPositionsByFormation = {
-            '442-defensive': {},
-            '352-defensive': {},
-            '451-defensive': {},
-            '4231-defensive': {}
-        };
-        let currentFormation = '442-defensive';
+let selectedPlayersByFormation = {
+        '442-defensive': {},
+        '352-defensive': {},
+        '451-defensive': {},
+        '4231-defensive': {}
+    };
+    let playerPositionsByFormation = {
+        '442-defensive': {},
+        '352-defensive': {},
+        '451-defensive': {},
+        '4231-defensive': {}
+    };
+    let currentFormation = '442-defensive';
 
-        // 檢查足球場圖片是否加載成功
-        function checkPitchImage() {
-            const img = new Image();
-            img.src = 'https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg';
-            img.onload = () => {
-                document.getElementById('pitch-error').style.display = 'none';
-                document.getElementById('pitch-container').style.backgroundImage = "url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg')";
-            };
-            img.onerror = () => {
-                document.getElementById('pitch-error').style.display = 'block';
-                document.getElementById('pitch-container').style.backgroundImage = 'none';
-            };
-        }
+    // 檢查足球場圖片是否加載成功
+    function checkPitchImage() {
+        const img = new Image();
+        img.src = 'https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg';
+        img.onload = () => {
+            document.getElementById('pitch-error').style.display = 'none';
+            document.getElementById('pitch-container').style.backgroundImage = "url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg')";
+        };
+        img.onerror = () => {
+            document.getElementById('pitch-error').style.display = 'block';
+            document.getElementById('pitch-container').style.backgroundImage = 'none';
+        };
+    }
 
-        // 初始化陣型選擇
-        function initFormationSelect() {
-            const formationSelect = document.getElementById('formation-select');
-            formationSelect.value = '442-defensive';
-            formationSelect.onchange = () => {
-                currentFormation = formationSelect.value;
-                updateFormation();
-                updatePitchAndSubs();
-            };
-            loadSavedSelections();
+    // 初始化陣型選擇
+    function initFormationSelect() {
+        const formationSelect = document.getElementById('formation-select');
+        formationSelect.value = '442-defensive';
+        formationSelect.onchange = () => {
+            currentFormation = formationSelect.value;
             updateFormation();
-            checkPitchImage();
-        }
-
-        // 更新陣型相關內容
-        function updateFormation() {
-            const formation = formations[currentFormation];
-            const positionsContainer = document.getElementById('positions-container');
-            const pitchContainer = document.getElementById('pitch-container');
-            const positionDetails = document.getElementById('position-details');
-
-            // 更新左側選單
-            positionsContainer.innerHTML = '';
-            formation.positions.forEach(pos => {
-                const label = document.createElement('label');
-                label.textContent = formation.details[pos].name + ':';
-                const select = document.createElement('select');
-                select.id = pos;
-                select.innerHTML = '<option value="">選擇球員</option>' + 
-                    Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
-                positionsContainer.appendChild(label);
-                positionsContainer.appendChild(select);
-            });
-
-            // 更新戰術板
-            pitchContainer.innerHTML = '<div id="pitch-error" style="display: none;">無法加載足球場圖片，請檢查網路或圖片路徑。</div>';
-            formation.positions.forEach(pos => {
-                const playerDiv = document.createElement('div');
-                playerDiv.className = 'player';
-                playerDiv.id = `${pos}-player`;
-                playerDiv.dataset.position = pos;
-                const savedPos = playerPositionsByFormation[currentFormation][pos];
-                playerDiv.style.left = savedPos?.left || formation.layout[pos].left;
-                playerDiv.style.top = savedPos?.top || formation.layout[pos].top;
-                playerDiv.textContent = pos.toUpperCase();
-
-                const statsDiv = document.createElement('div');
-                statsDiv.className = 'stats';
-                statsDiv.id = `${pos}-stats`;
-                playerDiv.appendChild(statsDiv);
-
-                playerDiv.onclick = (e) => {
-                    if (!e.target.isDragging) showPositionDetails(pos);
-                };
-                makeDraggable(playerDiv);
-                pitchContainer.appendChild(playerDiv);
-            });
-
-            // 更新右側詳情
-            positionDetails.innerHTML = '';
-            formation.positions.forEach(pos => {
-                const info = formation.details[pos];
-                positionDetails.innerHTML += `
-                    <div id="${pos}-info" class="position-info">
-                        <h3>${info.name}</h3>
-                        <p><strong>戰術要求:</strong> ${info.tactics}</p>
-                        <p><strong>技術要求:</strong> ${info.tech}</p>
-                        <p><strong>進攻時位置要求:</strong> ${info.off}</p>
-                        <p><strong>防守時位置要求:</strong> ${info.def}</p>
-                        <p><strong>代表球員:</strong> ${info.example}</p>
-                    </div>
-                `;
-            });
-
-            formation.positions.forEach(pos => {
-                const select = document.getElementById(pos);
-                if (select) {
-                    select.onchange = updatePitchAndSubs;
-                    if (selectedPlayersByFormation[currentFormation][pos]) {
-                        select.value = selectedPlayersByFormation[currentFormation][pos];
-                    }
-                }
-            });
-
-            if (formation.positions.length > 0) {
-                showPositionDetails(formation.positions[0]);
-            }
             updatePitchAndSubs();
+        };
+        loadSavedSelections();
+        updateFormation();
+        checkPitchImage();
+    }
+
+    // 更新陣型相關內容
+    function updateFormation() {
+        const formation = formations[currentFormation];
+        const positionsContainer = document.getElementById('positions-container');
+        const pitchContainer = document.getElementById('pitch-container');
+        const positionDetails = document.getElementById('position-details');
+
+        positionsContainer.innerHTML = '';
+        formation.positions.forEach(pos => {
+            const label = document.createElement('label');
+            label.textContent = formation.details[pos].name + ':';
+            const select = document.createElement('select');
+            select.id = pos;
+            select.innerHTML = '<option value="">選擇球員</option>' + 
+                Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
+            positionsContainer.appendChild(label);
+            positionsContainer.appendChild(select);
+        });
+
+        pitchContainer.innerHTML = '<div id="pitch-error" style="display: none;">無法加載足球場圖片，請檢查網路或圖片路徑。</div>';
+        formation.positions.forEach(pos => {
+            const playerDiv = document.createElement('div');
+            playerDiv.className = 'player';
+            playerDiv.id = `${pos}-player`;
+            playerDiv.dataset.position = pos;
+            const savedPos = playerPositionsByFormation[currentFormation][pos];
+            playerDiv.style.left = savedPos?.left || formation.layout[pos].left;
+            playerDiv.style.top = savedPos?.top || formation.layout[pos].top;
+            playerDiv.textContent = pos.toUpperCase();
+
+            const statsDiv = document.createElement('div');
+            statsDiv.className = 'stats';
+            statsDiv.id = `${pos}-stats`;
+            playerDiv.appendChild(statsDiv);
+
+            playerDiv.onclick = (e) => {
+                if (!playerDiv.isDragging) showPositionDetails(pos);
+            };
+            makeDraggable(playerDiv);
+            pitchContainer.appendChild(playerDiv);
+        });
+
+        positionDetails.innerHTML = '';
+        formation.positions.forEach(pos => {
+            const info = formation.details[pos];
+            positionDetails.innerHTML += `
+                <div id="${pos}-info" class="position-info">
+                    <h3>${info.name}</h3>
+                    <p><strong>戰術要求:</strong> ${info.tactics}</p>
+                    <p><strong>技術要求:</strong> ${info.tech}</p>
+                    <p><strong>進攻時位置要求:</strong> ${info.off}</p>
+                    <p><strong>防守時位置要求:</strong> ${info.def}</p>
+                    <p><strong>代表球員:</strong> ${info.example}</p>
+                </div>
+            `;
+        });
+
+        formation.positions.forEach(pos => {
+            const select = document.getElementById(pos);
+            if (select) {
+                select.onchange = updatePitchAndSubs;
+                if (selectedPlayersByFormation[currentFormation][pos]) {
+                    select.value = selectedPlayersByFormation[currentFormation][pos];
+                }
+            }
+        });
+
+        if (formation.positions.length > 0) {
+            showPositionDetails(formation.positions[0]);
         }
+        updatePitchAndSubs();
+    }
 
-        // 使球員圖示可拖動
-        function makeDraggable(element) {
-            let isDragging = false;
-            let currentX;
-            let currentY;
-            let initialX;
-            let initialY;
+    // 使球員圖示可拖動（支援滑鼠和觸控）
+    function makeDraggable(element) {
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
 
-            element.onmousedown = (e) => {
-                isDragging = true;
-                element.isDragging = true;
+        // 滑鼠事件
+        element.onmousedown = startDragging;
+        element.ontouchstart = startDragging;
+
+        function startDragging(e) {
+            e.preventDefault();
+            isDragging = true;
+            element.isDragging = true;
+            element.style.zIndex = 1000;
+
+            if (e.type === 'mousedown') {
                 initialX = e.clientX - currentX;
                 initialY = e.clientY - currentY;
-                element.style.zIndex = 1000;
                 document.onmousemove = drag;
                 document.onmouseup = stopDragging;
-            };
-
-            function drag(e) {
-                if (isDragging) {
-                    e.preventDefault();
-                    currentX = e.clientX - initialX;
-                    currentY = e.clientY - initialY;
-                    const pitch = document.getElementById('pitch-container');
-                    const rect = pitch.getBoundingClientRect();
-                    const playerWidth = element.offsetWidth;
-                    const playerHeight = element.offsetHeight;
-
-                    // 限制拖動範圍在球場內
-                    let left = (currentX + playerWidth / 2) / rect.width * 100;
-                    let top = (currentY + playerHeight / 2) / rect.height * 100;
-                    left = Math.max(0 + playerWidth / rect.width * 50, Math.min(100 - playerWidth / rect.width * 50, left));
-                    top = Math.max(0 + playerHeight / rect.height * 50, Math.min(100 - playerHeight / rect.height * 50, top));
-
-                    element.style.left = `${left}%`;
-                    element.style.top = `${top}%`;
-                }
+            } else if (e.type === 'touchstart') {
+                const touch = e.touches[0];
+                initialX = touch.clientX - currentX;
+                initialY = touch.clientY - currentY;
+                document.ontouchmove = drag;
+                document.ontouchend = stopDragging;
             }
-
-            function stopDragging() {
-                isDragging = false;
-                element.isDragging = false;
-                element.style.zIndex = '';
-                document.onmousemove = null;
-                document.onmouseup = null;
-
-                // 保存移動後的位置
-                const pos = element.dataset.position;
-                playerPositionsByFormation[currentFormation][pos] = {
-                    left: element.style.left,
-                    top: element.style.top
-                };
-                localStorage.setItem('playerPositionsByFormation', JSON.stringify(playerPositionsByFormation));
-            }
-
-            // 初始化位置
-            currentX = parseFloat(element.style.left) / 100 * document.getElementById('pitch-container').offsetWidth - element.offsetWidth / 2;
-            currentY = parseFloat(element.style.top) / 100 * document.getElementById('pitch-container').offsetHeight - element.offsetHeight / 2;
         }
 
-        // 更新戰術板和後備名單
-        function updatePitchAndSubs() {
-            const formation = formations[currentFormation];
-            const selected = new Set();
-            
-            formation.positions.forEach(pos => {
-                const select = document.getElementById(pos);
-                const playerDiv = document.getElementById(pos + '-player');
-                const statsDiv = document.getElementById(pos + '-stats');
-                if (select && playerDiv && statsDiv) {
-                    const selectedPlayer = select.value;
-                    playerDiv.textContent = selectedPlayer || pos.toUpperCase();
-                    selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
-                    statsDiv.textContent = '';
-                    if (selectedPlayer) selected.add(selectedPlayer);
-                }
-            });
+        function drag(e) {
+            if (!isDragging) return;
 
-            const subsList = document.getElementById('subs-list');
-            if (subsList) {
-                const subs = Object.keys(players).filter(p => !selected.has(p));
-                subsList.innerHTML = subs.map(p => {
-                    const stats = players[p];
-                    return `
-                        <div class="sub-player">
-                            <span>${p}</span>
-                            <span class="sub-stats">
-                                出:<input type="number" min="0" value="${stats.appearances}" onchange="updateStats('${p}', 'appearances', this.value)">
-                                球:<input type="number" min="0" value="${stats.goals}" onchange="updateStats('${p}', 'goals', this.value)">
-                                助:<input type="number" min="0" value="${stats.assists}" onchange="updateStats('${p}', 'assists', this.value)">
-                            </span>
-                        </div>
-                    `;
-                }).join('');
+            e.preventDefault();
+            const pitch = document.getElementById('pitch-container');
+            const rect = pitch.getBoundingClientRect();
+            const playerWidth = element.offsetWidth;
+            const playerHeight = element.offsetHeight;
+
+            if (e.type === 'mousemove') {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+            } else if (e.type === 'touchmove') {
+                const touch = e.touches[0];
+                currentX = touch.clientX - initialX;
+                currentY = touch.clientY - initialY;
             }
 
-            localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
-            localStorage.setItem('currentFormation', currentFormation);
+            let left = (currentX + playerWidth / 2) / rect.width * 100;
+            let top = (currentY + playerHeight / 2) / rect.height * 100;
+            left = Math.max(0 + playerWidth / rect.width * 50, Math.min(100 - playerWidth / rect.width * 50, left));
+            top = Math.max(0 + playerHeight / rect.height * 50, Math.min(100 - playerHeight / rect.height * 50, top));
+
+            element.style.left = `${left}%`;
+            element.style.top = `${top}%`;
+        }
+
+        function stopDragging() {
+            isDragging = false;
+            element.isDragging = false;
+            element.style.zIndex = '';
+            document.onmousemove = null;
+            document.onmouseup = null;
+            document.ontouchmove = null;
+            document.ontouchend = null;
+
+            const pos = element.dataset.position;
+            playerPositionsByFormation[currentFormation][pos] = {
+                left: element.style.left,
+                top: element.style.top
+            };
+            localStorage.setItem('playerPositionsByFormation', JSON.stringify(playerPositionsByFormation));
+        }
+
+        currentX = parseFloat(element.style.left) / 100 * document.getElementById('pitch-container').offsetWidth - element.offsetWidth / 2;
+        currentY = parseFloat(element.style.top) / 100 * document.getElementById('pitch-container').offsetHeight - element.offsetHeight / 2;
+    }
+
+    // 更新戰術板和後備名單
+    function updatePitchAndSubs() {
+        const formation = formations[currentFormation];
+        const selected = new Set();
+        
+        formation.positions.forEach(pos => {
+            const select = document.getElementById(pos);
+            const playerDiv = document.getElementById(pos + '-player');
+            const statsDiv = document.getElementById(pos + '-stats');
+            if (select && playerDiv && statsDiv) {
+                const selectedPlayer = select.value;
+                playerDiv.textContent = selectedPlayer || pos.toUpperCase();
+                selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
+                statsDiv.textContent = '';
+                if (selectedPlayer) selected.add(selectedPlayer);
+            }
+        });
+
+        const subsList = document.getElementById('subs-list');
+        if (subsList) {
+            const subs = Object.keys(players).filter(p => !selected.has(p));
+            subsList.innerHTML = subs.map(p => {
+                const stats = players[p];
+                return `
+                    <div class="sub-player">
+                        <span>${p}</span>
+                        <span class="sub-stats">
+                            出:<input type="number" min="0" value="${stats.appearances}" onchange="updateStats('${p}', 'appearances', this.value)">
+                            球:<input type="number" min="0" value="${stats.goals}" onchange="updateStats('${p}', 'goals', this.value)">
+                            助:<input type="number" min="0" value="${stats.assists}" onchange="updateStats('${p}', 'assists', this.value)">
+                        </span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
+        localStorage.setItem('currentFormation', currentFormation);
+        localStorage.setItem('playersStats', JSON.stringify(players));
+    }
+
+    // 更新統計數據
+    function updateStats(playerName, statType, value) {
+        if (players[playerName]) {
+            const numValue = parseInt(value) || 0;
+            players[playerName][statType] = numValue;
             localStorage.setItem('playersStats', JSON.stringify(players));
+            updatePitchAndSubs();
         }
+    }
 
-        // 更新統計數據
-        function updateStats(playerName, statType, value) {
-            if (players[playerName]) {
-                const numValue = parseInt(value) || 0;
-                players[playerName][statType] = numValue;
-                localStorage.setItem('playersStats', JSON.stringify(players));
-                updatePitchAndSubs();
+    // 載入上次保存的選擇和統計數據
+    function loadSavedSelections() {
+        const savedFormation = localStorage.getItem('currentFormation');
+        const savedPlayers = localStorage.getItem('selectedPlayersByFormation');
+        const savedStats = localStorage.getItem('playersStats');
+        const savedPositions = localStorage.getItem('playerPositionsByFormation');
+        if (savedFormation) {
+            currentFormation = savedFormation;
+            document.getElementById('formation-select').value = savedFormation;
+        }
+        if (savedPlayers) {
+            selectedPlayersByFormation = JSON.parse(savedPlayers);
+        }
+        if (savedStats) {
+            Object.assign(players, JSON.parse(savedStats));
+        }
+        if (savedPositions) {
+            playerPositionsByFormation = JSON.parse(savedPositions);
+        }
+        Object.keys(formations).forEach(formation => {
+            if (!selectedPlayersByFormation[formation]) {
+                selectedPlayersByFormation[formation] = {};
             }
-        }
-
-        // 載入上次保存的選擇和統計數據
-        function loadSavedSelections() {
-            const savedFormation = localStorage.getItem('currentFormation');
-            const savedPlayers = localStorage.getItem('selectedPlayersByFormation');
-            const savedStats = localStorage.getItem('playersStats');
-            const savedPositions = localStorage.getItem('playerPositionsByFormation');
-            if (savedFormation) {
-                currentFormation = savedFormation;
-                document.getElementById('formation-select').value = savedFormation;
+            if (!playerPositionsByFormation[formation]) {
+                playerPositionsByFormation[formation] = {};
             }
-            if (savedPlayers) {
-                selectedPlayersByFormation = JSON.parse(savedPlayers);
-            }
-            if (savedStats) {
-                Object.assign(players, JSON.parse(savedStats));
-            }
-            if (savedPositions) {
-                playerPositionsByFormation = JSON.parse(savedPositions);
-            }
-            Object.keys(formations).forEach(formation => {
-                if (!selectedPlayersByFormation[formation]) {
-                    selectedPlayersByFormation[formation] = {};
-                }
-                if (!playerPositionsByFormation[formation]) {
-                    playerPositionsByFormation[formation] = {};
-                }
-            });
-        }
+        });
+    }
 
-        // 顯示位置詳情
-        function showPositionDetails(pos) {
-            document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
-            const infoDiv = document.getElementById(pos + '-info');
-            if (infoDiv) infoDiv.style.display = 'block';
-        }
+    // 顯示位置詳情
+    function showPositionDetails(pos) {
+        document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
+        const infoDiv = document.getElementById(pos + '-info');
+        if (infoDiv) infoDiv.style.display = 'block';
+    }
 
-        // 匯出陣容功能
-        function exportFormation() {
-            const data = {
-                currentFormation: currentFormation,
-                selectedPlayersByFormation: selectedPlayersByFormation,
-                playerPositionsByFormation: playerPositionsByFormation,
-                players: players
-            };
-            const jsonStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'formation.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        // 匯入陣容功能
-        function importFormation(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.currentFormation && data.selectedPlayersByFormation) {
-                        currentFormation = data.currentFormation;
-                        selectedPlayersByFormation = data.selectedPlayersByFormation;
-                        playerPositionsByFormation = data.playerPositionsByFormation || playerPositionsByFormation;
-                        if (data.players) {
-                            Object.assign(players, data.players);
-                        }
-                        Object.keys(formations).forEach(formation => {
-                            if (!selectedPlayersByFormation[formation]) {
-                                selectedPlayersByFormation[formation] = {};
-                            }
-                            if (!playerPositionsByFormation[formation]) {
-                                playerPositionsByFormation[formation] = {};
-                            }
-                        });
-                        document.getElementById('formation-select').value = currentFormation;
-                        updateFormation();
-                        updatePitchAndSubs();
-                        localStorage.setItem('currentFormation', currentFormation);
-                        localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
-                        localStorage.setItem('playerPositionsByFormation', JSON.stringify(playerPositionsByFormation));
-                        localStorage.setItem('playersStats', JSON.stringify(players));
-                        alert('陣容已成功匯入！');
-                    } else {
-                        alert('匯入的檔案格式不正確！');
-                    }
-                } catch (err) {
-                    alert('無法解析匯入的檔案，請確保檔案格式正確！');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        // 頁面加載完成後初始化
-        window.onload = () => {
-            initFormationSelect();
+    // 匯出陣容功能
+    function exportFormation() {
+        const data = {
+            currentFormation: currentFormation,
+            selectedPlayersByFormation: selectedPlayersByFormation,
+            playerPositionsByFormation: playerPositionsByFormation,
+            players: players
         };
-    </script>
+        const jsonStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'formation.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // 匯入陣容功能
+    function importFormation(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.currentFormation && data.selectedPlayersByFormation) {
+                    currentFormation = data.currentFormation;
+                    selectedPlayersByFormation = data.selectedPlayersByFormation;
+                    playerPositionsByFormation = data.playerPositionsByFormation || playerPositionsByFormation;
+                    if (data.players) {
+                        Object.assign(players, data.players);
+                    }
+                    Object.keys(formations).forEach(formation => {
+                        if (!selectedPlayersByFormation[formation]) {
+                            selectedPlayersByFormation[formation] = {};
+                        }
+                        if (!playerPositionsByFormation[formation]) {
+                            playerPositionsByFormation[formation] = {};
+                        }
+                    });
+                    document.getElementById('formation-select').value = currentFormation;
+                    updateFormation();
+                    updatePitchAndSubs();
+                    localStorage.setItem('currentFormation', currentFormation);
+                    localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
+                    localStorage.setItem('playerPositionsByFormation', JSON.stringify(playerPositionsByFormation));
+                    localStorage.setItem('playersStats', JSON.stringify(players));
+                    alert('陣容已成功匯入！');
+                } else {
+                    alert('匯入的檔案格式不正確！');
+                }
+            } catch (err) {
+                alert('無法解析匯入的檔案，請確保檔案格式正確！');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    window.onload = () => {
+        initFormationSelect();
+    };
+</script>
 </body>
 </html>
