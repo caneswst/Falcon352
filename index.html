@@ -73,27 +73,26 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-.player {
-    position: absolute;
-    width: clamp(25px, 3.5vw, 40px);
-    height: clamp(25px, 3.5vw, 40px);
-    background: #4682b4;
-    border-radius: 50%;
-    color: #fff;
-    text-align: center;
-    line-height: clamp(25px, 3.5vw, 40px);
-    cursor: move;
-    font-size: clamp(8px, 1.5vw, 14px);
-    transition: transform 0.3s, box-shadow 0.3s;
-    transform: translate(-50%, -50%);
-    user-select: none;
-    z-index: 10; /* 確保圖形在前景 */
-}
+        .player {
+            position: absolute;
+            width: clamp(25px, 3.5vw, 40px);
+            height: clamp(25px, 3.5vw, 40px);
+            background: #4682b4;
+            border-radius: 50%;
+            color: #fff;
+            text-align: center;
+            line-height: clamp(25px, 3.5vw, 40px);
+            cursor: move;
+            font-size: clamp(8px, 1.5vw, 14px);
+            transition: transform 0.3s, box-shadow 0.3s;
+            transform: translate(-50%, -50%);
+            user-select: none;
+        }
         .player:hover {
             transform: translate(-50%, -50%) scale(1.1);
             box-shadow: 0 0 8px rgba(70, 130, 180, 0.6);
         }
-.football {
+        .football {
     position: absolute;
     width: clamp(20px, 2.5vw, 30px);
     height: clamp(20px, 2.5vw, 30px);
@@ -104,9 +103,6 @@
     user-select: none;
     z-index: 5; /* 足球在球員下方 */
 }
-        .football:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-        }
         .stats {
             position: absolute;
             top: calc(100% + 2px);
@@ -255,10 +251,6 @@
                 line-height: 6vw;
                 font-size: 2vw;
             }
-            .football {
-                width: 5vw;
-                height: 5vw;
-            }
             .stats {
                 font-size: 1.5vw;
             }
@@ -347,8 +339,19 @@
                     'lst': { left: '40%', top: '20%' },
                     'rst': { left: '60%', top: '20%' }
                 },
-                // details 內容保持不變，已省略以縮短程式碼
-                details: formations['442-defensive'].details
+                details: {
+                    'gk': { name: '門將 (GK)', tactics: '防守的最後一道屏障，負責守護球門並快速分球發動反擊，組織後衛線保持緊密防守。', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '參與後場短傳，必要時長傳至前場快速球員發動反擊。', def: '守住球門線，快速反應撲救，果斷出擊攔截單刀或高空球。', example: 'Manuel Neuer - 出擊防守和傳球能力強的現代門將典範。' },
+                    'lb': { name: '左後衛 (LB)', tactics: '穩固左路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援左中場。', def: '封堵對方右邊鋒突破或傳中，退守禁區補位。', example: 'Andrew Robertson - 防守穩健且跑動積極的邊後衛。' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守中路核心，負責清空禁區威脅，與右中後衛協作穩固防線。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定。', def: '盯防對方前鋒，清空高空球和傳中威脅，快速補位。', example: 'Virgil van Dijk - 防守全面且領導力強的中後衛。' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守中路核心，與左中後衛協作，承擔空中防守和盯人任務。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，必要時支援中場轉換。', def: '盯防對方前鋒，清空高空球，確保防線完整。', example: 'Sergio Ramos - 防守兇悍且經驗豐富的中後衛。' },
+                    'rb': { name: '右後衛 (RB)', tactics: '穩固右路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援右中場。', def: '封堵對方左邊鋒突破或傳中，退守禁區補位。', example: 'Kyle Walker - 速度快且防守穩固的邊後衛。' },
+                    'lm': { name: '左中場 (LM)', tactics: '防守左邊路並支援反擊，提供場地寬度並協助左後衛防守。', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊。', def: '回防壓迫對方右後衛或右邊鋒，協助防守邊路。', example: 'Son Heung-min - 速度快且技術全面的邊路球員。' },
+                    'lcm': { name: '左中場 (LCM)', tactics: '防守中場左側並銜接攻防，與右中場協作形成中場屏障。', tech: '傳球 88, 搶斷 85, 視野 90, 跑動 85, 防守站位 88', off: '分球至邊路或前鋒，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛。', example: 'Toni Kroos - 傳球精準且防守穩健的中場。' },
+                    'rcm': { name: '右中場 (RCM)', tactics: '防守中場右側並銜接攻防，與左中場協作形成中場屏障。', tech: '傳球 88, 搶斷 85, 視野 90, 跑動 85, 防守站位 88', off: '分球至邊路或前鋒，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛。', example: 'Luka Modrić - 技術全面且防守積極的中場。' },
+                    'rm': { name: '右中場 (RM)', tactics: '防守右邊路並支援反擊，提供場地寬度並協助右後衛防守。', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊。', def: '回防壓迫對方左後衛或左邊鋒，協助防守邊路。', example: 'Bukayo Saka - 速度快且技術出色的邊路球員。' },
+                    'lst': { name: '左前鋒 (LST)', tactics: '防守反擊的終結者，負責牽制後衛並完成得分，與右前鋒配合。', tech: '射門 88, 速度 90, 盤帶 88, 傳球 80, 位置感 90', off: '位於禁區左側，內切射門或傳中給右前鋒。', def: '壓迫對方右後衛或右中後衛，爭搶第二落點。', example: 'Son Heung-min - 射門精準且速度快的左前鋒。' },
+                    'rst': { name: '右前鋒 (RST)', tactics: '防守反擊的終結者，負責牽制後衛並完成得分，與左前鋒配合。', tech: '射門 88, 速度 90, 盤帶 88, 傳球 80, 位置感 90', off: '位於禁區右側，內切射門或傳中給左前鋒。', def: '壓迫對方左後衛或左中後衛，爭搶第二落點。', example: 'Kylian Mbappé - 速度驚人且技術全面的右前鋒。' }
+                }
             },
             '352-defensive': {
                 positions: ['gk', 'lcb', 'cb', 'rcb', 'lwb', 'ldm', 'rdm', 'rwb', 'am', 'lst', 'rst'],
@@ -365,7 +368,19 @@
                     'lst': { left: '35%', top: '20%' },
                     'rst': { left: '65%', top: '20%' }
                 },
-                details: formations['352-defensive'].details
+                details: {
+                    'gk': { name: '門將 (GK)', tactics: '作為防守的最後一道屏障，負責守護球門並組織防線，快速發動防守反擊。需要與後衛保持高效溝通，掌控禁區內的防守布局。', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '站在禁區外圍，支援後衛進行短傳分球，必要時利用長傳找到前場快速球員發動反擊。', def: '守住球門線，保持冷靜，快速判斷射門角度並作出反應，必要時果斷出擊攔截單刀球或高空球。', example: 'Manuel Neuer - 現代「掃蕩型門將」的代表，擅長出擊防守和用腳傳球，改變了門將的傳統角色。' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '負責防守左側區域，協助左翼衛封堵邊路進攻，同時在中路提供補位支援，是三後衛體系的重要支柱。', tech: '頭球 88, 搶斷 90, 傳球 80, 防守站位 90, 速度 75', off: '穩固後場，適時分球至左翼衛或中場，保持防守陣型的完整性。', def: '退守禁區左側，與中後衛協作，緊盯對方右邊鋒或內切前鋒，負責清空禁區內的高空球和傳中威脅。', example: 'Giorgio Chiellini - 防守硬朗，頭球能力出色，擅長人盯人防守和關鍵攔截。' },
+                    'cb': { name: '中後衛 (CB)', tactics: '三後衛體系的核心，負責統籌防線，盯防對方前鋒並清掃禁區內的所有威脅，同時承擔防守指揮責任。', tech: '頭球 92, 搶斷 95, 傳球 85, 防守站位 95, 力量 90', off: '留在後場中路，分球至中場或邊路，必要時帶球前插支援中場防守轉換。', def: '坐鎮禁區中央，負責高空球防守和對方前鋒的直接對抗，快速補位並指揮隊友站位。', example: 'Virgil van Dijk - 現代中後衛的典範，防守全面且具備出球能力，場上領導力極強。' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '負責防守右側區域，協助右翼衛封堵邊路進攻，同時在中路提供補位支援，與左中後衛協作保持防線平衡。', tech: '頭球 88, 搶斷 90, 傳球 80, 防守站位 90, 速度 75', off: '穩固後場，適時分球至右翼衛或中場，保持防守陣型的完整性。', def: '退守禁區右側，與中後衛協作，緊盯對方左邊鋒或內切前鋒，負責清空禁區內的高空球和傳中威脅。', example: 'Sergio Ramos - 防守兇悍且進攻能力強，定位球得分能力突出，防守經驗豐富。' },
+                    'lwb': { name: '左翼衛 (LWB)', tactics: '防守左邊路為主，提供場地寬度並支援進攻，與左防守中場協作形成穩固邊路防線，同時具備一定的進攻支援能力。', tech: '速度 88, 搶斷 85, 傳中 82, 防守站位 85, 體力 90', off: '前插至中場線附近，傳中至禁區或分球至進攻中場，支援左前鋒推進。', def: '回撤至左後衛位置，封堵對方右邊鋒的突破或傳中，協助左中後衛防守邊路空位。', example: 'Marcelo - 進攻型翼衛的代表，防守穩健且具備一定的邊路推進能力。' },
+                    'ldm': { name: '左防守中場 (LDM)', tactics: '防守型中場，負責中場左側的防守與銜接，保護後衛並與右防守中場形成雙後腰，提供中場穩定性。', tech: '傳球 85, 搶斷 90, 視野 88, 跑動 85, 防守站位 90', off: '分球至邊路或進攻中場，保持中場防守陣型的完整性，必要時支援左翼衛。', def: '壓迫對方中場左側球員，負責搶斷和補位，保護左中後衛免受直接衝擊，協助防守轉換。', example: 'N’Golo Kanté - 防守覆蓋面廣，搶斷能力頂尖，是中場防守的標杆。' },
+                    'rdm': { name: '右防守中場 (RDM)', tactics: '防守型中場，負責中場右側的防守與銜接，保護後衛並與左防守中場形成雙後腰，提供中場穩定性。', tech: '傳球 85, 搶斷 90, 視野 88, 跑動 85, 防守站位 90', off: '分球至邊路或進攻中場，保持中場防守陣型的完整性，必要時支援右翼衛。', def: '壓迫對方中場右側球員，負責搶斷和補位，保護右中後衛免受直接衝擊，協助防守轉換。', example: 'Casemiro - 防守硬朗且傳球穩健，是防守型後腰的經典代表。' },
+                    'rwb': { name: '右翼衛 (RWB)', tactics: '防守右邊路為主，提供場地寬度並支援進攻，與右防守中場協作形成穩固邊路防線，同時具備一定的進攻支援能力。', tech: '速度 88, 搶斷 85, 傳中 82, 防守站位 85, 體力 90', off: '前插至中場線附近，傳中至禁區或分球至進攻中場，支援右前鋒推進。', def: '回撤至右後衛位置，封堵對方左邊鋒的突破或傳中，協助右中後衛防守邊路空位。', example: 'Kyle Walker - 速度快且防守穩固，具備一定的邊路推進能力。' },
+                    'am': { name: '進攻中場 (AM)', tactics: '負責組織進攻並為雙前鋒創造機會，位於中場偏後位置，銜接防守中場與前鋒線。需要出色的視野和傳球能力。', tech: '視野 90, 傳球 88, 盤帶 85, 射門 80, 靈活性 88', off: '位於禁區外圍，分球至左前鋒或右前鋒，尋找遠射機會或直塞撕開對方防線。', def: '壓迫對方後腰或中場核心，協助雙防守中場防守，必要時回撤至中場線參與防守轉換。', example: 'Kevin De Bruyne - 傳球大師，視野開闊且遠射能力強，是進攻中場的頂級代表。' },
+                    'lst': { name: '左前鋒 (LST)', tactics: '防守反擊的重要一環，負責拉開防線並尋找得分機會，與右前鋒和進攻中場形成聯繫，承擔進攻終結任務。', tech: '速度 90, 射門 88, 盤帶 88, 傳球 80, 靈活性 90', off: '拉至禁區左側，內切射門或傳中給右前鋒，快速利用反擊機會得分，與進攻中場配合。', def: '壓迫對方右後衛或右中後衛，參與前場防守並爭搶第二落點。', example: 'Son Heung-min - 速度快且射門精準，擅長邊路突破和內切得分。' },
+                    'rst': { name: '右前鋒 (RST)', tactics: '防守反擊的重要一環，負責拉開防線並尋找得分機會，與左前鋒和進攻中場形成聯繫，承擔進攻終結任務。', tech: '速度 90, 射門 88, 盤帶 88, 傳球 80, 靈活性 90', off: '拉至禁區右側，內切射門或傳中給左前鋒，快速利用反擊機會得分，與進攻中場配合。', def: '壓迫對方左後衛或左中後衛，參與前場防守並爭搶第二落點。', example: 'Kylian Mbappé - 速度驚人且技術全面，是防守反擊的致命武器。' }
+                }
             },
             '451-defensive': {
                 positions: ['gk', 'lb', 'lcb', 'rcb', 'rb', 'lm', 'lcm', 'cdm', 'rcm', 'rm', 'st'],
@@ -382,7 +397,19 @@
                     'rm': { left: '80%', top: '40%' },
                     'st': { left: '50%', top: '25%' }
                 },
-                details: formations['451-defensive'].details
+                details: {
+                    'gk': { name: '門將 (GK)', tactics: '作為防守的最後一道屏障，負責守護球門並快速分球發動反擊，同時組織後衛線保持緊密防守。需要具備出色的單對單能力和心理素質，能在高壓環境下穩定發揮。', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '站在禁區外圍，參與後場短傳組織，必要時長傳至前鋒或邊路發動快速反擊。', def: '守住球門線，保持冷靜判斷射門角度，快速反應撲救遠射或近距離射門，必要時果斷出擊攔截單刀球或高空球。', example: 'Manuel Neuer - 現代「掃蕩型門將」的代表，擅長出擊防守和用腳傳球，改變了門將的傳統角色。' },
+                    'lb': { name: '左後衛 (LB)', tactics: '負責防守左路並穩固邊線，協助中後衛形成緊密的四後衛防線，是防守陣型中的邊路屏障。需要具備穩定的防守能力和一定的支援意識。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '支援中場分球，少量前插至中場線附近，為左中場提供分球選擇並參與防守轉換。', def: '封堵對方右邊鋒的突破或傳中，退守禁區左側補位，與左中後衛協作防守邊路和中路空位。', example: 'Andrew Robertson - 防守穩健且跑動積極，擅長邊路防守和支援中場。' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '負責防守中路並清空禁區威脅，與右中後衛協作形成堅固的防線核心，承擔主要的空中防守和盯人任務。需要頂級的防守閱讀能力和身體對抗能力。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定，必要時帶球前插支援中場防守轉換。', def: '位於禁區左側，盯防對方前鋒或內切球員，清空高空球和傳 Brest威脅，快速補位確保防線完整。', example: 'Virgil van Dijk - 防守全面且具備出球能力，是現代中後衛的頂級代表。' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '負責防守中路並清空禁區威脅，與左中後衛協作形成堅固的防線核心，承擔主要的空中防守和盯人任務。需要出色的防守意識和身體素質。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定，必要時帶球前插支援中場防守轉換。', def: '位於禁區右側，盯防對方前鋒或內切球員，清空高空球和傳中威脅，快速補位確保防線完整。', example: 'Sergio Ramos - 防守兇悍且經驗豐富，定位球得分能力強，是中後衛的經典代表。' },
+                    'rb': { name: '右後衛 (RB)', tactics: '負責防守右路並穩固邊線，協助中後衛形成緊密的四後衛防線，是防守陣型中的邊路屏障。需要具備穩定的防守能力和一定的支援意識。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '支援中場分球，少量前插至中場線附近，為右中場提供分球選擇並參與防守轉換。', def: '封堵對方左邊鋒的突破或傳中，退守禁區右側補位，與右中後衛協作防守邊路和中路空位。', example: 'Kyle Walker - 速度快且防守穩固，擅長邊路防守和快速回防。' },
+                    'lm': { name: '左中場 (LM)', tactics: '負責防守左邊路並支援快速反擊，提供場地寬度並與左後衛協作形成邊路防守網。需要出色的跑動能力和邊路技術。', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊，與左中場配合製造進攻機會。', def: '回防壓迫對方右後衛或右邊鋒，協助左後衛防守邊路，必要時退守至後場參與防守。', example: 'Son Heung-min - 速度快且技術全面，擅長邊路突破和支援防守。' },
+                    'lcm': { name: '左中場 (LCM)', tactics: '負責防守中場左側並銜接攻防，與防守中場和右中場協作，形成中場防守屏障並支援反擊。需要良好的戰術理解力和傳球能力。', tech: '傳球 88, 搶斷 85, 視野 90, 跑動 85, 防守站位 88', off: '分球至邊路或前鋒，支援中場組織，必要時前插至禁區外圍參與進攻。', def: '壓迫對方中場左側球員，協助防守中場搶斷和補位，保護後衛免受直接衝擊。', example: 'Toni Kroos - 傳球精準且防守穩健，擅長中場組織和控制節奏。' },
+                    'cdm': { name: '防守中場 (CDM)', tactics: '保護後衛並斷球，是中場防守的核心樞紐，負責壓迫對方進攻球員並穩固中場陣型。需要頂級的搶斷能力和體力。', tech: '搶斷 92, 傳球 85, 體力 90, 防守站位 90, 力量 88', off: '穩固中場，分球至邊路或中場，必要時帶球推進支援反擊。', def: '位於中場與防線之間，壓迫對方進攻球員，負責搶斷和補位，保護四後衛線免受直接威脅。', example: 'N’Golo Kanté - 防守覆蓋面廣，搶斷能力頂尖，是防守中場的標杆。' },
+                    'rcm': { name: '右中場 (RCM)', tactics: '負責防守中場右側並銜接攻防，與防守中場和左中場協作，形成中場防守屏障並支援反擊。需要良好的戰術理解力和傳球能力。', tech: '傳球 88, 搶斷 85, 視野 90, 跑動 85, 防守站位 88', off: '分球至邊路或前鋒，支援中場組織，必要時前插至禁區外圍參與進攻。', def: '壓迫對方中場右側球員，協助防守中場搶斷和補位，保護後衛免受直接衝擊。', example: 'Luka Modrić - 技術全面且防守積極，擅長中場控制和攻防轉換。' },
+                    'rm': { name: '右中場 (RM)', tactics: '負責防守右邊路並支援快速反擊，提供場地寬度並與右後衛協作形成邊路防守網。需要出色的跑動能力和邊路技術。', tech: '傳中 85, 體力 90, 速度 88, 傳球 80, 搶斷 85', off: '拉邊傳中至前鋒，參與快速反擊，與右中場配合製造進攻機會。', def: '回防壓迫對方左後衛或左邊鋒，協助右後衛防守邊路，必要時退守至後場參與防守。', example: 'Bukayo Saka - 速度快且技術出色，擅長邊路突破和支援防守。' },
+                    'st': { name: '中前鋒 (ST)', tactics: '防守反擊的終結者，負責牽制對方後衛並完成得分，是前場的唯一支點和進攻核心。需要出色的門前嗅覺和得分效率。', tech: '射門 90, 速度 88, 位置感 92, 力量 88, 搶點 90', off: '位於禁區中央，接應中場傳球完成射門，或利用速度和力量製造單刀機會。', def: '壓迫對方中後衛，爭搶第一落點並參與前場防守，阻斷對方後場出球。', example: 'Harry Kane - 射門效率高且全面，擅長禁區內搶點和遠射，是現代中鋒的典範。' }
+                }
             },
             '4231-defensive': {
                 positions: ['gk', 'lb', 'lcb', 'rcb', 'rb', 'ldm', 'rdm', 'lam', 'cam', 'ram', 'st'],
@@ -399,299 +426,369 @@
                     'ram': { left: '80%', top: '50%' },
                     'st': { left: '50%', top: '30%' }
                 },
-                details: formations['4231-defensive'].details
+                details: {
+                    'gk': { name: '門將 (GK)', tactics: '防守的最後一道屏障，負責守護球門並快速分球發動反擊，組織後衛線保持緊密防守。', tech: '撲救 90, 手控球 85, 開球 80, 反應 95, 位置感 88', off: '參與後場短傳，必要時長傳至前場快速球員發動反擊。', def: '守住球門線，快速反應撲救，果斷出擊攔截單刀或高空球。', example: 'Manuel Neuer - 出擊防守和傳球能力.factory現代門將典範。' },
+                    'lb': { name: '左後衛 (LB)', tactics: '穩固左路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援左邊進攻中場。', def: '封堵對方右邊鋒突破或傳中，退守禁區補位。', example: 'Andrew Robertson - 防守穩健且跑動積極的邊後衛。' },
+                    'lcb': { name: '左中後衛 (LCB)', tactics: '防守中路核心，負責清空禁區威脅，與右中後衛協作穩固防線。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，保持後場穩定。', def: '盯防對方前鋒，清空高空球和傳中威脅，快速補位。', example: 'Virgil van Dijk - 防守全面且領導力強的中後衛。' },
+                    'rcb': { name: '右中後衛 (RCB)', tactics: '防守中路核心，與左中後衛協作，承擔空中防守和盯人任務。', tech: '頭球 90, 搶斷 92, 傳球 85, 力量 88, 防守站位 90', off: '分球至中場或邊路，必要時支援中場轉換。', def: '盯防對方前鋒，清空高空球，確保防線完整。', example: 'Sergio Ramos - 防守兇悍且經驗豐富的中後衛。' },
+                    'rb': { name: '右後衛 (RB)', tactics: '穩固右路防守，提供邊路支援，協助中後衛形成緊密防線。', tech: '搶斷 88, 速度 85, 傳球 80, 防守站位 90, 體力 85', off: '少量前插至中場線，分球支援右邊進攻中場。', def: '封堵對方左邊鋒突破或傳中，退守禁區補位。', example: 'Kyle Walker - 速度快且防守穩固的邊後衛。' },
+                    'ldm': { name: '左防守中場 (LDM)', tactics: '防守中場左側，負責保護後衛並銜接攻防，與右防守中場形成雙後腰屏障。', tech: '傳球 88, 搶斷 90, 視野 85, 防守站位 90, 體力 88', off: '分球至邊路或進攻中場，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛線。', example: 'N’Golo Kanté - 防守覆蓋面廣且搶斷能力頂尖的後腰。' },
+                    'rdm': { name: '右防守中場 (RDM)', tactics: '防守中場右側，負責保護後衛並銜接攻防，與左防守中場形成雙後腰屏障。', tech: '傳球 88, 搶斷 90, 視野 85, 防守站位 90, 體力 88', off: '分球至邊路或進攻中場，支援中場組織。', def: '壓迫對方中場，協助搶斷和補位，保護後衛線。', example: 'Casemiro - 防守硬朗且傳球穩健的防守型後腰。' },
+                    'lam': { name: '左進攻中場 (LAM)', tactics: '負責左路進攻組織與防守壓迫，提供場地寬度並支援前鋒。', tech: '傳球 85, 盤帶 88, 速度 90, 射門 80, 靈活性 88', off: '拉邊至左路，內切射門或傳中至中鋒，與中進攻中場聯繫。', def: '壓迫對方右後衛或右中場，協助左防守中場防守邊路。', example: 'Son Heung-min - 速度快且技術全面的邊路進攻手。' },
+                    'cam': { name: '中進攻中場 (CAM)', tactics: '進攻核心，負責組織進攻並為中鋒創造機會，位於中場與前鋒之間。', tech: '視野 90, 傳球 88, 盤帶 85, 射門 82, 靈活性 88', off: '位於禁區外圍，分球至邊路或直塞給中鋒，尋找遠射機會。', def: '壓迫對方後腰，協助雙防守中場防守中路。', example: 'Kevin De Bruyne - 傳球精準且視野開闊的進攻中場。' },
+                    'ram': { name: '右進攻中場 (RAM)', tactics: '負責右路進攻組織與防守壓迫，提供場地寬度並支援前鋒。', tech: '傳球 85, 盤帶 88, 速度 90, 射門 80, 靈活性 88', off: '拉邊至右路，內切射門或傳中至中鋒，與中進攻中場聯繫。', def: '壓迫對方左後衛或左中場，協助右防守中場防守邊路。', example: 'Bukayo Saka - 速度快且技術出色的邊路進攻手。' },
+                    'st': { name: '中前鋒 (ST)', tactics: '防守反擊的終結者，負責牽制後衛並完成得分，是前場的進攻支點。', tech: '射門 90, 速度 88, 位置感 92, 力量 88, 搶點 90', off: '位於禁區中央，接應中場傳球完成射門，或製造單刀機會。', def: '壓迫對方中後衛，爭搶第一落點並參與前場防守。', example: 'Harry Kane - 射門效率高且全面的現代中鋒。' }
+                }
             }
         };
 
-        let selectedPlayersByFormation = {
-            '442-defensive': {},
-            '352-defensive': {},
-            '451-defensive': {},
-            '4231-defensive': {}
+let selectedPlayersByFormation = {
+        '442-defensive': {},
+        '352-defensive': {},
+        '451-defensive': {},
+        '4231-defensive': {}
+    };
+    let playerPositionsByFormation = {
+        '442-defensive': {},
+        '352-defensive': {},
+        '451-defensive': {},
+        '4231-defensive': {}
+    };
+    let currentFormation = '442-defensive';
+
+    // 檢查足球場圖片是否加載成功
+    function checkPitchImage() {
+        const img = new Image();
+        img.src = 'https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg';
+        img.onload = () => {
+            document.getElementById('pitch-error').style.display = 'none';
+            document.getElementById('pitch-container').style.backgroundImage = "url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg')";
         };
-        let playerPositionsByFormation = {
-            '442-defensive': {},
-            '352-defensive': {},
-            '451-defensive': {},
-            '4231-defensive': {}
+        img.onerror = () => {
+            document.getElementById('pitch-error').style.display = 'block';
+            document.getElementById('pitch-container').style.backgroundImage = 'none';
         };
-        let footballPosition = { left: '50%', top: '50%' };
-        let currentFormation = '442-defensive';
-
-        // 檢查足球場圖片是否加載成功
-        function checkPitchImage() {
-            const img = new Image();
-            img.src = 'https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg';
-            img.onload = () => {
-                document.getElementById('pitch-error').style.display = 'none';
-                document.getElementById('pitch-container').style.backgroundImage = "url('https://raw.githubusercontent.com/caneswst/Falcon352/refs/heads/main/football_pitch.jpg')";
-            };
-            img.onerror = () => {
-                document.getElementById('pitch-error').style.display = 'block';
-                document.getElementById('pitch-container').style.backgroundImage = 'none';
-            };
-        }
-
-        // 初始化陣型選擇
-        function initFormationSelect() {
-            const formationSelect = document.getElementById('formation-select');
-            formationSelect.value = '442-defensive';
-            formationSelect.onchange = () => {
-                currentFormation = formationSelect.value;
-                updateFormation();
-                updatePitchAndSubs();
-            };
-            loadSavedSelections();
-            updateFormation();
-            checkPitchImage();
-        }
-
-// 更新陣型相關內容
-function updateFormation() {
-    const formation = formations[currentFormation];
-    const positionsContainer = document.getElementById('positions-container');
-    const pitchContainer = document.getElementById('pitch-container');
-    const positionDetails = document.getElementById('position-details');
-
-    // 清空並重新生成位置選擇框
-    positionsContainer.innerHTML = '';
-    formation.positions.forEach(pos => {
-        const label = document.createElement('label');
-        label.textContent = formation.details[pos].name + ':';
-        const select = document.createElement('select');
-        select.id = pos;
-        select.innerHTML = '<option value="">選擇球員</option>' + 
-            Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
-        select.onchange = () => {
-            selectedPlayersByFormation[currentFormation][pos] = select.value;
-            updatePitchAndSubs(); // 立即更新戰術板
-        };
-        if (selectedPlayersByFormation[currentFormation][pos]) {
-            select.value = selectedPlayersByFormation[currentFormation][pos];
-        }
-        positionsContainer.appendChild(label);
-        positionsContainer.appendChild(select);
-    });
-
-    // 重置戰術板內容
-    pitchContainer.innerHTML = '<div id="pitch-error" style="display: none;">無法加載足球場圖片，請檢查網路或圖片路徑。</div>';
-
-    // 添加球員圖示
-    formation.positions.forEach(pos => {
-        const playerDiv = document.createElement('div');
-        playerDiv.className = 'player';
-        playerDiv.id = `${pos}-player`;
-        playerDiv.dataset.position = pos;
-        const savedPos = playerPositionsByFormation[currentFormation][pos] || formation.layout[pos];
-        playerDiv.style.left = savedPos.left;
-        playerDiv.style.top = savedPos.top;
-        const selectedPlayer = selectedPlayersByFormation[currentFormation][pos] || '';
-        playerDiv.textContent = selectedPlayer || pos.toUpperCase();
-
-        const statsDiv = document.createElement('div');
-        statsDiv.className = 'stats';
-        statsDiv.id = `${pos}-stats`;
-        playerDiv.appendChild(statsDiv);
-
-        playerDiv.onclick = (e) => {
-            if (!playerDiv.isDragging) showPositionDetails(pos);
-        };
-        makeDraggable(playerDiv);
-        pitchContainer.appendChild(playerDiv);
-    });
-
-    // 添加足球圖示
-    const footballDiv = document.createElement('div');
-    footballDiv.className = 'football';
-    footballDiv.id = 'football';
-    footballDiv.style.left = footballPosition.left;
-    footballDiv.style.top = footballPosition.top;
-    makeDraggable(footballDiv, true);
-    pitchContainer.appendChild(footballDiv);
-
-    // 更新戰術要求
-    positionDetails.innerHTML = '';
-    formation.positions.forEach(pos => {
-        const info = formation.details[pos];
-        positionDetails.innerHTML += `
-            <div id="${pos}-info" class="position-info">
-                <h3>${info.name}</h3>
-                <p><strong>戰術要求:</strong> ${info.tactics}</p>
-                <p><strong>技術要求:</strong> ${info.tech}</p>
-                <p><strong>進攻時位置要求:</strong> ${info.off}</p>
-                <p><strong>防守時位置要求:</strong> ${info.def}</p>
-                <p><strong>代表球員:</strong> ${info.example}</p>
-            </div>
-        `;
-    });
-
-    if (formation.positions.length > 0) {
-        showPositionDetails(formation.positions[0]);
     }
-    updatePitchAndSubs();
-}
 
-// 更新戰術板和後備名單
-function updatePitchAndSubs() {
-    const formation = formations[currentFormation];
-    const selected = new Set();
+    // 初始化陣型選擇
+    function initFormationSelect() {
+        const formationSelect = document.getElementById('formation-select');
+        formationSelect.value = '442-defensive';
+        formationSelect.onchange = () => {
+            currentFormation = formationSelect.value;
+            updateFormation();
+            updatePitchAndSubs();
+        };
+        loadSavedSelections();
+        updateFormation();
+        checkPitchImage();
+    }
 
-    // 更新戰術板上的球員名稱
-    formation.positions.forEach(pos => {
-        const select = document.getElementById(pos);
-        const playerDiv = document.getElementById(`${pos}-player`);
-        const statsDiv = document.getElementById(`${pos}-stats`);
-        if (select && playerDiv && statsDiv) {
-            const selectedPlayer = select.value;
-            playerDiv.textContent = selectedPlayer || pos.toUpperCase();
-            selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
-            statsDiv.textContent = selectedPlayer ? `${players[selectedPlayer].appearances}-${players[selectedPlayer].goals}-${players[selectedPlayer].assists}` : '';
-            if (selectedPlayer) selected.add(selectedPlayer);
-        }
-    });
+    // 更新陣型相關內容
+    function updateFormation() {
+        const formation = formations[currentFormation];
+        const positionsContainer = document.getElementById('positions-container');
+        const pitchContainer = document.getElementById('pitch-container');
+        const positionDetails = document.getElementById('position-details');
 
-    // 更新後備名單
-    const subsList = document.getElementById('subs-list');
-    if (subsList) {
-        const subs = Object.keys(players).filter(p => !selected.has(p));
-        subsList.innerHTML = subs.map(p => {
-            const stats = players[p];
-            return `
-                <div class="sub-player">
-                    <span>${p}</span>
-                    <span class="sub-stats">
-                        出:<input type="number" min="0" value="${stats.appearances}" onchange="updateStats('${p}', 'appearances', this.value)">
-                        球:<input type="number" min="0" value="${stats.goals}" onchange="updateStats('${p}', 'goals', this.value)">
-                        助:<input type="number" min="0" value="${stats.assists}" onchange="updateStats('${p}', 'assists', this.value)">
-                    </span>
+        positionsContainer.innerHTML = '';
+        formation.positions.forEach(pos => {
+            const label = document.createElement('label');
+            label.textContent = formation.details[pos].name + ':';
+            const select = document.createElement('select');
+            select.id = pos;
+            select.innerHTML = '<option value="">選擇球員</option>' + 
+                Object.keys(players).map(p => `<option value="${p}">${p}</option>`).join('');
+            positionsContainer.appendChild(label);
+            positionsContainer.appendChild(select);
+        });
+
+        pitchContainer.innerHTML = '<div id="pitch-error" style="display: none;">無法加載足球場圖片，請檢查網路或圖片路徑。</div>';
+        formation.positions.forEach(pos => {
+            const playerDiv = document.createElement('div');
+            playerDiv.className = 'player';
+            playerDiv.id = `${pos}-player`;
+            playerDiv.dataset.position = pos;
+            const savedPos = playerPositionsByFormation[currentFormation][pos];
+            playerDiv.style.left = savedPos?.left || formation.layout[pos].left;
+            playerDiv.style.top = savedPos?.top || formation.layout[pos].top;
+            playerDiv.textContent = pos.toUpperCase();
+
+            const statsDiv = document.createElement('div');
+            statsDiv.className = 'stats';
+            statsDiv.id = `${pos}-stats`;
+            playerDiv.appendChild(statsDiv);
+
+            playerDiv.onclick = (e) => {
+                if (!playerDiv.isDragging) showPositionDetails(pos);
+            };
+            makeDraggable(playerDiv);
+            pitchContainer.appendChild(playerDiv);
+        });
+
+        positionDetails.innerHTML = '';
+        formation.positions.forEach(pos => {
+            const info = formation.details[pos];
+            positionDetails.innerHTML += `
+                <div id="${pos}-info" class="position-info">
+                    <h3>${info.name}</h3>
+                    <p><strong>戰術要求:</strong> ${info.tactics}</p>
+                    <p><strong>技術要求:</strong> ${info.tech}</p>
+                    <p><strong>進攻時位置要求:</strong> ${info.off}</p>
+                    <p><strong>防守時位置要求:</strong> ${info.def}</p>
+                    <p><strong>代表球員:</strong> ${info.example}</p>
                 </div>
             `;
-        }).join('');
+        });
+
+        formation.positions.forEach(pos => {
+            const select = document.getElementById(pos);
+            if (select) {
+                select.onchange = updatePitchAndSubs;
+                if (selectedPlayersByFormation[currentFormation][pos]) {
+                    select.value = selectedPlayersByFormation[currentFormation][pos];
+                }
+            }
+        });
+
+        if (formation.positions.length > 0) {
+            showPositionDetails(formation.positions[0]);
+        }
+        updatePitchAndSubs();
     }
 
-    localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
-    localStorage.setItem('currentFormation', currentFormation);
-    localStorage.setItem('playersStats', JSON.stringify(players));
-}
+    // 使球員圖示可拖動（支援滑鼠和觸控）
+    function makeDraggable(element) {
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
 
-        // 更新統計數據
-        function updateStats(playerName, statType, value) {
-            if (players[playerName]) {
-                const numValue = parseInt(value) || 0;
-                players[playerName][statType] = numValue;
-                localStorage.setItem('playersStats', JSON.stringify(players));
-                updatePitchAndSubs();
+        // 滑鼠事件
+        element.onmousedown = startDragging;
+        element.ontouchstart = startDragging;
+
+        function startDragging(e) {
+            e.preventDefault();
+            isDragging = true;
+            element.isDragging = true;
+            element.style.zIndex = 1000;
+
+            if (e.type === 'mousedown') {
+                initialX = e.clientX - currentX;
+                initialY = e.clientY - currentY;
+                document.onmousemove = drag;
+                document.onmouseup = stopDragging;
+            } else if (e.type === 'touchstart') {
+                const touch = e.touches[0];
+                initialX = touch.clientX - currentX;
+                initialY = touch.clientY - currentY;
+                document.ontouchmove = drag;
+                document.ontouchend = stopDragging;
             }
         }
 
-        // 載入上次保存的選擇和統計數據
-        function loadSavedSelections() {
-            const savedFormation = localStorage.getItem('currentFormation');
-            const savedPlayers = localStorage.getItem('selectedPlayersByFormation');
-            const savedStats = localStorage.getItem('playersStats');
-            const savedPositions = localStorage.getItem('playerPositionsByFormation');
-            const savedFootballPos = localStorage.getItem('footballPosition');
-            if (savedFormation) {
-                currentFormation = savedFormation;
-                document.getElementById('formation-select').value = savedFormation;
+        function drag(e) {
+            if (!isDragging) return;
+
+            e.preventDefault();
+            const pitch = document.getElementById('pitch-container');
+            const rect = pitch.getBoundingClientRect();
+            const playerWidth = element.offsetWidth;
+            const playerHeight = element.offsetHeight;
+
+            if (e.type === 'mousemove') {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+            } else if (e.type === 'touchmove') {
+                const touch = e.touches[0];
+                currentX = touch.clientX - initialX;
+                currentY = touch.clientY - initialY;
             }
-            if (savedPlayers) {
-                selectedPlayersByFormation = JSON.parse(savedPlayers);
-            }
-            if (savedStats) {
-                Object.assign(players, JSON.parse(savedStats));
-            }
-            if (savedPositions) {
-                playerPositionsByFormation = JSON.parse(savedPositions);
-            }
-            if (savedFootballPos) {
-                footballPosition = JSON.parse(savedFootballPos);
-            }
-            Object.keys(formations).forEach(formation => {
-                if (!selectedPlayersByFormation[formation]) {
-                    selectedPlayersByFormation[formation] = {};
-                }
-                if (!playerPositionsByFormation[formation]) {
-                    playerPositionsByFormation[formation] = {};
-                }
-            });
+
+            let left = (currentX + playerWidth / 2) / rect.width * 100;
+            let top = (currentY + playerHeight / 2) / rect.height * 100;
+            left = Math.max(0 + playerWidth / rect.width * 50, Math.min(100 - playerWidth / rect.width * 50, left));
+            top = Math.max(0 + playerHeight / rect.height * 50, Math.min(100 - playerHeight / rect.height * 50, top));
+
+            element.style.left = `${left}%`;
+            element.style.top = `${top}%`;
         }
 
-        // 顯示位置詳情
-        function showPositionDetails(pos) {
-            document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
-            const infoDiv = document.getElementById(pos + '-info');
-            if (infoDiv) infoDiv.style.display = 'block';
-        }
+        function stopDragging() {
+            isDragging = false;
+            element.isDragging = false;
+            element.style.zIndex = '';
+            document.onmousemove = null;
+            document.onmouseup = null;
+            document.ontouchmove = null;
+            document.ontouchend = null;
 
-        // 匯出陣容功能
-        function exportFormation() {
-            const data = {
-                currentFormation: currentFormation,
-                selectedPlayersByFormation: selectedPlayersByFormation,
-                playerPositionsByFormation: playerPositionsByFormation,
-                footballPosition: footballPosition,
-                players: players
+            const pos = element.dataset.position;
+            playerPositionsByFormation[currentFormation][pos] = {
+                left: element.style.left,
+                top: element.style.top
             };
-            const jsonStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'formation.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            localStorage.setItem('playerPositionsByFormation', JSON.stringify(playerPositionsByFormation));
         }
 
-        // 匯入陣容功能
-        function importFormation(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        currentX = parseFloat(element.style.left) / 100 * document.getElementById('pitch-container').offsetWidth - element.offsetWidth / 2;
+        currentY = parseFloat(element.style.top) / 100 * document.getElementById('pitch-container').offsetHeight - element.offsetHeight / 2;
+    }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.currentFormation && data.selectedPlayersByFormation) {
-                        currentFormation = data.currentFormation;
-                        selectedPlayersByFormation = data.selectedPlayersByFormation;
-                        playerPositionsByFormation = data.playerPositionsByFormation || playerPositionsByFormation;
-                        footballPosition = data.footballPosition || footballPosition;
-                        if (data.players) {
-                            Object.assign(players, data.players);
-                        }
-                        Object.keys(formations).forEach(formation => {
-                            if (!selectedPlayersByFormation[formation]) {
-                                selectedPlayersByFormation[formation] = {};
-                            }
-                            if (!playerPositionsByFormation[formation]) {
-                                playerPositionsByFormation[formation] = {};
-                            }
-                        });
-                        document.getElementById('formation-select').value = currentFormation;
-                        updateFormation();
-                        updatePitchAndSubs();
-                        localStorage.setItem('currentFormation', currentFormation);
-                        localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
-                        localStorage.setItem('playerPositionsByFormation', JSON.stringify(playerPositionsByFormation));
-                        localStorage.setItem('footballPosition', JSON.stringify(footballPosition));
-                        localStorage.setItem('playersStats', JSON.stringify(players));
-                        alert('陣容已成功匯入！');
-                    } else {
-                        alert('匯入的檔案格式不正確！');
-                    }
-                } catch (err) {
-                    alert('無法解析匯入的檔案，請確保檔案格式正確！');
-                }
-            };
-            reader.readAsText(file);
+    // 更新戰術板和後備名單
+    function updatePitchAndSubs() {
+        const formation = formations[currentFormation];
+        const selected = new Set();
+        
+        formation.positions.forEach(pos => {
+            const select = document.getElementById(pos);
+            const playerDiv = document.getElementById(pos + '-player');
+            const statsDiv = document.getElementById(pos + '-stats');
+            if (select && playerDiv && statsDiv) {
+                const selectedPlayer = select.value;
+                playerDiv.textContent = selectedPlayer || pos.toUpperCase();
+                selectedPlayersByFormation[currentFormation][pos] = selectedPlayer;
+                statsDiv.textContent = '';
+                if (selectedPlayer) selected.add(selectedPlayer);
+            }
+        });
+
+        const subsList = document.getElementById('subs-list');
+        if (subsList) {
+            const subs = Object.keys(players).filter(p => !selected.has(p));
+            subsList.innerHTML = subs.map(p => {
+                const stats = players[p];
+                return `
+                    <div class="sub-player">
+                        <span>${p}</span>
+                        <span class="sub-stats">
+                            出:<input type="number" min="0" value="${stats.appearances}" onchange="updateStats('${p}', 'appearances', this.value)">
+                            球:<input type="number" min="0" value="${stats.goals}" onchange="updateStats('${p}', 'goals', this.value)">
+                            助:<input type="number" min="0" value="${stats.assists}" onchange="updateStats('${p}', 'assists', this.value)">
+                        </span>
+                    </div>
+                `;
+            }).join('');
         }
 
-        window.onload = () => {
-            initFormationSelect();
+        localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
+        localStorage.setItem('currentFormation', currentFormation);
+        localStorage.setItem('playersStats', JSON.stringify(players));
+    }
+
+    // 更新統計數據
+    function updateStats(playerName, statType, value) {
+        if (players[playerName]) {
+            const numValue = parseInt(value) || 0;
+            players[playerName][statType] = numValue;
+            localStorage.setItem('playersStats', JSON.stringify(players));
+            updatePitchAndSubs();
+        }
+    }
+
+    // 載入上次保存的選擇和統計數據
+    function loadSavedSelections() {
+        const savedFormation = localStorage.getItem('currentFormation');
+        const savedPlayers = localStorage.getItem('selectedPlayersByFormation');
+        const savedStats = localStorage.getItem('playersStats');
+        const savedPositions = localStorage.getItem('playerPositionsByFormation');
+        if (savedFormation) {
+            currentFormation = savedFormation;
+            document.getElementById('formation-select').value = savedFormation;
+        }
+        if (savedPlayers) {
+            selectedPlayersByFormation = JSON.parse(savedPlayers);
+        }
+        if (savedStats) {
+            Object.assign(players, JSON.parse(savedStats));
+        }
+        if (savedPositions) {
+            playerPositionsByFormation = JSON.parse(savedPositions);
+        }
+        Object.keys(formations).forEach(formation => {
+            if (!selectedPlayersByFormation[formation]) {
+                selectedPlayersByFormation[formation] = {};
+            }
+            if (!playerPositionsByFormation[formation]) {
+                playerPositionsByFormation[formation] = {};
+            }
+        });
+    }
+
+    // 顯示位置詳情
+    function showPositionDetails(pos) {
+        document.querySelectorAll('.position-info').forEach(info => info.style.display = 'none');
+        const infoDiv = document.getElementById(pos + '-info');
+        if (infoDiv) infoDiv.style.display = 'block';
+    }
+
+    // 匯出陣容功能
+    function exportFormation() {
+        const data = {
+            currentFormation: currentFormation,
+            selectedPlayersByFormation: selectedPlayersByFormation,
+            playerPositionsByFormation: playerPositionsByFormation,
+            players: players
         };
-    </script>
+        const jsonStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'formation.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // 匯入陣容功能
+    function importFormation(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.currentFormation && data.selectedPlayersByFormation) {
+                    currentFormation = data.currentFormation;
+                    selectedPlayersByFormation = data.selectedPlayersByFormation;
+                    playerPositionsByFormation = data.playerPositionsByFormation || playerPositionsByFormation;
+                    if (data.players) {
+                        Object.assign(players, data.players);
+                    }
+                    Object.keys(formations).forEach(formation => {
+                        if (!selectedPlayersByFormation[formation]) {
+                            selectedPlayersByFormation[formation] = {};
+                        }
+                        if (!playerPositionsByFormation[formation]) {
+                            playerPositionsByFormation[formation] = {};
+                        }
+                    });
+                    document.getElementById('formation-select').value = currentFormation;
+                    updateFormation();
+                    updatePitchAndSubs();
+                    localStorage.setItem('currentFormation', currentFormation);
+                    localStorage.setItem('selectedPlayersByFormation', JSON.stringify(selectedPlayersByFormation));
+                    localStorage.setItem('playerPositionsByFormation', JSON.stringify(playerPositionsByFormation));
+                    localStorage.setItem('playersStats', JSON.stringify(players));
+                    alert('陣容已成功匯入！');
+                } else {
+                    alert('匯入的檔案格式不正確！');
+                }
+            } catch (err) {
+                alert('無法解析匯入的檔案，請確保檔案格式正確！');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    window.onload = () => {
+        initFormationSelect();
+    };
+</script>
 </body>
 </html>
